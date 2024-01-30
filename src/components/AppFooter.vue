@@ -14,4 +14,12 @@ export default {
 }
 </script>
 
-<style scoped></style>
+<style scoped>
+.navbar {
+  background-color: #1b3333;
+}
+
+.footer-text {
+  color: #c3edc0;
+}
+</style>

@@ -22,7 +22,7 @@ async function getProfiles() {
 
 async function getProfile(pk) {
   try {
-    const response = await axios.get(`${API_URL}/account/${pk}`)
+    const response = await axios.get(`${API_URL}/profile/${pk}`)
     return response.data
   } catch (error) {
     throw new Error(error.response.data.error)
@@ -38,9 +38,39 @@ async function getProfileFeed(pk) {
   }
 }
 
+async function getMovieLikes(pk) {
+  try {
+    const response = await axios.get(`${API_URL}/likes/${pk}`)
+    return response.data
+  } catch (error) {
+    throw new Error(error.response.data.error)
+  }
+}
+
+async function getMovieComments(pk) {
+  try {
+    const response = await axios.get(`${API_URL}/comments/${pk}`)
+    return response.data
+  } catch (error) {
+    throw new Error(error.response.data.error)
+  }
+}
+
+async function getMovieCardComments(pk) {
+  try {
+    const response = await axios.get(`${API_URL}/card-comments/${pk}`)
+    return response.data
+  } catch (error) {
+    throw new Error(error.response.data.error)
+  }
+}
+
 export default {
   getFeed,
   getProfiles,
   getProfile,
-  getProfileFeed
+  getProfileFeed,
+  getMovieLikes,
+  getMovieComments,
+  getMovieCardComments
 }

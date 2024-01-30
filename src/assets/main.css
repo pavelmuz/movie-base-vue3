@@ -1,5 +1,3 @@
-@import './base.css';
-
 #app {
   max-width: 1280px;
   margin: 0 auto;
@@ -9,6 +7,6 @@
 
 body {
   background-color: #c3edc0;
-  padding-top: 5rem;
-  padding-bottom: 3rem;
+  padding-top: 3rem;
+  padding-bottom: 1rem;
 }

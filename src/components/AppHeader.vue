@@ -37,9 +37,6 @@
           <header-link :link="{ name: 'account' }" title="Профиль" />
           <header-link :link="{ name: 'login' }" title="Войти/Регистрация" />
           <li class="nav-item">
-            <a class="nav-link" href="#">Администрирование</a>
-          </li>
-          <li class="nav-item">
             <a class="nav-link" href="http://localhost:8000/api">API</a>
           </li>
           <li class="nav-item">

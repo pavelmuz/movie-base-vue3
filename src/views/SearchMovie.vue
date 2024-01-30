@@ -43,7 +43,6 @@ export default {
     async findMovies() {
       try {
         this.movieList = await apiKinooisk.getMovies(this.movieTitle)
-        console.log(this.movieList)
         this.$router.push({ name: 'search-results' })
       } catch (error) {
         console.log(error)

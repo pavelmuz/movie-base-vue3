@@ -1,7 +1,7 @@
 <template>
   <app-header />
   <router-view></router-view>
-  <!-- <AppFooter></AppFooter> -->
+  <app-footer />
 </template>
 
 <script>

@@ -14,10 +14,6 @@ export default {
     title: {
       type: String,
       required: true
-    },
-    customClass: {
-      type: String,
-      default: ''
     }
   }
 }
