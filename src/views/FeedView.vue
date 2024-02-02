@@ -2,27 +2,22 @@
   <movie-card v-for="movie in feedData" :key="movie" :movie="movie" />
 </template>
 
-<script>
+<script setup>
 import MovieCard from '@/components/MovieCard.vue'
-import apiMovibase from '@/includes/apiMoviebase'
-export default {
-  name: 'MainFeed',
-  components: {
-    MovieCard
-  },
-  data() {
-    return {
-      feedData: {}
-    }
-  },
-  async mounted() {
-    try {
-      this.feedData = await apiMovibase.getFeed()
-    } catch (error) {
-      console.log(error)
-    }
+import apiMoviebase from '@/includes/apiMoviebase'
+import { onMounted, ref } from 'vue'
+
+const feedData = ref({})
+
+const fetchData = async () => {
+  try {
+    feedData.value = await apiMoviebase.getFeed()
+  } catch (error) {
+    console.log(error)
   }
 }
+
+onMounted(fetchData)
 </script>
 
 <style scoped></style>

@@ -50,13 +50,8 @@
   </nav>
 </template>
 
-<script>
+<script setup>
 import HeaderLink from '@/components/HeaderLink.vue'
-export default {
-  components: {
-    HeaderLink
-  }
-}
 </script>
 
 <style scoped>

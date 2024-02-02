@@ -31,16 +31,10 @@
   </div>
 </template>
 
-<script>
-import useMoviesStore from '@/stores/movies'
-import { mapState } from 'pinia'
+<script setup>
+import { useMoviesStore } from '@/stores/movies'
 
-export default {
-  name: 'SearchMovieResults',
-  computed: {
-    ...mapState(useMoviesStore, ['movieList'])
-  }
-}
+const { movieList } = useMoviesStore()
 </script>
 
 <style scoped>

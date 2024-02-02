@@ -8,11 +8,7 @@
   </nav>
 </template>
 
-<script>
-export default {
-  name: 'AppFooter'
-}
-</script>
+<script setup></script>
 
 <style scoped>
 .navbar {

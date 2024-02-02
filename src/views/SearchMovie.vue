@@ -24,30 +24,22 @@
   </div>
 </template>
 
-<script>
-import apiKinooisk from '@/includes/apiKinopoisk'
+<script setup>
+import apiKinopoisk from '@/includes/apiKinopoisk'
 import useMoviesStore from '@/stores/movies'
-import { mapWritableState } from 'pinia'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
 
-export default {
-  name: 'SearchMovie',
-  data() {
-    return {
-      movieTitle: ''
-    }
-  },
-  computed: {
-    ...mapWritableState(useMoviesStore, ['movieList'])
-  },
-  methods: {
-    async findMovies() {
-      try {
-        this.movieList = await apiKinooisk.getMovies(this.movieTitle)
-        this.$router.push({ name: 'search-results' })
-      } catch (error) {
-        console.log(error)
-      }
-    }
+const movieTitle = ref('')
+const router = useRouter()
+const { setMovieList } = useMoviesStore()
+
+const findMovies = async () => {
+  try {
+    setMovieList(await apiKinopoisk.getMovies(movieTitle.value))
+    router.push({ name: 'search-results' })
+  } catch (error) {
+    console.log(error)
   }
 }
 </script>

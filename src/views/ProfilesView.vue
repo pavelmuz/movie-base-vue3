@@ -58,23 +58,21 @@
   </div>
 </template>
 
-<script>
-import apiMovibase from '@/includes/apiMoviebase'
-export default {
-  name: 'Profiles',
-  data() {
-    return {
-      profiles: {}
-    }
-  },
-  async mounted() {
-    try {
-      this.profiles = await apiMovibase.getProfiles()
-    } catch (error) {
-      console.log(error)
-    }
+<script setup>
+import apiMoviebase from '@/includes/apiMoviebase'
+import { onMounted, ref } from 'vue'
+
+const profiles = ref({})
+
+const getProfiles = async () => {
+  try {
+    profiles.value = await apiMoviebase.getProfiles()
+  } catch (error) {
+    console.log(error)
   }
 }
+
+onMounted(getProfiles)
 </script>
 
 <style scoped>

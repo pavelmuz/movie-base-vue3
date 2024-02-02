@@ -61,7 +61,7 @@
         <a href="#" class="card-link text-decoration-none">
           <h5 class="card-title">{{ movie.title }}</h5>
           <p class="card-text"><strong>Рейтинг: </strong>{{ movie.user_rating }}</p>
-          <p class="card-text"><strong>Обзор: </strong>{{ movie.description }}</p>
+          <p class="card-text"><strong>Обзор: </strong>{{ movie.user_review }}</p>
         </a>
       </div>
     </div>
@@ -121,43 +121,40 @@
   </div>
 </template>
 
-<script>
-import apiMovibase from '@/includes/apiMoviebase'
-export default {
-  name: 'MovieCard',
-  props: {
-    movie: {
-      type: Object,
-      required: true
-    }
-  },
-  data() {
-    return {
-      movieId: this.movie.id,
-      likes: {},
-      comments: {},
-      cardComments: {}
-    }
-  },
-  computed: {
-    totalLikes() {
-      return this.likes.length
-    },
-    totalComments() {
-      return this.comments.length
-    }
-  },
-  async mounted() {
-    try {
-      this.likes = await apiMovibase.getMovieLikes(this.movieId)
-      this.comments = await apiMovibase.getMovieComments(this.movieId)
-      this.cardComments = await apiMovibase.getMovieCardComments(this.movieId)
-      this.cardComments.reverse()
-    } catch (error) {
-      console.log(error)
-    }
+<script setup>
+import apiMoviebase from '@/includes/apiMoviebase'
+import { computed, onMounted, ref } from 'vue'
+
+const props = defineProps({
+  movie: {
+    type: Object,
+    required: true
+  }
+})
+
+const likes = ref({})
+const comments = ref({})
+const cardComments = ref({})
+const movieId = ref('')
+
+const totalLikes = computed(() => likes.value.length)
+const totalComments = computed(() => comments.value.length)
+
+async function fetchMovieData() {
+  movieId.value = props.movie.id
+  try {
+    likes.value = await apiMoviebase.getMovieLikes(movieId.value)
+    comments.value = await apiMoviebase.getMovieComments(movieId.value)
+    cardComments.value = await apiMoviebase.getMovieCardComments(movieId.value)
+    cardComments.value.reverse()
+  } catch (error) {
+    console.error(error)
   }
 }
+
+onMounted(async () => {
+  await fetchMovieData()
+})
 </script>
 
 <style scoped>

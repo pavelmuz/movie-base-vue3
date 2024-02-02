@@ -30,31 +30,33 @@
   </div>
 </template>
 
-<script>
-import apiKinooisk from '@/includes/apiKinopoisk'
-export default {
-  name: 'AddMovie',
-  data() {
-    return {
-      movie: {},
-      movieRating: '',
-      movieReview: ''
-    }
-  },
-  async mounted() {
-    try {
-      this.movie = await apiKinooisk.getMovie(this.$route.params.id)
-    } catch (error) {
-      console.error('Error:', error.message)
-    }
-  },
-  methods: {
-    addToDB() {
-      console.log('Movie saved to DB')
-      this.$router.push({ name: 'feed' })
-    }
+<script setup>
+import apiKinopoisk from '@/includes/apiKinopoisk'
+import { onMounted, ref } from 'vue'
+import { useRoute, useRouter } from 'vue-router'
+
+const movie = ref({})
+const movieRating = ref('')
+const movieReview = ref('')
+
+const route = useRoute()
+const router = useRouter()
+const routeParam = route.params.id
+
+const fetchMovieData = async () => {
+  try {
+    movie.value = await apiKinopoisk.getMovie(routeParam)
+  } catch (error) {
+    console.error('Error:', error.message)
   }
 }
+
+const addToDB = () => {
+  console.log('Movie saved to DB')
+  router.push({ name: 'feed' })
+}
+
+onMounted(fetchMovieData)
 </script>
 
 <style scoped>

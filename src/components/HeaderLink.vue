@@ -4,29 +4,25 @@
   </li>
 </template>
 
-<script>
-export default {
-  name: 'HeaderLink',
-  props: {
-    link: {
-      required: true
-    },
-    title: {
-      type: String,
-      required: true
-    }
+<script setup>
+import { defineProps } from 'vue'
+const props = defineProps({
+  link: {
+    required: true
+  },
+  title: {
+    type: String,
+    required: true
   }
-}
+})
 </script>
 
 <style scoped>
-.nav-link,
-.navbar-brand {
+.nav-link {
   color: #c3edc0;
 }
 
-.nav-link:hover,
-.navbar-brand:hover {
+.nav-link:hover {
   color: #9cbd99;
 }
 </style>
