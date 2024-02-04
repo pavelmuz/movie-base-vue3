@@ -83,6 +83,15 @@ async function getFollowings(pk) {
   }
 }
 
+async function getNotifications(pk) {
+  try {
+    const response = await axios.get(`${API_URL}/notifications/${pk}/`)
+    return response.data
+  } catch (error) {
+    throw new Error(error.response.data.error)
+  }
+}
+
 export default {
   getFeed,
   getProfiles,
@@ -92,5 +101,6 @@ export default {
   getMovieComments,
   getMovieCardComments,
   getFollowers,
-  getFollowings
+  getFollowings,
+  getNotifications
 }

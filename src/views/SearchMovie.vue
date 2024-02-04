@@ -4,22 +4,20 @@
       <!-- Title -->
       <h4 class="card-title">Найти фильм</h4>
       <!-- Search movie form -->
-      <form action="">
-        <div class="mb-3">
-          <label class="form-label">Название:</label>
-          <input
-            type="text"
-            v-model="movieTitle"
-            class="form-control"
-            name="movie-title"
-            style="color: #0b666a"
-          />
-        </div>
+      <div class="mb-3">
+        <label class="form-label">Название:</label>
+        <input
+          type="text"
+          v-model="movieTitle"
+          class="form-control mb-3"
+          name="movie-title"
+          style="color: #0b666a"
+        />
         <!-- Back button -->
         <button @click.prevent="findMovies" class="btn auth-btn">
           <i class="fa-solid fa-magnifying-glass"></i> Найти
         </button>
-      </form>
+      </div>
     </div>
   </div>
 </template>
@@ -27,6 +25,7 @@
 <script setup>
 import apiKinopoisk from '@/includes/apiKinopoisk'
 import useMoviesStore from '@/stores/movies'
+
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -34,7 +33,7 @@ const movieTitle = ref('')
 const router = useRouter()
 const { setMovieList } = useMoviesStore()
 
-const findMovies = async () => {
+async function findMovies() {
   try {
     setMovieList(await apiKinopoisk.getMovies(movieTitle.value))
     router.push({ name: 'search-results' })
@@ -118,6 +117,7 @@ body {
 .auth-btn,
 .edit-btn {
   background-color: #c3edc0;
+  width: 130px;
 }
 
 .auth-btn:hover,

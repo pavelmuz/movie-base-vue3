@@ -12,19 +12,16 @@
       <div class="col-7">
         <h4 class="card-title">{{ movie.nameRu }}</h4>
         <p class="card-text">{{ movie.year }}</p>
-
         <p v-if="movie.shortDescription" class="card-text">{{ movie.shortDescription }}</p>
 
         <!-- Form for personal review and rating -->
-        <form action="">
-          <label class="form-label">Ваш обзор:</label>
-          <textarea class="form-control" rows="3" v-model="movieReview"></textarea>
-          <label class="form-label">Ваша оценка:</label>
-          <input type="text" class="form-control" v-model="movieRating" />
-          <button @click.prevent="addToDB" class="btn edit-btn mt-1">
-            <i class="fa-solid fa-floppy-disk"></i> Сохранить
-          </button>
-        </form>
+        <label class="form-label">Ваш обзор:</label>
+        <textarea class="form-control" rows="3" v-model="movieReview"></textarea>
+        <label class="form-label">Ваша оценка:</label>
+        <input type="text" class="form-control" v-model="movieRating" />
+        <button @click.prevent="addToDB" class="btn edit-btn mt-2">
+          <i class="fa-solid fa-floppy-disk"></i> Сохранить
+        </button>
       </div>
     </div>
   </div>

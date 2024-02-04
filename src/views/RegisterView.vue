@@ -4,7 +4,7 @@
       <!-- Card title -->
       <h4 class="card-title">Создать аккаунт</h4>
       <!-- Register form -->
-      <form action="" method="post">
+      <div>
         <div class="mb-3">
           <label class="form-label">Имя пользователя:</label>
           <input type="text" class="form-control" name="username" style="color: #0b666a" />
@@ -30,8 +30,9 @@
             style="color: #0b666a"
           />
         </div>
-        <button type="submit" class="btn auth-btn mt-2">Создать аккаунт</button>
-      </form>
+        <button class="btn auth-btn mt-2">Создать аккаунт</button>
+      </div>
+
       <!-- Login link -->
       <p class="card-text py-3">
         Уже есть аккаунт?
@@ -56,6 +57,7 @@
 
 .auth-btn {
   background-color: #c3edc0;
+  width: 160px;
 }
 
 .auth-btn:hover {

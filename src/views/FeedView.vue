@@ -1,5 +1,11 @@
 <template>
-  <movie-card v-for="movie in feedData" :key="movie" :movie="movie" />
+  <movie-card
+    v-for="movie in feedData"
+    :key="movie"
+    :movie="movie"
+    :show-options="false"
+    :show-owner="true"
+  />
 </template>
 
 <script setup>

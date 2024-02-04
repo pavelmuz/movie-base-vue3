@@ -21,16 +21,7 @@
           <header-link :link="{ name: 'feed' }" title="Лента" />
           <header-link :link="{ name: 'profiles' }" title="Найти" />
           <header-link :link="{ name: 'search' }" title="Добавить фильм" />
-          <li class="nav-item">
-            <a class="nav-link position-relative" href="#">
-              Уведомления
-              <span
-                class="position-absolute top-1 start-90 translate-middle p-1 bg-danger border border-light rounded-circle"
-              >
-                <span class="visually-hidden">New alerts</span>
-              </span>
-            </a>
-          </li>
+          <header-link :link="{ name: 'notifications' }" title="Уведомления" />
           <li class="nav-item">
             <a class="nav-link" href="#">Сообщения</a>
           </li>

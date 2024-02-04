@@ -4,7 +4,7 @@
       <!-- Card title -->
       <h4 class="card-title">Войти в аккаунт</h4>
       <!-- Login form -->
-      <form action="" method="post">
+      <div>
         <div class="mb-3">
           <label class="form-label">Имя пользователя:</label>
           <input type="text" class="form-control" name="username" style="color: #0b666a" />
@@ -13,8 +13,8 @@
           <label class="form-label">Пароль:</label>
           <input type="password" class="form-control" name="password" style="color: #0b666a" />
         </div>
-        <button type="submit" class="btn auth-btn">Войти</button>
-      </form>
+        <button class="btn auth-btn">Войти</button>
+      </div>
       <p class="card-text pt-2 mb-1">или войдите с помощью:</p>
       <!-- Social Logins -->
       <div class="row me-auto">
@@ -64,6 +64,7 @@
 
 .auth-btn {
   background-color: #c3edc0;
+  width: 130px;
 }
 
 .auth-btn:hover {

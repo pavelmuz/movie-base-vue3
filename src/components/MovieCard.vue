@@ -1,15 +1,19 @@
 <template>
   <div class="container card movie-card mx-auto mb-2">
     <!-- Movie owner info -->
-    <div class="row py-2">
+    <router-link
+      v-if="showOwner"
+      :to="{ name: 'profile', params: { id: movie.owner.id } }"
+      class="row pt-2 card-link text-decoration-none"
+    >
       <div class="col-auto">
         <img src="@/assets/images/test_avatar.png" class="avatar-img-sm" />
       </div>
       <div class="col ps-0">
         <p class="card-text">{{ movie.owner.username }}</p>
       </div>
-    </div>
-    <div class="row">
+    </router-link>
+    <div class="row pt-2">
       <div class="col-4">
         <!-- Movie poster -->
         <img :src="movie.poster_url" class="rounded movie-card-poster" />
@@ -59,7 +63,40 @@
       <!-- Movie info -->
       <div class="col-8">
         <a href="#" class="card-link text-decoration-none">
-          <h5 class="card-title">{{ movie.title }}</h5>
+          <div class="row">
+            <!-- Movie title -->
+            <div class="col-8 me-auto pt-2">
+              <h5 class="card-title">{{ movie.title }}</h5>
+            </div>
+            <!-- Movie options -->
+            <div v-if="showOptions" class="col-auto">
+              <!-- Movie options dropdown -->
+              <div class="dropdown dropstart">
+                <!-- Open dropdown -->
+                <button
+                  class="btn dropdown-btn"
+                  type="button"
+                  data-bs-toggle="dropdown"
+                  aria-expanded="false"
+                >
+                  <i class="fa-solid fa-ellipsis fa-xl"></i>
+                </button>
+                <!-- Dropdown -->
+                <ul class="dropdown-menu">
+                  <li>
+                    <a class="dropdown-item edit-link" href="{% url 'edit-movie' movie.id %}">
+                      <i class="fa-solid fa-pen-to-square"></i> Изменить
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item delete-link" href="{% url 'delete-movie' movie.id %}">
+                      <i class="fa-solid fa-trash-can"></i> Удалить фильм
+                    </a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
           <p class="card-text"><strong>Рейтинг: </strong>{{ movie.user_rating }}</p>
           <p class="card-text"><strong>Обзор: </strong>{{ movie.user_review }}</p>
         </a>
@@ -129,6 +166,14 @@ const props = defineProps({
   movie: {
     type: Object,
     required: true
+  },
+  showOwner: {
+    type: Boolean,
+    required: true
+  },
+  showOptions: {
+    type: Boolean,
+    required: true
   }
 })
 
@@ -167,7 +212,12 @@ onMounted(async () => {
   color: #9cbd99;
 }
 
+.link-active {
+  color: #9cbd99;
+}
+
 .movie-card,
+.profile-card,
 .modal-content {
   background-color: #0b666a;
   color: #c3edc0;
@@ -190,6 +240,40 @@ onMounted(async () => {
   background-color: #9cbd99;
 }
 
+.dropdown-btn {
+  color: #c3edc0;
+  border-color: transparent;
+}
+
+.dropdown-menu {
+  border-color: #c3edc0;
+  background-color: #0b666a;
+}
+
+.dropdown-item {
+  color: #c3edc0;
+}
+
+.dropdown-item:hover {
+  background-color: #0b666a;
+}
+
+.edit-link {
+  color: #ffff00;
+}
+
+.edit-link:hover {
+  color: #cccc00;
+}
+
+.delete-link {
+  color: #fa1e0e;
+}
+
+.delete-link:hover {
+  color: #c8180b;
+}
+
 .avatar-img-md {
   width: 50px;
   height: 50px;
@@ -202,5 +286,13 @@ onMounted(async () => {
   height: 25px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+.modal-link {
+  cursor: pointer;
+}
+
+.modal-header {
+  border-bottom: 2px solid #c3edc0;
 }
 </style>

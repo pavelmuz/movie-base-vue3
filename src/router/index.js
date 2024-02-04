@@ -3,11 +3,13 @@ import { createRouter, createWebHistory } from 'vue-router'
 const Login = () => import('@/views/LoginView.vue')
 const Register = () => import('@/views/RegisterView.vue')
 const Feed = () => import('@/views/FeedView.vue')
-const Profiles = () => import('@/views/ProfilesView.vue')
+const SearchProfiles = () => import('@/views/SearchProfilesView.vue')
 const SearchMovie = () => import('@/views/SearchMovie.vue')
 const SearchMovieResults = () => import('@/views/SearchMovieResults.vue')
 const AddMovie = () => import('@/views/AddMovieView.vue')
 const Account = () => import('@/views/AccountView.vue')
+const Profile = () => import('@/views/ProfileView.vue')
+const Notifications = () => import('@/views/NotificationsView.vue')
 
 const routes = [
   {
@@ -28,7 +30,7 @@ const routes = [
   {
     name: 'profiles',
     path: '/profiles',
-    component: Profiles
+    component: SearchProfiles
   },
   {
     name: 'search',
@@ -49,6 +51,16 @@ const routes = [
     name: 'account',
     path: '/account',
     component: Account
+  },
+  {
+    name: 'profile',
+    path: '/profile/:id',
+    component: Profile
+  },
+  {
+    name: 'notifications',
+    path: '/notifications/',
+    component: Notifications
   }
 ]
 
