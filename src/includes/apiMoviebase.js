@@ -92,6 +92,43 @@ async function getNotifications(pk) {
   }
 }
 
+async function getActiveChats(pk) {
+  try {
+    const response = await axios.get(`${API_URL}/active-chats/${pk}/`)
+    return response.data
+  } catch (error) {
+    throw new Error(error.response.data.error)
+  }
+}
+
+async function getChat(userId, recipientId) {
+  try {
+    const response = await axios.get(`${API_URL}/chat/${userId}/${recipientId}`)
+    return response.data
+  } catch (error) {
+    throw new Error(error.response.data.error)
+  }
+}
+
+async function getMovies(title) {
+  try {
+    const response = await axios.get(`${API_URL}/movies/${title}/`)
+    return response.data
+  } catch (error) {
+    throw new Error(error.response.data.error)
+  }
+}
+
+async function getMovie(kinopoiskId) {
+  try {
+    const response = await axios.get(`${API_URL}/movie/${kinopoiskId}/`)
+    return response.data
+  } catch (error) {
+    throw new Error(error.response.data.error)
+  }
+}
+
+
 export default {
   getFeed,
   getProfiles,
@@ -102,5 +139,9 @@ export default {
   getMovieCardComments,
   getFollowers,
   getFollowings,
-  getNotifications
+  getNotifications,
+  getActiveChats,
+  getChat,
+  getMovies,
+  getMovie
 }

@@ -22,9 +22,7 @@
           <header-link :link="{ name: 'profiles' }" title="Найти" />
           <header-link :link="{ name: 'search' }" title="Добавить фильм" />
           <header-link :link="{ name: 'notifications' }" title="Уведомления" />
-          <li class="nav-item">
-            <a class="nav-link" href="#">Сообщения</a>
-          </li>
+          <header-link :link="{ name: 'chats' }" title="Сообщения" />
           <header-link :link="{ name: 'account' }" title="Профиль" />
           <header-link :link="{ name: 'login' }" title="Войти/Регистрация" />
           <li class="nav-item">

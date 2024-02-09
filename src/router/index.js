@@ -4,12 +4,14 @@ const Login = () => import('@/views/LoginView.vue')
 const Register = () => import('@/views/RegisterView.vue')
 const Feed = () => import('@/views/FeedView.vue')
 const SearchProfiles = () => import('@/views/SearchProfilesView.vue')
-const SearchMovie = () => import('@/views/SearchMovie.vue')
-const SearchMovieResults = () => import('@/views/SearchMovieResults.vue')
+const SearchMovie = () => import('@/views/SearchMovieView.vue')
+const SearchMovieResults = () => import('@/views/SearchMovieResultsView.vue')
 const AddMovie = () => import('@/views/AddMovieView.vue')
 const Account = () => import('@/views/AccountView.vue')
 const Profile = () => import('@/views/ProfileView.vue')
 const Notifications = () => import('@/views/NotificationsView.vue')
+const Chats = () => import('@/views/ChatsView.vue')
+const Chat = () => import('@/views/ChatView.vue')
 
 const routes = [
   {
@@ -39,7 +41,7 @@ const routes = [
   },
   {
     name: 'search-results',
-    path: '/search-results',
+    path: '/search-results/:title',
     component: SearchMovieResults
   },
   {
@@ -61,6 +63,16 @@ const routes = [
     name: 'notifications',
     path: '/notifications/',
     component: Notifications
+  },
+  {
+    name: 'chats',
+    path: '/chats/',
+    component: Chats
+  },
+  {
+    name: 'chat',
+    path: '/chats/:userId/:recipientId',
+    component: Chat
   }
 ]
 

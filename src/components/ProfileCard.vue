@@ -211,51 +211,15 @@ watch(
 </script>
 
 <style scoped>
-body {
-  background-color: #c3edc0;
-  padding-top: 5rem;
-  padding-bottom: 3rem;
-}
-
-.navbar {
-  background-color: #1b3333;
-}
-
-.nav-logo {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.nav-link,
-.navbar-brand,
-.card-link,
 .modal-close,
-.footer-text,
-.footer-link,
-.notification-btn {
+.card-link {
   color: #c3edc0;
 }
 
-.nav-link:hover,
-.navbar-brand:hover,
-.modal-close:hover,
-.notification-btn:hover {
+.modal-close:hover {
   color: #9cbd99;
 }
 
-.link-active {
-  color: #9cbd99;
-}
-
-.navbar-toggler {
-  color: #c3edc0;
-  border-color: #c3edc0;
-}
-
-.movie-card,
-.auth-card,
 .profile-card,
 .modal-content {
   background-color: #0b666a;
@@ -269,37 +233,13 @@ body {
   max-width: 700px;
 }
 
-.movie-card-poster {
-  max-width: 220px;
-}
-
-.movie-poster-search {
-  max-width: 120px;
-}
-
-.card-button {
-  color: #c3edc0;
-}
-
-.auth-btn,
 .edit-btn {
   background-color: #c3edc0;
 }
 
-.auth-btn:hover,
 .edit-btn:hover {
   background-color: #9cbd99;
 }
-
-.social-btn {
-  background-color: #c3edc0;
-  width: 130px;
-}
-
-.social-btn:hover {
-  background-color: #9cbd99;
-}
-
 .dropdown-btn {
   color: #c3edc0;
   border-color: transparent;
@@ -341,13 +281,6 @@ body {
   object-fit: cover;
 }
 
-.avatar-img-sm {
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
 .avatar-img-lg {
   width: 90px;
   height: 90px;
@@ -355,8 +288,7 @@ body {
   object-fit: cover;
 }
 
-.search-user-card,
-.chats-card {
+.search-user-card {
   background-color: #0b666a;
   color: #c3edc0;
   max-width: 600px;
@@ -384,64 +316,11 @@ body {
   border-color: #c3edc0;
 }
 
-.search-user {
-  max-width: 600px;
-}
-
-.search-user-btn {
-  background-color: transparent;
-  border-color: #0b666a;
-  color: #0b666a;
-  width: 120px;
-}
-
-.search-user-btn:hover {
-  background-color: #0b666a;
-  color: #c3edc0;
-}
-
-.search-user-input::placeholder {
-  color: #0b666a;
-}
-
-.alert {
-  max-width: 700px;
-}
-
 .modal-link {
   cursor: pointer;
 }
 
 .modal-header {
   border-bottom: 2px solid #c3edc0;
-}
-
-.chat-feed {
-  background-color: #edf9ec;
-}
-
-.message-bubble {
-  max-width: 220px;
-}
-
-.message-sender {
-  background-color: #cff0cc;
-}
-
-.message-recipient {
-  background-color: #afd5ac;
-}
-
-.message-input {
-  background-color: #edf9ec;
-}
-
-.message-input:focus {
-  background-color: #edf9ec;
-  color: #0b666a;
-}
-
-::placeholder {
-  color: #0b666a;
 }
 </style>

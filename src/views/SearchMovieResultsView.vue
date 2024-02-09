@@ -6,7 +6,7 @@
     </div>
   </div>
   <!-- Movie card -->
-  <div v-for="movie in movieList.items" :key="movie" class="container card movie-card mx-auto my-1">
+  <div v-for="movie in movieList" :key="movie" class="container card movie-card mx-auto my-1">
     <div class="row py-2">
       <!-- Movie poster -->
       <div class="col-auto my-auto">
@@ -32,9 +32,25 @@
 </template>
 
 <script setup>
-import { useMoviesStore } from '@/stores/movies'
+import apiMovibase from '@/includes/apiMoviebase'
+import { onMounted, ref } from 'vue'
+import { useRoute } from 'vue-router'
 
-const { movieList } = useMoviesStore()
+const movieList = ref({})
+const route = useRoute()
+const movieTitle = ref(route.params.title || '')
+
+async function fetchMovies() {
+  try {
+    movieList.value = await apiMovibase.getMovies(movieTitle.value)
+  } catch (error) {
+    console.error('Error:', error.message)
+  }
+}
+
+onMounted(async () => {
+  await fetchMovies()
+})
 </script>
 
 <style scoped>

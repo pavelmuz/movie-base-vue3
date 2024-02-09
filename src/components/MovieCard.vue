@@ -84,12 +84,12 @@
                 <!-- Dropdown -->
                 <ul class="dropdown-menu">
                   <li>
-                    <a class="dropdown-item edit-link" href="{% url 'edit-movie' movie.id %}">
+                    <a class="dropdown-item edit-link" href="#">
                       <i class="fa-solid fa-pen-to-square"></i> Изменить
                     </a>
                   </li>
                   <li>
-                    <a class="dropdown-item delete-link" href="{% url 'delete-movie' movie.id %}">
+                    <a class="dropdown-item delete-link" href="#">
                       <i class="fa-solid fa-trash-can"></i> Удалить фильм
                     </a>
                   </li>

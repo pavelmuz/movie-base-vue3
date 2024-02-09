@@ -18,7 +18,7 @@
       </div>
       <div v-else-if="notificationType == 'comment'" class="col-auto my-auto px-1">
         <a href="#" class="card-link text-decoration-none">
-          <p class="card-text">{{ notification.sender.username }} прокомментировал</p>
+          <p class="card-text">{{ notification.sender.username }} прокомментировал:</p>
         </a>
       </div>
       <div v-else-if="notificationType == 'message'" class="col-auto my-auto px-1">
@@ -39,8 +39,8 @@
           <p class="card-text">{{ notification.message.body }}</p>
         </a>
       </div>
-      <div class="col-auto">
-        <button class="btn notification-btn ps-auto ms-auto">
+      <div class="col-auto ms-auto">
+        <button class="btn notification-btn ps-auto">
           <i class="fa-solid fa-xmark fa-xl"></i>
         </button>
       </div>

@@ -28,7 +28,7 @@
 </template>
 
 <script setup>
-import apiKinopoisk from '@/includes/apiKinopoisk'
+import apiMovibase from '@/includes/apiMoviebase'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -38,11 +38,11 @@ const movieReview = ref('')
 
 const route = useRoute()
 const router = useRouter()
-const routeParam = route.params.id
+const kinopoiskId = route.params.id
 
 const fetchMovieData = async () => {
   try {
-    movie.value = await apiKinopoisk.getMovie(routeParam)
+    movie.value = await apiMovibase.getMovie(kinopoiskId)
   } catch (error) {
     console.error('Error:', error.message)
   }
