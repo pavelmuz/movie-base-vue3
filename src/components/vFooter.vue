@@ -8,8 +8,6 @@
   </nav>
 </template>
 
-<script setup></script>
-
 <style scoped>
 .navbar {
   background-color: #1b3333;

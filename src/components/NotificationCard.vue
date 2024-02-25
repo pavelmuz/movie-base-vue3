@@ -3,7 +3,7 @@
     <div class="row py-1">
       <div class="col-auto my-auto pe-0">
         <a href="#" class="card-link text-decoration-none">
-          <img src="@/assets/images/test_avatar.png" class="avatar-img-sm" />
+          <img :src="notification.sender.profile_image" class="avatar-img-sm" />
         </a>
       </div>
       <div v-if="notificationType == 'follow'" class="col-auto my-auto px-1">
@@ -40,7 +40,7 @@
         </a>
       </div>
       <div class="col-auto ms-auto">
-        <button class="btn notification-btn ps-auto">
+        <button class="btn notification-btn ps-auto" @click.prevent="deleteNotification">
           <i class="fa-solid fa-xmark fa-xl"></i>
         </button>
       </div>
@@ -49,6 +49,7 @@
 </template>
 
 <script setup>
+import apiNotifications from '@/services/apiNotifications'
 const props = defineProps({
   notification: {
     type: Object,
@@ -59,6 +60,15 @@ const props = defineProps({
     required: true
   }
 })
+
+async function deleteNotification() {
+  try {
+    await apiNotifications.deleteNotification(props.notification.id)
+    location.reload()
+  } catch (error) {
+    console.log(error)
+  }
+}
 </script>
 
 <style scoped>

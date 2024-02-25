@@ -4,9 +4,9 @@
     <!-- Back button -->
     <div class="row pb-2">
       <div class="col-auto pt-2">
-        <a href="#" class="card-link text-decoration-none" id="back-button">
+        <router-link :to="{ name: 'chats' }" class="card-link text-decoration-none">
           <i class="fa-solid fa-chevron-left fa-xl"></i> Назад
-        </a>
+        </router-link>
       </div>
     </div>
     <!-- Chat recipinet info -->
@@ -14,7 +14,7 @@
       <h5 class="card-title">
         Чат с пользователем:
         <a href="#" class="card-link text-decoration-none">
-          <img src="@/assets/images/test_avatar.png" class="avatar-img-sm mx-2" />
+          <img :src="recipient.profile_image" class="avatar-img-sm mx-2" />
           {{ recipient.username }}
         </a>
       </h5>
@@ -45,16 +45,20 @@
         rows="2"
         placeholder="Введите сообщение"
         name="chat-message"
+        v-model="message"
       ></textarea>
       <div class="col-auto">
-        <button type="submit" class="btn edit-btn mb-2">Отправить</button>
+        <button type="submit" class="btn edit-btn mb-2" @click.prevent="sendMessage">
+          Отправить
+        </button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
-import apiMoviebase from '@/includes/apiMoviebase'
+import apiChats from '@/services/apiChats'
+import apiProfiles from '@/services/apiProfiles'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -62,12 +66,13 @@ const route = useRoute()
 const userId = route.params.userId
 const recipientId = route.params.recipientId
 
-const messageFeed = ref({})
+const messageFeed = ref([])
 const recipient = ref({})
+const message = ref('')
 
 async function fetchMessages() {
   try {
-    messageFeed.value = await apiMoviebase.getChat(userId, recipientId)
+    messageFeed.value = await apiChats.getChat(recipientId)
   } catch (error) {
     console.log(error)
   }
@@ -75,7 +80,19 @@ async function fetchMessages() {
 
 async function fetchRecipient() {
   try {
-    recipient.value = await apiMoviebase.getProfile(recipientId)
+    recipient.value = await apiProfiles.getProfile(recipientId)
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function sendMessage() {
+  try {
+    await apiChats.sendMessage(recipientId, {
+      message: message.value
+    })
+    message.value = ''
+    await fetchMessages()
   } catch (error) {
     console.log(error)
   }

@@ -1,17 +1,17 @@
 import { createRouter, createWebHistory } from 'vue-router'
 
-const Login = () => import('@/views/LoginView.vue')
-const Register = () => import('@/views/RegisterView.vue')
-const Feed = () => import('@/views/FeedView.vue')
-const SearchProfiles = () => import('@/views/SearchProfilesView.vue')
-const SearchMovie = () => import('@/views/SearchMovieView.vue')
-const SearchMovieResults = () => import('@/views/SearchMovieResultsView.vue')
-const AddMovie = () => import('@/views/AddMovieView.vue')
-const Account = () => import('@/views/AccountView.vue')
-const Profile = () => import('@/views/ProfileView.vue')
-const Notifications = () => import('@/views/NotificationsView.vue')
-const Chats = () => import('@/views/ChatsView.vue')
-const Chat = () => import('@/views/ChatView.vue')
+const Login = () => import('@/views/Login.vue')
+const Register = () => import('@/views/Register.vue')
+const Feed = () => import('@/views/MainFeed.vue')
+const SearchProfiles = () => import('@/views/SearchProfiles.vue')
+const SearchMovie = () => import('@/views/SearchMovie.vue')
+const SearchMovieResults = () => import('@/views/SearchMovieResults.vue')
+const AddMovie = () => import('@/views/AddMovie.vue')
+const Account = () => import('@/views/Account.vue')
+const Profile = () => import('@/views/Profile.vue')
+const Notifications = () => import('@/views/Notifications.vue')
+const ActiveChats = () => import('@/views/ActiveChats.vue')
+const Chat = () => import('@/views/Chat.vue')
 
 const routes = [
   {
@@ -67,7 +67,7 @@ const routes = [
   {
     name: 'chats',
     path: '/chats/',
-    component: Chats
+    component: ActiveChats
   },
   {
     name: 'chat',

@@ -11,7 +11,7 @@
     <div class="row py-2">
       <!-- Prodile avatar -->
       <div class="col-auto my-auto">
-        <img src="@/assets/images/test_avatar.png" class="avatar-img-md" />
+        <img :src="chat.profile_image" class="avatar-img-md" />
       </div>
       <!-- Profile username -->
       <div class="col-auto my-auto">
@@ -35,14 +35,14 @@
 </template>
 
 <script setup>
-import apiMoviebase from '@/includes/apiMoviebase'
+import apiChats from '@/services/apiChats'
 import { onMounted, ref } from 'vue'
 
-const activeChats = ref({})
+const activeChats = ref([])
 
 async function fetchActiveChats() {
   try {
-    activeChats.value = await apiMoviebase.getActiveChats('477aed47-d388-46c9-9375-e21f8896a5ba')
+    activeChats.value = await apiChats.getActiveChats()
   } catch (error) {
     console.log(error)
   }

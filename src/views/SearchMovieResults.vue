@@ -32,17 +32,17 @@
 </template>
 
 <script setup>
-import apiMovibase from '@/includes/apiMoviebase'
+import apiMovibase from '@/services/apiMovies'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
-const movieList = ref({})
+const movieList = ref([])
 const route = useRoute()
 const movieTitle = ref(route.params.title || '')
 
 async function fetchMovies() {
   try {
-    movieList.value = await apiMovibase.getMovies(movieTitle.value)
+    movieList.value = await apiMovibase.getKinopoiskMovies(movieTitle.value)
   } catch (error) {
     console.error('Error:', error.message)
   }

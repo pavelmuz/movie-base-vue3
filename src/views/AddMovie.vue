@@ -16,10 +16,10 @@
 
         <!-- Form for personal review and rating -->
         <label class="form-label">Ваш обзор:</label>
-        <textarea class="form-control" rows="3" v-model="movieReview"></textarea>
+        <textarea class="form-control" rows="3" v-model="userReview"></textarea>
         <label class="form-label">Ваша оценка:</label>
-        <input type="text" class="form-control" v-model="movieRating" />
-        <button @click.prevent="addToDB" class="btn edit-btn mt-2">
+        <input type="text" class="form-control" v-model="userRating" />
+        <button @click.prevent="addMovie" class="btn edit-btn mt-2">
           <i class="fa-solid fa-floppy-disk"></i> Сохранить
         </button>
       </div>
@@ -28,32 +28,45 @@
 </template>
 
 <script setup>
-import apiMovibase from '@/includes/apiMoviebase'
+import apiMovies from '@/services/apiMovies'
 import { onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const movie = ref({})
-const movieRating = ref('')
-const movieReview = ref('')
+const userRating = ref('')
+const userReview = ref('')
 
 const route = useRoute()
 const router = useRouter()
 const kinopoiskId = route.params.id
 
-const fetchMovieData = async () => {
+async function fetchMovieData() {
   try {
-    movie.value = await apiMovibase.getMovie(kinopoiskId)
+    movie.value = await apiMovies.getKinopoiskMovie(kinopoiskId)
   } catch (error) {
     console.error('Error:', error.message)
   }
 }
 
-const addToDB = () => {
-  console.log('Movie saved to DB')
-  router.push({ name: 'feed' })
+async function addMovie() {
+  try {
+    await apiMovies.addMovie({
+      title: movie.value.nameRu,
+      user_rating: parseFloat(userRating.value),
+      user_review: userReview.value,
+      description: movie.value.description,
+      poster_url: movie.value.posterUrl,
+      kinopoisk_url: movie.value.webUrl
+    })
+    router.push({ name: 'account' })
+  } catch (error) {
+    console.error('Error:', error.message)
+  }
 }
 
-onMounted(fetchMovieData)
+onMounted(async () => {
+  await fetchMovieData()
+})
 </script>
 
 <style scoped>

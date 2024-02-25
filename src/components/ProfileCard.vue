@@ -3,7 +3,7 @@
     <div class="row py-3 px-3">
       <!-- Profile avatar -->
       <div class="col-auto">
-        <img src="@/assets/images/test_avatar.png" class="avatar-img-lg" />
+        <img :src="profile.profile_image" class="avatar-img-lg" />
       </div>
       <!-- Profile info -->
       <div class="col-6 me-auto">
@@ -15,7 +15,7 @@
         <div class="row">
           <!-- Movies count -->
           <div class="col-auto text-center">
-            <p class="card-text my-0 fw-light">{{ movieCount }}</p>
+            <p class="card-text my-0 fw-light">{{ movieCount || 0 }}</p>
             <p class="card-txt my-0 fw-light">фильмы</p>
           </div>
           <!-- Followers count + modal button -->
@@ -24,7 +24,7 @@
             data-bs-toggle="modal"
             data-bs-target="#followers"
           >
-            <p class="card-text my-0 fw-light">{{ followers.length }}</p>
+            <p class="card-text my-0 fw-light">{{ followersCount }}</p>
             <p class="card-txt my-0 fw-light">подписчики</p>
           </div>
           <!-- Followers modal -->
@@ -40,14 +40,14 @@
                 </div>
                 <div class="modal-body">
                   <!-- Followers list -->
-                  <div v-for="follower in followers" :key="follower" class="row">
+                  <div v-for="follower in profile.followers" :key="follower" class="row">
                     <!-- Profile avatar -->
                     <div class="col-auto my-auto pe-0">
                       <router-link
                         :to="{ name: 'profile', params: { id: follower.follower.id } }"
                         class="card-link text-decoration-none"
                       >
-                        <img src="@/assets/images/test_avatar.png" class="avatar-img-md" />
+                        <img :src="follower.follower.profile_image" class="avatar-img-md" />
                       </router-link>
                     </div>
                     <!-- Profile info -->
@@ -73,7 +73,7 @@
             data-bs-toggle="modal"
             data-bs-target="#following"
           >
-            <p class="card-text my-0 fw-light">{{ followings.length }}</p>
+            <p class="card-text my-0 fw-light">{{ followingsCount }}</p>
             <p class="card-txt my-0 fw-light">подписки</p>
           </div>
           <!-- Follow modal -->
@@ -89,14 +89,14 @@
                 </div>
                 <div class="modal-body">
                   <!-- Follow list -->
-                  <div v-for="following in followings" :key="following" class="row">
+                  <div v-for="following in profile.followings" :key="following" class="row">
                     <!-- Profile avatar -->
                     <div class="col-auto my-auto pe-0">
                       <router-link
                         :to="{ name: 'profile', params: { id: following.following.id } }"
                         class="card-link text-decoration-none"
                       >
-                        <img src="@/assets/images/test_avatar.png" class="avatar-img-md" />
+                        <img :src="following.following.profile_image" class="avatar-img-md" />
                       </router-link>
                     </div>
                     <!-- Profile info -->
@@ -153,7 +153,7 @@
               </a>
             </li>
             <li>
-              <a class="dropdown-item delete-link" href="#">
+              <a class="dropdown-item delete-link" href="#" @click.prevent="deleteAccount">
                 <i class="fa-solid fa-trash-can"></i> Удалить аккаунт
               </a>
             </li>
@@ -165,8 +165,10 @@
 </template>
 
 <script setup>
-import apiMoviebase from '@/includes/apiMoviebase'
+import apiProfiles from '@/services/apiProfiles'
 import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
+
 const props = defineProps({
   profile: {
     type: Object,
@@ -186,25 +188,37 @@ const props = defineProps({
   }
 })
 
-const followers = ref({})
-const followings = ref({})
-const profileId = ref('')
+const profile = ref({})
+const movieCount = ref()
+const followersCount = ref()
+const followingsCount = ref()
+const router = useRouter()
 
-async function fetchFollow() {
-  profileId.value = props.profile.id
+async function deleteAccount() {
   try {
-    followers.value = await apiMoviebase.getFollowers(profileId.value)
-    followings.value = await apiMoviebase.getFollowings(profileId.value)
+    await apiProfiles.deleteAccount()
+    router.push({ name: 'login' })
   } catch (error) {
     console.log(error)
   }
 }
 
 watch(
-  () => props.profile.id,
-  async (newValue, oldValue) => {
+  () => props.profile,
+  (newValue, oldValue) => {
     if (newValue) {
-      await fetchFollow()
+      profile.value = newValue
+      followersCount.value = newValue.followers.length
+      followingsCount.value = newValue.followings.length
+    }
+  }
+)
+
+watch(
+  () => props.movieCount,
+  (newValue, oldValue) => {
+    if (newValue) {
+      movieCount.value = newValue
     }
   }
 )

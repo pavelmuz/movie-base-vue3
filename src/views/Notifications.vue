@@ -16,16 +16,14 @@
 
 <script setup>
 import NotificationCard from '@/components/NotificationCard.vue'
-import apiMoviebase from '@/includes/apiMoviebase'
+import apiNotifications from '@/services/apiNotifications'
 import { onMounted, ref } from 'vue'
 
-const notifications = ref({})
+const notifications = ref([])
 
 async function fetchNotifications() {
   try {
-    notifications.value = await apiMoviebase.getNotifications(
-      '477aed47-d388-46c9-9375-e21f8896a5ba'
-    )
+    notifications.value = await apiNotifications.getNotifications()
   } catch (error) {
     console.log(error)
   }

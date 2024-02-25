@@ -7,7 +7,7 @@
           :to="{ name: 'profile', params: { id: profile.id } }"
           class="card-link text-decoration-none"
         >
-          <img src="@/assets/images/test_avatar.png" class="avatar-img-md" />
+          <img :src="profile.profile_image" class="avatar-img-md" />
         </router-link>
       </div>
       <!-- User info -->

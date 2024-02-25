@@ -10,18 +10,20 @@
 
 <script setup>
 import MovieCard from '@/components/MovieCard.vue'
-import apiMoviebase from '@/includes/apiMoviebase'
+import apiMovies from '@/services/apiMovies'
 import { onMounted, ref } from 'vue'
 
-const feedData = ref({})
+const feedData = ref([])
 
-const fetchData = async () => {
+async function fetchMainFeed() {
   try {
-    feedData.value = await apiMoviebase.getFeed()
+    feedData.value = await apiMovies.getMainFeed()
   } catch (error) {
     console.log(error)
   }
 }
 
-onMounted(fetchData)
+onMounted(async () => {
+  await fetchMainFeed()
+})
 </script>

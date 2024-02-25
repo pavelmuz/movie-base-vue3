@@ -7,13 +7,25 @@
       <div>
         <div class="mb-3">
           <label class="form-label">Имя пользователя:</label>
-          <input type="text" class="form-control" name="username" style="color: #0b666a" />
+          <input
+            type="text"
+            v-model="username"
+            class="form-control"
+            name="username"
+            style="color: #0b666a"
+          />
         </div>
         <div class="mb-3">
           <label class="form-label">Пароль:</label>
-          <input type="password" class="form-control" name="password" style="color: #0b666a" />
+          <input
+            type="password"
+            v-model="password"
+            class="form-control"
+            name="password"
+            style="color: #0b666a"
+          />
         </div>
-        <button class="btn auth-btn">Войти</button>
+        <button class="btn auth-btn" @click="login">Войти</button>
       </div>
       <p class="card-text pt-2 mb-1">или войдите с помощью:</p>
       <!-- Social Logins -->
@@ -40,7 +52,7 @@
         </div>
       </div>
       <!-- Forgot passowrd and register links -->
-      <a href="#" class="card-link mt-2">Забыли пароль?</a>
+      <a href="http://localhost:8000/reset_password/" class="card-link mt-2">Забыли пароль?</a>
       <p class="card-text my-3">
         Еще нет аккаунта?
         <router-link :to="{ name: 'register' }" class="card-link">Зарегистрируйтесь</router-link>
@@ -49,7 +61,28 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useAuthStore } from '@/stores/authStore'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const authStore = useAuthStore()
+const username = ref('')
+const password = ref('')
+
+async function login() {
+  try {
+    await authStore.login({
+      username: username.value,
+      password: password.value
+    })
+    router.push({ name: 'account' })
+  } catch (error) {
+    console.log('Error', error)
+  }
+}
+</script>
 
 <style scoped>
 .card-link {

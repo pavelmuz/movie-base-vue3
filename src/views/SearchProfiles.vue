@@ -25,20 +25,22 @@
 
 <script setup>
 import SearchProfileCard from '@/components/SearchProfileCard.vue'
-import apiMoviebase from '@/includes/apiMoviebase'
+import apiProfiles from '@/services/apiProfiles'
 import { onMounted, ref } from 'vue'
 
-const profiles = ref({})
+const profiles = ref([])
 
-const getProfiles = async () => {
+async function fetchProfiles() {
   try {
-    profiles.value = await apiMoviebase.getProfiles()
+    profiles.value = await apiProfiles.getProfiles()
   } catch (error) {
     console.log(error)
   }
 }
 
-onMounted(getProfiles)
+onMounted(async () => {
+  await fetchProfiles()
+})
 </script>
 
 <style scoped>

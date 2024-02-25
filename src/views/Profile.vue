@@ -11,7 +11,8 @@
 <script setup>
 import MovieCard from '@/components/MovieCard.vue'
 import ProfileCard from '@/components/ProfileCard.vue'
-import apiMovibase from '@/includes/apiMoviebase'
+import apiMovies from '@/services/apiMovies'
+import apiProfiles from '@/services/apiProfiles'
 import { onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
@@ -19,12 +20,12 @@ const route = useRoute()
 const profileId = route.params.id
 
 const profile = ref({})
-const feedData = ref({})
+const feedData = ref([])
 const movieCount = ref(0)
 
 async function fetchProfileData() {
   try {
-    profile.value = await apiMovibase.getProfile(profileId)
+    profile.value = await apiProfiles.getProfile(profileId)
   } catch {
     console.log(error)
   }
@@ -32,7 +33,7 @@ async function fetchProfileData() {
 
 async function fetchMovieFeed() {
   try {
-    feedData.value = await apiMovibase.getProfileFeed(profileId)
+    feedData.value = await apiMovies.getProfileFeed(profileId)
     movieCount.value = feedData.value.length
   } catch (error) {
     console.log(error)

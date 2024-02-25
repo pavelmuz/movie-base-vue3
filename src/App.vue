@@ -1,18 +1,10 @@
 <template>
-  <app-header />
-  <router-view></router-view>
-  <app-footer />
+  <v-header />
+  <router-view />
+  <v-footer />
 </template>
 
-<script>
-import AppFooter from '@/components/AppFooter.vue'
-import AppHeader from '@/components/AppHeader.vue'
-export default {
-  components: {
-    AppHeader,
-    AppFooter
-  }
-}
+<script setup>
+import vFooter from '@/components/vFooter.vue'
+import vHeader from '@/components/vHeader.vue'
 </script>
-
-<style scoped></style>
