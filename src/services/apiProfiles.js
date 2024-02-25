@@ -5,7 +5,9 @@ const API_URL = import.meta.env.VITE_SERVER_API_URL
 async function getProfiles() {
   try {
     const response = await axios.get(`${API_URL}/profiles/`)
-    return response.data
+    const profileId = localStorage.getItem('profileId')
+    const filteredProfiles = response.data.filter((profile) => profile.id !== profileId)
+    return filteredProfiles
   } catch (error) {
     throw new Error(error.response.data.error)
   }

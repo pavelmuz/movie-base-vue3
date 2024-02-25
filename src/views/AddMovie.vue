@@ -16,9 +16,14 @@
 
         <!-- Form for personal review and rating -->
         <label class="form-label">Ваш обзор:</label>
-        <textarea class="form-control" rows="3" v-model="userReview"></textarea>
+        <textarea
+          class="form-control"
+          rows="3"
+          v-model="userReview"
+          style="color: #0b666a"
+        ></textarea>
         <label class="form-label">Ваша оценка:</label>
-        <input type="text" class="form-control" v-model="userRating" />
+        <input type="text" class="form-control" v-model="userRating" style="color: #0b666a" />
         <button @click.prevent="addMovie" class="btn edit-btn mt-2">
           <i class="fa-solid fa-floppy-disk"></i> Сохранить
         </button>
@@ -50,7 +55,7 @@ async function fetchMovieData() {
 
 async function addMovie() {
   try {
-    await apiMovies.addMovie({
+    await apiMovies.postMovie({
       title: movie.value.nameRu,
       user_rating: parseFloat(userRating.value),
       user_review: userReview.value,

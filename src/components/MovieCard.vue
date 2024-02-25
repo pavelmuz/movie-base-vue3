@@ -36,7 +36,7 @@
               v-if="likedMovie"
               class="btn card-button card-button"
               name="movie"
-              @click.prevent="unlikeMovie"
+              @click.prevent="$emit('removeLike', movie.id)"
             >
               <i class="fa-solid fa-heart fa-xl"></i>
             </button>
@@ -44,7 +44,7 @@
               v-if="!likedMovie"
               class="btn card-button"
               name="movie"
-              @click.prevent="likeMovie"
+              @click.prevent="$emit('addLike', movie.id)"
             >
               <i class="fa-regular fa-heart fa-xl card-button"></i>
             </button>
@@ -84,7 +84,8 @@
                         <button
                           class="btn edit-btn mt-2"
                           name="comment"
-                          @click.prevent="addComment"
+                          data-bs-dismiss="modal"
+                          @click.prevent="$emit('addComment', movie.id, commentMsg)"
                         >
                           Добавить
                         </button>
@@ -161,7 +162,8 @@
                         <button
                           class="btn delete-btn mt-2"
                           name="comment"
-                          @click.prevent="deleteMovie"
+                          @click.prevent="$emit('removeMovie', movie.id)"
+                          data-bs-dismiss="modal"
                         >
                           <i class="fa-solid fa-trash-can"></i> Удалить
                         </button>
@@ -204,7 +206,12 @@
                         </button>
                       </div>
                       <div class="col-auto">
-                        <button class="btn save-btn mt-2" name="comment" @click.prevent="editMovie">
+                        <button
+                          class="btn save-btn mt-2"
+                          name="comment"
+                          @click.prevent="$emit('editMovie', movie.id, userReview, userRating)"
+                          data-bs-dismiss="modal"
+                        >
                           <i class="fa-solid fa-pen-to-square"></i> Изменить
                         </button>
                       </div>
@@ -280,8 +287,7 @@
 </template>
 
 <script setup>
-import apiMovies from '@/services/apiMovies'
-import { computed, ref } from 'vue'
+import { computed, ref, watch } from 'vue'
 
 const props = defineProps({
   movie: {
@@ -298,12 +304,13 @@ const props = defineProps({
   }
 })
 
-const cardComments = ref(props.movie.comments.slice(-2))
-const likesCount = ref(props.movie.likes.length)
-const commentsCount = ref(props.movie.comments.length)
-const likes = ref(props.movie.likes)
-const userRating = ref(props.movie.user_rating)
-const userReview = ref(props.movie.user_review)
+const movie = ref({})
+const cardComments = ref([])
+const likesCount = ref(0)
+const commentsCount = ref(0)
+const likes = ref([])
+const userRating = ref(0)
+const userReview = ref('')
 const commentMsg = ref('')
 
 const likedMovie = computed(() => {
@@ -319,57 +326,21 @@ const movieOwner = computed(() => {
   return false
 })
 
-async function likeMovie() {
-  try {
-    await apiMovies.likeMovie(props.movie.id)
-    location.reload()
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-async function unlikeMovie() {
-  try {
-    await apiMovies.unlikeMovie(props.movie.id)
-    location.reload()
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-async function editMovie() {
-  try {
-    let content = {
-      user_rating: userRating.value,
-      user_review: userReview.value
+watch(
+  () => props.movie,
+  (newValue, oldValue) => {
+    if (newValue) {
+      movie.value = newValue
+      cardComments.value = newValue.comments.slice(-2)
+      likesCount.value = newValue.likes.length
+      commentsCount.value = newValue.comments.length
+      likes.value = newValue.likes
+      userRating.value = newValue.user_rating
+      userReview.value = newValue.user_review
     }
-    await apiMovies.editMovie(content, props.movie.id)
-    location.reload()
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-async function deleteMovie() {
-  try {
-    await apiMovies.deleteMovie(props.movie.id)
-    location.reload()
-  } catch (error) {
-    console.log(error)
-  }
-}
-
-async function addComment() {
-  try {
-    let comment = {
-      comment: commentMsg.value
-    }
-    await apiMovies.addComment(comment, props.movie.id)
-    location.reload()
-  } catch (error) {
-    console.log(error)
-  }
-}
+  },
+  { immediate: true, deep: true }
+)
 </script>
 
 <style scoped>

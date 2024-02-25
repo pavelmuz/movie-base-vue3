@@ -2,7 +2,7 @@ import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_SERVER_API_URL
 
-async function getMainFeed() {
+async function getFeed() {
   try {
     const response = await axios.get(`${API_URL}/feed/`)
     return response.data
@@ -52,7 +52,7 @@ async function getProfileFeed(pk) {
   }
 }
 
-async function addMovie(movieData) {
+async function postMovie(movieData) {
   try {
     const accessToken = localStorage.getItem('accessToken')
     await axios.post(`${API_URL}/add-movie/`, movieData, {
@@ -91,7 +91,7 @@ async function addComment(comment, movieId) {
   }
 }
 
-async function likeMovie(movieId) {
+async function postLike(movieId) {
   try {
     const accessToken = localStorage.getItem('accessToken')
     await axios.post(`${API_URL}/like/${movieId}/`, null, {
@@ -104,7 +104,7 @@ async function likeMovie(movieId) {
   }
 }
 
-async function unlikeMovie(movieId) {
+async function deleteLike(movieId) {
   try {
     const accessToken = localStorage.getItem('accessToken')
     await axios.delete(`${API_URL}/like/${movieId}/`, {
@@ -117,7 +117,7 @@ async function unlikeMovie(movieId) {
   }
 }
 
-async function editMovie(content, movieId) {
+async function patchMovie(content, movieId) {
   try {
     const accessToken = localStorage.getItem('accessToken')
     await axios.patch(`${API_URL}/movie/${movieId}/`, content, {
@@ -131,15 +131,15 @@ async function editMovie(content, movieId) {
 }
 
 export default {
-  getMainFeed,
+  getFeed,
   getKinopoiskMovies,
   getKinopoiskMovie,
   getAccountFeed,
   getProfileFeed,
-  addMovie,
+  postMovie,
   deleteMovie,
   addComment,
-  likeMovie,
-  unlikeMovie,
-  editMovie
+  postLike,
+  deleteLike,
+  patchMovie
 }

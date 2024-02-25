@@ -11,6 +11,11 @@
     :movie="movie"
     :show-options="true"
     :show-owner="false"
+    @add-like="addLike"
+    @remove-like="removeLike"
+    @add-comment="addComment"
+    @edit-movie="editMovie"
+    @remove-movie="removeMovie"
   />
 </template>
 
@@ -37,6 +42,59 @@ async function fetchMovieFeed() {
   try {
     feedData.value = await apiMovies.getAccountFeed()
     movieCount.value = feedData.value.length
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function addLike(movieId) {
+  try {
+    await apiMovies.postLike(movieId)
+    await fetchMovieFeed()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function removeLike(movieId) {
+  try {
+    await apiMovies.deleteLike(movieId)
+    await fetchMovieFeed()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function addComment(movieId, commentMsg) {
+  try {
+    let comment = {
+      comment: commentMsg
+    }
+    await apiMovies.addComment(comment, movieId)
+    commentMsg = ''
+    await fetchMovieFeed()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function editMovie(movieId, userReview, userRating) {
+  try {
+    let content = {
+      user_rating: userRating,
+      user_review: userReview
+    }
+    await apiMovies.patchMovie(content, movieId)
+    await fetchMovieFeed()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function removeMovie(movieId) {
+  try {
+    await apiMovies.deleteMovie(movieId)
+    await fetchMovieFeed()
   } catch (error) {
     console.log(error)
   }

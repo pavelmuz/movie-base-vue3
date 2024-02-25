@@ -5,7 +5,15 @@
     :show-options="false"
     :show-profile-buttons="true"
   />
-  <movie-card v-for="movie in feedData" :movie="movie" :show-options="false" :show-owner="false" />
+  <movie-card
+    v-for="movie in feedData"
+    :movie="movie"
+    :show-options="false"
+    :show-owner="false"
+    @add-like="addLike"
+    @remove-like="removeLike"
+    @add-comment="addComment"
+  />
 </template>
 
 <script setup>
@@ -35,6 +43,37 @@ async function fetchMovieFeed() {
   try {
     feedData.value = await apiMovies.getProfileFeed(profileId)
     movieCount.value = feedData.value.length
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function addLike(movieId) {
+  try {
+    await apiMovies.postLike(movieId)
+    await fetchMovieFeed()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function removeLike(movieId) {
+  try {
+    await apiMovies.deleteLike(movieId)
+    await fetchMovieFeed()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function addComment(movieId, commentMsg) {
+  try {
+    let comment = {
+      comment: commentMsg
+    }
+    await apiMovies.addComment(comment, movieId)
+    commentMsg = ''
+    await fetchMovieFeed()
   } catch (error) {
     console.log(error)
   }

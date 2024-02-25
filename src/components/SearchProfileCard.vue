@@ -25,23 +25,35 @@
       <!-- Follow-unfollow buttons -->
       <div class="col-3 my-auto">
         <!-- Unfollow action -->
-        <button class="btn following-btn" name="unfollow-{{ profile.id }}">Подписан</button>
+        <button class="btn following-btn" name="unfollow" v-if="isFollowing">Подписан</button>
         <!-- Follow action -->
-        <!-- <button class="btn follow-btn" name="follow-{{ profile.id }}">
-          Подписаться
-        </button> -->
+        <button class="btn follow-btn" name="follow" v-if="!isFollowing">Подписаться</button>
       </div>
     </div>
   </div>
 </template>
 
 <script setup>
+import { ref, watch } from 'vue'
+
 const props = defineProps({
   profile: {
     type: Object,
     required: true
   }
 })
+
+const isFollowing = ref(true)
+
+watch(
+  () => props.profile,
+  (newValue, oldValue) => {
+    if (newValue) {
+      const profileId = localStorage.getItem('profileId')
+      isFollowing.value = newValue.followers.some((follower) => follower.follower.id === profileId)
+    }
+  }
+)
 </script>
 
 <style scoped>
