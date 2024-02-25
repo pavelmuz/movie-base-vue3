@@ -78,7 +78,7 @@ async function deleteMovie(id) {
   }
 }
 
-async function addComment(comment, movieId) {
+async function postComment(comment, movieId) {
   try {
     const accessToken = localStorage.getItem('accessToken')
     await axios.post(`${API_URL}/comment/${movieId}/`, comment, {
@@ -138,7 +138,7 @@ export default {
   getProfileFeed,
   postMovie,
   deleteMovie,
-  addComment,
+  postComment,
   postLike,
   deleteLike,
   patchMovie

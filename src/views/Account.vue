@@ -70,7 +70,7 @@ async function addComment(movieId, commentMsg) {
     let comment = {
       comment: commentMsg
     }
-    await apiMovies.addComment(comment, movieId)
+    await apiMovies.postComment(comment, movieId)
     commentMsg = ''
     await fetchMovieFeed()
   } catch (error) {

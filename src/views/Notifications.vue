@@ -11,6 +11,7 @@
     :key="notification"
     :notification="notification"
     :notification-type="notification.notification_type"
+    @remove-notification="removeNotification"
   />
 </template>
 
@@ -24,6 +25,15 @@ const notifications = ref([])
 async function fetchNotifications() {
   try {
     notifications.value = await apiNotifications.getNotifications()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function removeNotification(notificationId) {
+  try {
+    await apiNotifications.deleteNotification(notificationId)
+    await fetchNotifications()
   } catch (error) {
     console.log(error)
   }

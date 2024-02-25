@@ -40,7 +40,10 @@
         </a>
       </div>
       <div class="col-auto ms-auto">
-        <button class="btn notification-btn ps-auto" @click.prevent="deleteNotification">
+        <button
+          class="btn notification-btn ps-auto"
+          @click.prevent="$emit('removeNotification', notification.id)"
+        >
           <i class="fa-solid fa-xmark fa-xl"></i>
         </button>
       </div>
@@ -49,7 +52,8 @@
 </template>
 
 <script setup>
-import apiNotifications from '@/services/apiNotifications'
+import { ref, watch } from 'vue'
+
 const props = defineProps({
   notification: {
     type: Object,
@@ -61,14 +65,17 @@ const props = defineProps({
   }
 })
 
-async function deleteNotification() {
-  try {
-    await apiNotifications.deleteNotification(props.notification.id)
-    location.reload()
-  } catch (error) {
-    console.log(error)
-  }
-}
+const notification = ref({})
+
+watch(
+  () => props.notification,
+  (newValue, oldValue) => {
+    if (newValue) {
+      notification.value = newValue
+    }
+  },
+  { immediate: true, deep: true }
+)
 </script>
 
 <style scoped>

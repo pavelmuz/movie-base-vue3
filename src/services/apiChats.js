@@ -30,7 +30,7 @@ async function getChat(recipientId) {
   }
 }
 
-async function sendMessage(recipientId, message) {
+async function postMessage(recipientId, message) {
   try {
     const accessToken = localStorage.getItem('accessToken')
     await axios.post(`${API_URL}/message/${recipientId}/`, message, {
@@ -46,5 +46,5 @@ async function sendMessage(recipientId, message) {
 export default {
   getActiveChats,
   getChat,
-  sendMessage
+  postMessage
 }

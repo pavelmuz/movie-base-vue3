@@ -88,7 +88,7 @@ async function fetchRecipient() {
 
 async function sendMessage() {
   try {
-    await apiChats.sendMessage(recipientId, {
+    await apiChats.postMessage(recipientId, {
       message: message.value
     })
     message.value = ''
