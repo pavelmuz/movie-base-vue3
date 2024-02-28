@@ -12,10 +12,10 @@
     <a class="card-link text-decoration-none">
       <div class="row py-2">
         <div class="col-auto">
-          <!-- <img :src="movie.owner.profile_image" class="avatar-img-sm" /> -->
+           <img :src="movie.owner.profile_image" class="avatar-img-sm" />
         </div>
         <div class="col ps-0">
-          <!-- <p class="card-text">{{ movie.owner.username }}</p> -->
+           <p class="card-text">{{ movie.owner.username }}</p>
         </div>
       </div>
     </a>
@@ -117,7 +117,7 @@
 
 <script setup>
 import apiMovies from '@/services/apiMovies'
-import { onMounted, ref } from 'vue'
+import { onBeforeMount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -141,7 +141,7 @@ function goBack() {
   router.back()
 }
 
-onMounted(async () => {
+onBeforeMount(async () => {
   await fetchMovie()
   likes.value = movie.value.likes
   comments.value = movie.value.comments

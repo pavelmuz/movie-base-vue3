@@ -91,6 +91,15 @@ async function postComment(comment, movieId) {
   }
 }
 
+async function getMovie(movieId) {
+  try {
+    const response = await axios.get(`${API_URL}/movie/${movieId}/`)
+    return response.data
+  } catch (error) {
+    throw new Error(error.message.data.error)
+  }
+}
+
 async function postLike(movieId) {
   try {
     const accessToken = localStorage.getItem('accessToken')
@@ -99,15 +108,6 @@ async function postLike(movieId) {
         Authorization: `Bearer ${accessToken}`
       }
     })
-  } catch (error) {
-    throw new Error(error.message.data.error)
-  }
-}
-
-async function getMovie(movieId) {
-  try {
-    const response = await axios.get(`${API_URL}/movie/${movieId}/`)
-    return response.data
   } catch (error) {
     throw new Error(error.message.data.error)
   }
