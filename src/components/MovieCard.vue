@@ -100,7 +100,10 @@
       </div>
       <!-- Movie info -->
       <div class="col-8">
-        <a href="#" class="card-link text-decoration-none">
+        <router-link
+          :to="{ name: 'movie', params: { movieId: movie.id } }"
+          class="card-link text-decoration-none"
+        >
           <div class="row">
             <!-- Movie title -->
             <div class="col-8 me-auto pt-2">
@@ -223,7 +226,7 @@
           </div>
           <p class="card-text"><strong>Рейтинг: </strong>{{ movie.user_rating }}</p>
           <p class="card-text"><strong>Обзор: </strong>{{ movie.user_review }}</p>
-        </a>
+        </router-link>
       </div>
     </div>
     <!-- Total likes -->

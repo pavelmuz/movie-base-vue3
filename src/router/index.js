@@ -12,6 +12,7 @@ const Profile = () => import('@/views/Profile.vue')
 const Notifications = () => import('@/views/Notifications.vue')
 const ActiveChats = () => import('@/views/ActiveChats.vue')
 const Chat = () => import('@/views/Chat.vue')
+const MovieDetails = () => import('@/views/MovieDetails.vue')
 
 const routes = [
   {
@@ -71,8 +72,13 @@ const routes = [
   },
   {
     name: 'chat',
-    path: '/chats/:userId/:recipientId',
+    path: '/chats/:recipientId',
     component: Chat
+  },
+  {
+    name: 'movie',
+    path: '/movie/:movieId',
+    component: MovieDetails
   }
 ]
 

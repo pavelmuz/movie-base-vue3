@@ -59,11 +59,13 @@
 <script setup>
 import apiChats from '@/services/apiChats'
 import apiProfiles from '@/services/apiProfiles'
-import { onMounted, ref } from 'vue'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const userId = route.params.userId
+const userId = computed(() => {
+  return localStorage.getItem('profileId')
+})
 const recipientId = route.params.recipientId
 
 const messageFeed = ref([])

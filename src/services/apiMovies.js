@@ -104,6 +104,15 @@ async function postLike(movieId) {
   }
 }
 
+async function getMovie(movieId) {
+  try {
+    const response = await axios.get(`${API_URL}/movie/${movieId}/`)
+    return response.data
+  } catch (error) {
+    throw new Error(error.message.data.error)
+  }
+}
+
 async function deleteLike(movieId) {
   try {
     const accessToken = localStorage.getItem('accessToken')
@@ -136,6 +145,7 @@ export default {
   getKinopoiskMovie,
   getAccountFeed,
   getProfileFeed,
+  getMovie,
   postMovie,
   deleteMovie,
   postComment,

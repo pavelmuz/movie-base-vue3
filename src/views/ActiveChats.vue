@@ -23,7 +23,7 @@
           class="card-link"
           :to="{
             name: 'chat',
-            params: { userId: '477aed47-d388-46c9-9375-e21f8896a5ba', recipientId: chat.id }
+            params: { recipientId: chat.id }
           }"
           role="button"
         >

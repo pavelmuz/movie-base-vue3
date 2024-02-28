@@ -127,7 +127,7 @@
           </div>
           <!-- Link to chat -->
           <div class="col-auto">
-            <a class="btn edit-btn" href="#" role="button">
+            <a class="btn edit-btn" role="button">
               <i class="fa-solid fa-pen-to-square"></i> Сообщение
             </a>
           </div>
