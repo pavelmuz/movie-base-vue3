@@ -315,14 +315,13 @@ const likes = ref([])
 const userRating = ref(0)
 const userReview = ref('')
 const commentMsg = ref('')
+let profileId = localStorage.getItem('profileId')
 
 const likedMovie = computed(() => {
-  let profileId = localStorage.getItem('profileId')
   return props.movie.likes.some((like) => like.owner.id === profileId)
 })
 
 const movieOwner = computed(() => {
-  let profileId = localStorage.getItem('profileId')
   if (props.movie.owner.id === profileId) {
     return true
   }

@@ -9,7 +9,7 @@
       </div>
     </div>
     <!-- Card owner info if not current user -->
-    <a class="card-link text-decoration-none">
+    <!-- <router-link v-if="movieOwner" :to="{ name: 'account' }" class="card-link text-decoration-none">
       <div class="row py-2">
         <div class="col-auto">
           <img :src="movie.owner?.profile_image" class="avatar-img-sm" />
@@ -18,7 +18,22 @@
           <p class="card-text">{{ movie.owner?.username }}</p>
         </div>
       </div>
-    </a>
+    </router-link>
+
+    <router-link
+      v-if="!movieOwner"
+      :to="{ name: 'profile', params: { id: movie.owner?.id } }"
+      class="card-link text-decoration-none"
+    >
+      <div class="row py-2">
+        <div class="col-auto">
+          <img :src="movie.owner?.profile_image" class="avatar-img-sm" />
+        </div>
+        <div class="col ps-0">
+          <p class="card-text">{{ movie.owner?.username }}</p>
+        </div>
+      </div>
+    </router-link> -->
 
     <div class="row">
       <div class="col-4">
@@ -138,10 +153,17 @@ const movieId = route.params.movieId
 
 const movie = ref({})
 const commentMsg = ref('')
+let profileId = localStorage.getItem('profileId')
 
 const likedMovie = computed(() => {
-  let profileId = localStorage.getItem('profileId')
   return movie.value.likes?.some((like) => like.owner.id === profileId)
+})
+
+const movieOwner = computed(() => {
+  if (movie.value.owner.id === profileId) {
+    return true
+  }
+  return false
 })
 
 async function fetchMovie() {
