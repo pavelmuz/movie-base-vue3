@@ -12,10 +12,10 @@
     <a class="card-link text-decoration-none">
       <div class="row py-2">
         <div class="col-auto">
-           <img :src="movie.owner.profile_image" class="avatar-img-sm" />
+          <img :src="movie.owner.profile_image" class="avatar-img-sm" />
         </div>
         <div class="col ps-0">
-           <p class="card-text">{{ movie.owner.username }}</p>
+          <p class="card-text">{{ movie.owner.username }}</p>
         </div>
       </div>
     </a>
@@ -27,12 +27,17 @@
         <!-- Like and unlike buttons -->
         <div class="row py-0">
           <form class="col-auto my-auto px-0">
-            <button class="btn card-button">
+            <button v-if="likedMovie" @click.prevent="removeLike" class="btn card-button">
               <i class="fa-solid fa-heart fa-xl card-button"></i>
             </button>
-            <!-- <button type="submit" class="btn card-button">
-                                <i class="fa-regular fa-heart fa-xl card-button"></i>
-                            </button> -->
+            <button
+              v-if="!likedMovie"
+              @click.prevent="addLike"
+              type="submit"
+              class="btn card-button"
+            >
+              <i class="fa-regular fa-heart fa-xl card-button"></i>
+            </button>
           </form>
         </div>
         <div class="row">
@@ -42,7 +47,7 @@
             data-bs-toggle="modal"
             data-bs-target="#exampleModal"
           >
-            <strong>Нравится: </strong>{{ likes.length }}
+            <strong>Нравится: </strong>{{ movie.likes.length }}
           </p>
           <!-- Liked users modal -->
           <div
@@ -63,7 +68,7 @@
                 </div>
                 <div class="modal-body">
                   <!-- List of users liked -->
-                  <div v-for="like in likes" :key="like" class="row">
+                  <div v-for="like in movie.likes" :key="like" class="row">
                     <!-- User avatar -->
                     <div class="col-auto my-auto pe-0">
                       <a href="#" class="card-link text-decoration-none">
@@ -99,14 +104,21 @@
     </div>
     <!-- Movie comments -->
     <div class="row pb-2">
-      <p v-for="comment in comments" :key="comment" class="card-text mb-0">
+      <p class="card-text mb-0"><strong>Комментарии:</strong></p>
+      <p v-for="comment in movie.comments" :key="comment" class="card-text mb-0">
         <strong>{{ comment.owner.username }}</strong> {{ comment.body }}
       </p>
     </div>
     <!-- Add comment form -->
     <div class="row mb-2">
-      <form action="" method="post" class="pb-2">
-        <button type="submit" class="btn edit-btn">Добавить</button>
+      <form class="pb-2">
+        <textarea
+          v-model="commentMsg"
+          class="form-control mb-2"
+          rows="3"
+          style="color: #0b666a"
+        ></textarea>
+        <button class="btn edit-btn">Добавить</button>
       </form>
       <!-- <a class="btn edit-btn ms-2" href="#" role="button" style="max-width: 350px">
         Войдите, чтобы оставить комментарий
@@ -117,7 +129,7 @@
 
 <script setup>
 import apiMovies from '@/services/apiMovies'
-import { onBeforeMount, ref } from 'vue'
+import { computed, onBeforeMount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
@@ -125,13 +137,16 @@ const router = useRouter()
 const movieId = route.params.movieId
 
 const movie = ref({})
-const likes = ref([])
-const comments = ref([])
+const commentMsg = ref('')
+
+const likedMovie = computed(() => {
+  let profileId = localStorage.getItem('profileId')
+  return movie.value.likes.some((like) => like.owner.id === profileId)
+})
 
 async function fetchMovie() {
   try {
     movie.value = await apiMovies.getMovie(movieId)
-    console.log('movie fetched')
   } catch (error) {
     console.log(error)
   }
@@ -141,10 +156,26 @@ function goBack() {
   router.back()
 }
 
+async function addLike() {
+  try {
+    await apiMovies.postLike(movieId)
+    await fetchMovie()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function removeLike() {
+  try {
+    await apiMovies.deleteLike(movieId)
+    await fetchMovie()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
 onBeforeMount(async () => {
   await fetchMovie()
-  likes.value = movie.value.likes
-  comments.value = movie.value.comments
 })
 </script>
 
