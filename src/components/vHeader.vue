@@ -20,23 +20,23 @@
         <ul class="navbar-nav">
           <header-link :link="{ name: 'feed' }" title="Лента" />
           <header-link :link="{ name: 'profiles' }" title="Найти" />
-          <header-link :link="{ name: 'search' }" title="Добавить фильм" v-if="isAuthenticated" />
+          <header-link :link="{ name: 'search' }" title="Добавить фильм" v-if="authStore.isAuthenticated" />
           <header-link
             :link="{ name: 'notifications' }"
             title="Уведомления"
             v-if="isAuthenticated"
           />
-          <header-link :link="{ name: 'chats' }" title="Сообщения" v-if="isAuthenticated" />
-          <header-link :link="{ name: 'account' }" title="Профиль" v-if="isAuthenticated" />
+          <header-link :link="{ name: 'chats' }" title="Сообщения" v-if="authStore.isAuthenticated" />
+          <header-link :link="{ name: 'account' }" title="Профиль" v-if="authStore.isAuthenticated" />
           <header-link
             :link="{ name: 'login' }"
             title="Войти/Регистрация"
-            v-if="!isAuthenticated"
+            v-if="!authStore.isAuthenticated"
           />
           <li class="nav-item">
             <a class="nav-link" href="http://localhost:8000/api/docs/" target="_blank">API</a>
           </li>
-          <li class="nav-item" v-if="isAuthenticated">
+          <li class="nav-item" v-if="authStore.isAuthenticated">
             <a class="nav-link" @click="logout" href="#"
               ><i class="fa-solid fa-right-from-bracket fa-lg"></i> Выйти</a
             >
@@ -50,12 +50,9 @@
 <script setup>
 import HeaderLink from '@/components/HeaderLink.vue'
 import { useAuthStore } from '@/stores/authStore'
-import { onMounted, ref } from 'vue'
 import { useRouter } from 'vue-router'
 const router = useRouter()
 const authStore = useAuthStore()
-
-const isAuthenticated = ref(false)
 
 async function logout() {
   try {
@@ -65,10 +62,6 @@ async function logout() {
     console.log('Logout error')
   }
 }
-
-onMounted(() => {
-  isAuthenticated.value = authStore.isAuthenticated
-})
 </script>
 
 <style scoped>
