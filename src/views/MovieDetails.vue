@@ -12,10 +12,10 @@
     <a class="card-link text-decoration-none">
       <div class="row py-2">
         <div class="col-auto">
-          <img :src="movie.owner.profile_image" class="avatar-img-sm" />
+          <img :src="movie.owner?.profile_image" class="avatar-img-sm" />
         </div>
         <div class="col ps-0">
-          <p class="card-text">{{ movie.owner.username }}</p>
+          <p class="card-text">{{ movie.owner?.username }}</p>
         </div>
       </div>
     </a>
@@ -47,7 +47,7 @@
             data-bs-toggle="modal"
             data-bs-target="#exampleModal"
           >
-            <strong>Нравится: </strong>{{ movie.likes.length }}
+            <strong>Нравится: </strong>{{ movie.likes?.length }}
           </p>
           <!-- Liked users modal -->
           <div
@@ -141,7 +141,7 @@ const commentMsg = ref('')
 
 const likedMovie = computed(() => {
   let profileId = localStorage.getItem('profileId')
-  return movie.value.likes.some((like) => like.owner.id === profileId)
+  return movie.value.likes?.some((like) => like.owner.id === profileId)
 })
 
 async function fetchMovie() {

@@ -24,7 +24,7 @@
           <header-link
             :link="{ name: 'notifications' }"
             title="Уведомления"
-            v-if="isAuthenticated"
+            v-if="authStore.isAuthenticated"
           />
           <header-link :link="{ name: 'chats' }" title="Сообщения" v-if="authStore.isAuthenticated" />
           <header-link :link="{ name: 'account' }" title="Профиль" v-if="authStore.isAuthenticated" />
