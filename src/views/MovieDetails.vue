@@ -118,7 +118,7 @@
           rows="3"
           style="color: #0b666a"
         ></textarea>
-        <button class="btn edit-btn">Добавить</button>
+        <button @click.prevent="addComment" class="btn edit-btn">Добавить</button>
       </form>
       <!-- <a class="btn edit-btn ms-2" href="#" role="button" style="max-width: 350px">
         Войдите, чтобы оставить комментарий
@@ -168,6 +168,19 @@ async function addLike() {
 async function removeLike() {
   try {
     await apiMovies.deleteLike(movieId)
+    await fetchMovie()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function addComment() {
+  try {
+    let comment = {
+      comment: commentMsg.value
+    }
+    await apiMovies.postComment(comment, movieId)
+    commentMsg.value = ''
     await fetchMovie()
   } catch (error) {
     console.log(error)
