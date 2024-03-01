@@ -7,30 +7,55 @@
       <div>
         <div class="mb-3">
           <label class="form-label">Имя пользователя:</label>
-          <input type="text" class="form-control" name="username" style="color: #0b666a" />
+          <input
+            v-model="username"
+            type="text"
+            class="form-control"
+            name="username"
+            style="color: #0b666a"
+          />
         </div>
         <div class="mb-3">
           <label class="form-label">Полное имя:</label>
-          <input type="text" class="form-control" name="fullname" style="color: #0b666a" />
+          <input
+            v-model="name"
+            type="text"
+            class="form-control"
+            name="fullname"
+            style="color: #0b666a"
+          />
         </div>
         <div class="mb-3">
           <label class="form-label">Электронная почта:</label>
-          <input type="email" class="form-control" name="email" style="color: #0b666a" />
+          <input
+            v-model="email"
+            type="email"
+            class="form-control"
+            name="email"
+            style="color: #0b666a"
+          />
         </div>
         <div class="mb-3">
           <label class="form-label">Пароль:</label>
-          <input type="password" class="form-control" name="password" style="color: #0b666a" />
+          <input
+            v-model="password1"
+            type="password"
+            class="form-control"
+            name="password"
+            style="color: #0b666a"
+          />
         </div>
         <div class="mb-3">
           <label class="form-label">Подтвердите пароль:</label>
           <input
+            v-model="password2"
             type="password"
             class="form-control"
             name="confirm-password"
             style="color: #0b666a"
           />
         </div>
-        <button class="btn auth-btn mt-2">Создать аккаунт</button>
+        <button @click.prevent="register" class="btn auth-btn mt-2">Создать аккаунт</button>
       </div>
 
       <!-- Login link -->
@@ -42,7 +67,34 @@
   </div>
 </template>
 
-<script setup></script>
+<script setup>
+import { useAuthStore } from '@/stores/authStore'
+import { ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
+const authStore = useAuthStore()
+const username = ref('')
+const name = ref('')
+const email = ref('')
+const password1 = ref('')
+const password2 = ref('')
+
+async function register() {
+  try {
+    await authStore.register({
+      username: username.value,
+      email: email.value,
+      first_name: name.value,
+      password1: password1.value,
+      password2: password2.value
+    })
+    router.push({ name: 'feed' })
+  } catch (error) {
+    console.log('error', error)
+  }
+}
+</script>
 
 <style scoped>
 .card-link {

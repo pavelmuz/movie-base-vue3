@@ -22,6 +22,19 @@ export const useAuthStore = defineStore({
         throw error
       }
     },
+    async register(credentials) {
+      try {
+        const response = await axios.post(`${API_URL}/register/`, credentials)
+        this.isAuthenticated = true
+        localStorage.setItem('accessToken', response.data.access)
+        localStorage.setItem('refreshToken', response.data.refresh)
+        localStorage.setItem('isAuthenticated', 'true')
+        localStorage.setItem('profileId', response.data.profile.id)
+      } catch (error) {
+        console.log('Registration error', error)
+        throw error
+      }
+    },
     async logout() {
       try {
         const refreshToken = localStorage.getItem('refreshToken')
