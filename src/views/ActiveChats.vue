@@ -6,6 +6,12 @@
     </div>
   </div>
 
+  <div v-if="activeChats.length === 0" class="container card chats-card mb-1">
+    <div class="row py-1">
+      <p class="card-text">У вас нет активных чатов</p>
+    </div>
+  </div>
+
   <!-- Active chats -->
   <div v-for="chat in activeChats" :key="chat" class="container card chats-card my-1">
     <div class="row py-2">

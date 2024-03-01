@@ -41,27 +41,23 @@
                 <div class="modal-body">
                   <!-- Followers list -->
                   <div v-for="follower in profile.followers" :key="follower" class="row">
-                    <!-- Profile avatar -->
-                    <div class="col-auto my-auto pe-0">
-                      <router-link
-                        :to="{ name: 'profile', params: { id: follower.follower.id } }"
-                        class="card-link text-decoration-none"
-                      >
+                    <router-link
+                      :to="{ name: 'profile', params: { id: follower.follower.id } }"
+                      @click="closeFollowerModal"
+                      class="row text-decoration-none"
+                    >
+                      <!-- Profile avatar -->
+                      <div class="col-auto my-auto pe-0">
                         <img :src="follower.follower.profile_image" class="avatar-img-md" />
-                      </router-link>
-                    </div>
-                    <!-- Profile info -->
-                    <div class="col-6 my-auto">
-                      <router-link
-                        :to="{ name: 'profile', params: { id: follower.follower.id } }"
-                        class="card-link text-decoration-none"
-                      >
+                      </div>
+                      <!-- Profile info -->
+                      <div class="col-6 my-auto card-link">
                         <div class="card-body">
                           <h5 class="card-title">{{ follower.follower.username }}</h5>
                           <p class="card-subtitle">{{ follower.follower.name }}</p>
                         </div>
-                      </router-link>
-                    </div>
+                      </div>
+                    </router-link>
                   </div>
                 </div>
               </div>
@@ -76,6 +72,7 @@
             <p class="card-text my-0 fw-light">{{ followingsCount }}</p>
             <p class="card-txt my-0 fw-light">подписки</p>
           </div>
+
           <!-- Follow modal -->
           <div class="modal fade" id="following" tabindex="-1" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
@@ -90,27 +87,23 @@
                 <div class="modal-body">
                   <!-- Follow list -->
                   <div v-for="following in profile.followings" :key="following" class="row">
-                    <!-- Profile avatar -->
-                    <div class="col-auto my-auto pe-0">
-                      <router-link
-                        :to="{ name: 'profile', params: { id: following.following.id } }"
-                        class="card-link text-decoration-none"
-                      >
+                    <router-link
+                      :to="{ name: 'profile', params: { id: following.following.id } }"
+                      @click="closeFollowingModal"
+                      class="row text-decoration-none"
+                    >
+                      <!-- Profile avatar -->
+                      <div class="col-auto my-auto pe-0">
                         <img :src="following.following.profile_image" class="avatar-img-md" />
-                      </router-link>
-                    </div>
-                    <!-- Profile info -->
-                    <div class="col-6 my-auto">
-                      <router-link
-                        :to="{ name: 'profile', params: { id: following.following.id } }"
-                        class="card-link text-decoration-none"
-                      >
+                      </div>
+                      <!-- Profile info -->
+                      <div class="col-6 my-auto card-link">
                         <div class="card-body">
                           <h5 class="card-title">{{ following.following.username }}</h5>
                           <p class="card-subtitle">{{ following.following.name }}</p>
                         </div>
-                      </router-link>
-                    </div>
+                      </div>
+                    </router-link>
                   </div>
                 </div>
               </div>
@@ -118,7 +111,7 @@
           </div>
         </div>
         <!-- Follow button section -->
-        <div v-if="showProfileButtons" class="row pt-2">
+        <div v-if="showProfileButtons && authStore.isAuthenticated" class="row pt-2">
           <div class="col-auto my-auto">
             <!-- Unfollow action -->
             <button class="btn following-btn">Подписан</button>
@@ -170,6 +163,7 @@
 
 <script setup>
 import apiProfiles from '@/services/apiProfiles'
+import { useAuthStore } from '@/stores/authStore'
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -192,11 +186,33 @@ const props = defineProps({
   }
 })
 
+const authStore = useAuthStore()
+
 const profile = ref({})
 const movieCount = ref()
 const followersCount = ref()
 const followingsCount = ref()
 const router = useRouter()
+
+function closeFollowingModal() {
+  const modal = document.getElementById('following')
+  modal?.classList.remove('show')
+  modal?.setAttribute('aria-hidden', 'true')
+  modal?.setAttribute('style', 'display: none')
+  document.body.classList.remove('modal-open')
+  const backdrop = document.querySelector('.modal-backdrop')
+  backdrop?.parentNode?.removeChild(backdrop)
+}
+
+function closeFollowerModal() {
+  const modal = document.getElementById('followers')
+  modal?.classList.remove('show')
+  modal?.setAttribute('aria-hidden', 'true')
+  modal?.setAttribute('style', 'display: none')
+  document.body.classList.remove('modal-open')
+  const backdrop = document.querySelector('.modal-backdrop')
+  backdrop?.parentNode?.removeChild(backdrop)
+}
 
 async function deleteAccount() {
   try {

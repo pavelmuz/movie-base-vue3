@@ -2,8 +2,8 @@
   <div class="container card movie-card mx-auto mb-2">
     <!-- Movie owner info -->
     <router-link
-      v-if="showOwner && movieOwner"
-      :to="{ name: 'account' }"
+      v-if="showOwner"
+      :to="movieOwner ? { name: 'account' } : { name: 'profile', params: { id: movie.owner.id } }"
       class="row pt-2 card-link text-decoration-none"
     >
       <div class="col-auto">
@@ -13,23 +13,12 @@
         <p class="card-text">{{ movie.owner.username }}</p>
       </div>
     </router-link>
-    <router-link
-      v-if="showOwner && !movieOwner"
-      :to="{ name: 'profile', params: { id: movie.owner.id } }"
-      class="row pt-2 card-link text-decoration-none"
-    >
-      <div class="col-auto">
-        <img :src="movie.owner.profile_image" class="avatar-img-sm" />
-      </div>
-      <div class="col ps-0">
-        <p class="card-text">{{ movie.owner.username }}</p>
-      </div>
-    </router-link>
+
     <div class="row pt-2">
       <div class="col-4">
         <!-- Movie poster -->
         <img :src="movie.poster_url" class="rounded movie-card-poster" />
-        <div class="row py-0">
+        <div v-if="authStore.isAuthenticated" class="row py-0">
           <!-- Like and unlike buttons -->
           <form action="" method="post" class="col-auto my-auto px-0">
             <button
@@ -290,6 +279,7 @@
 </template>
 
 <script setup>
+import { useAuthStore } from '@/stores/authStore'
 import { computed, ref, watch } from 'vue'
 
 const props = defineProps({
@@ -306,6 +296,8 @@ const props = defineProps({
     required: true
   }
 })
+
+const authStore = useAuthStore()
 
 const movie = ref({})
 const cardComments = ref([])

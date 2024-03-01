@@ -8,21 +8,10 @@
         >
       </div>
     </div>
-    <!-- Card owner info if not current user -->
-    <router-link v-if="movieOwner" :to="{ name: 'account' }" class="card-link text-decoration-none">
-      <div class="row py-2">
-        <div class="col-auto">
-          <img :src="movie.owner?.profile_image" class="avatar-img-sm" />
-        </div>
-        <div class="col ps-0">
-          <p class="card-text">{{ movie.owner?.username }}</p>
-        </div>
-      </div>
-    </router-link>
 
+    <!-- Card owner info -->
     <router-link
-      v-if="!movieOwner"
-      :to="{ name: 'profile', params: { id: movie.owner?.id } }"
+      :to="movieOwner ? { name: 'account' } : { name: 'profile', params: { id: movie.owner?.id } }"
       class="card-link text-decoration-none"
     >
       <div class="row py-2">
@@ -40,7 +29,7 @@
         <!-- Movie poster -->
         <img :src="movie.poster_url" class="rounded movie-card-poster" />
         <!-- Like and unlike buttons -->
-        <div class="row py-0">
+        <div v-if="authStore.isAuthenticated" class="row py-0">
           <form class="col-auto my-auto px-0">
             <button v-if="likedMovie" @click.prevent="removeLike" class="btn card-button">
               <i class="fa-solid fa-heart fa-xl card-button"></i>
@@ -125,7 +114,7 @@
       </p>
     </div>
     <!-- Add comment form -->
-    <div class="row mb-2">
+    <div v-if="authStore.isAuthenticated" class="row mb-2">
       <form class="pb-2">
         <textarea
           v-model="commentMsg"
@@ -144,12 +133,15 @@
 
 <script setup>
 import apiMovies from '@/services/apiMovies'
+import { useAuthStore } from '@/stores/authStore'
 import { computed, onBeforeMount, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
 const router = useRouter()
 const movieId = route.params.movieId
+
+const authStore = useAuthStore()
 
 const movie = ref({})
 const commentMsg = ref('')
@@ -212,59 +204,17 @@ onBeforeMount(async () => {
 </script>
 
 <style scoped>
-body {
-  background-color: #c3edc0;
-  padding-top: 5rem;
-  padding-bottom: 3rem;
-}
-
-.navbar {
-  background-color: #1b3333;
-}
-
-.nav-logo {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.nav-link,
-.navbar-brand,
 .card-link,
-.modal-close,
-.footer-text,
-.footer-link,
-.notification-btn {
+.modal-close {
   color: #c3edc0;
 }
 
-.nav-link:hover,
-.navbar-brand:hover,
-.modal-close:hover,
-.notification-btn:hover {
+.modal-close:hover {
   color: #9cbd99;
-}
-
-.link-active {
-  color: #9cbd99;
-}
-
-.navbar-toggler {
-  color: #c3edc0;
-  border-color: #c3edc0;
 }
 
 .movie-card,
-.auth-card,
-.profile-card,
 .modal-content {
-  background-color: #0b666a;
-  color: #c3edc0;
-  max-width: 700px;
-}
-
-.edit-movie-card {
   background-color: #0b666a;
   color: #c3edc0;
   max-width: 700px;
@@ -274,65 +224,16 @@ body {
   max-width: 220px;
 }
 
-.movie-poster-search {
-  max-width: 120px;
-}
-
 .card-button {
   color: #c3edc0;
 }
 
-.auth-btn,
 .edit-btn {
   background-color: #c3edc0;
 }
 
-.auth-btn:hover,
 .edit-btn:hover {
   background-color: #9cbd99;
-}
-
-.social-btn {
-  background-color: #c3edc0;
-  width: 130px;
-}
-
-.social-btn:hover {
-  background-color: #9cbd99;
-}
-
-.dropdown-btn {
-  color: #c3edc0;
-  border-color: transparent;
-}
-
-.dropdown-menu {
-  border-color: #c3edc0;
-  background-color: #0b666a;
-}
-
-.dropdown-item {
-  color: #c3edc0;
-}
-
-.dropdown-item:hover {
-  background-color: #0b666a;
-}
-
-.edit-link {
-  color: #ffff00;
-}
-
-.edit-link:hover {
-  color: #cccc00;
-}
-
-.delete-link {
-  color: #fa1e0e;
-}
-
-.delete-link:hover {
-  color: #c8180b;
 }
 
 .avatar-img-md {
@@ -349,100 +250,11 @@ body {
   object-fit: cover;
 }
 
-.avatar-img-lg {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.search-user-card,
-.chats-card {
-  background-color: #0b666a;
-  color: #c3edc0;
-  max-width: 600px;
-}
-
-.follow-btn {
-  background-color: transparent;
-  border-color: #c3edc0;
-  color: #c3edc0;
-  width: 130px;
-}
-
-.follow-btn:hover {
-  background-color: #c3edc0;
-  color: #0b666a;
-}
-
-.following-btn {
-  background-color: #c3edc0;
-  width: 130px;
-}
-
-.following-btn:hover {
-  background-color: transparent;
-  border-color: #c3edc0;
-}
-
-.search-user {
-  max-width: 600px;
-}
-
-.search-user-btn {
-  background-color: transparent;
-  border-color: #0b666a;
-  color: #0b666a;
-  width: 120px;
-}
-
-.search-user-btn:hover {
-  background-color: #0b666a;
-  color: #c3edc0;
-}
-
-.search-user-input::placeholder {
-  color: #0b666a;
-}
-
-.alert {
-  max-width: 700px;
-}
-
 .modal-link {
   cursor: pointer;
 }
 
 .modal-header {
   border-bottom: 2px solid #c3edc0;
-}
-
-.chat-feed {
-  background-color: #edf9ec;
-}
-
-.message-bubble {
-  max-width: 220px;
-}
-
-.message-sender {
-  background-color: #cff0cc;
-}
-
-.message-recipient {
-  background-color: #afd5ac;
-}
-
-.message-input {
-  background-color: #edf9ec;
-}
-
-.message-input:focus {
-  background-color: #edf9ec;
-  color: #0b666a;
-}
-
-::placeholder {
-  color: #0b666a;
 }
 </style>

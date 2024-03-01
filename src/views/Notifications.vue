@@ -6,6 +6,12 @@
     </div>
   </div>
 
+  <div v-if="notifications.length === 0" class="container card movie-card mb-1">
+    <div class="row py-1">
+      <p class="card-text">Для вас нет уведомлений</p>
+    </div>
+  </div>
+
   <notification-card
     v-for="notification in notifications"
     :key="notification"

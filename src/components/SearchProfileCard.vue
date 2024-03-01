@@ -23,7 +23,7 @@
         </router-link>
       </div>
       <!-- Follow-unfollow buttons -->
-      <div class="col-3 my-auto">
+      <div v-if="authStore.isAuthenticated" class="col-3 my-auto">
         <!-- Unfollow action -->
         <button class="btn following-btn" name="unfollow" v-if="isFollowing">Подписан</button>
         <!-- Follow action -->
@@ -34,6 +34,7 @@
 </template>
 
 <script setup>
+import { useAuthStore } from '@/stores/authStore'
 import { ref, watch } from 'vue'
 
 const props = defineProps({
@@ -42,6 +43,8 @@ const props = defineProps({
     required: true
   }
 })
+
+const authStore = useAuthStore()
 
 const isFollowing = ref(true)
 
