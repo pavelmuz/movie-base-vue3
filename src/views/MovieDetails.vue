@@ -9,7 +9,7 @@
       </div>
     </div>
     <!-- Card owner info if not current user -->
-    <!-- <router-link v-if="movieOwner" :to="{ name: 'account' }" class="card-link text-decoration-none">
+    <router-link v-if="movieOwner" :to="{ name: 'account' }" class="card-link text-decoration-none">
       <div class="row py-2">
         <div class="col-auto">
           <img :src="movie.owner?.profile_image" class="avatar-img-sm" />
@@ -33,7 +33,7 @@
           <p class="card-text">{{ movie.owner?.username }}</p>
         </div>
       </div>
-    </router-link> -->
+    </router-link>
 
     <div class="row">
       <div class="col-4">
@@ -160,10 +160,7 @@ const likedMovie = computed(() => {
 })
 
 const movieOwner = computed(() => {
-  if (movie.value.owner.id === profileId) {
-    return true
-  }
-  return false
+  return movie.value.owner?.id === profileId;
 })
 
 async function fetchMovie() {
