@@ -3,7 +3,7 @@
     <!-- Card back button -->
     <div class="row pb-2">
       <div class="col-auto pt-2">
-        <a href="#" @click="goBack" class="card-link text-decoration-none"
+        <a href="#" @click.prevent="goBack" class="card-link text-decoration-none"
           ><i class="fa-solid fa-chevron-left fa-xl"></i> Назад</a
         >
       </div>
@@ -160,7 +160,7 @@ const likedMovie = computed(() => {
 })
 
 const movieOwner = computed(() => {
-  return movie.value.owner?.id === profileId;
+  return movie.value.owner?.id === profileId
 })
 
 async function fetchMovie() {

@@ -127,9 +127,13 @@
           </div>
           <!-- Link to chat -->
           <div class="col-auto">
-            <a class="btn edit-btn" role="button">
+            <router-link
+              :to="{ name: 'chat', params: { recipientId: profile.id } }"
+              class="btn edit-btn"
+              role="button"
+            >
               <i class="fa-solid fa-pen-to-square"></i> Сообщение
-            </a>
+            </router-link>
           </div>
         </div>
       </div>

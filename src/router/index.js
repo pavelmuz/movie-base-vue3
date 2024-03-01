@@ -72,7 +72,7 @@ const routes = [
   },
   {
     name: 'chat',
-    path: '/chats/:recipientId',
+    path: '/chats/:recipientId?',
     component: Chat
   },
   {

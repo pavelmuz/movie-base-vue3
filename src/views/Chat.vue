@@ -4,9 +4,9 @@
     <!-- Back button -->
     <div class="row pb-2">
       <div class="col-auto pt-2">
-        <router-link :to="{ name: 'chats' }" class="card-link text-decoration-none">
+        <a href="#" @click.prevent="goBack" class="card-link text-decoration-none">
           <i class="fa-solid fa-chevron-left fa-xl"></i> Назад
-        </router-link>
+        </a>
       </div>
     </div>
     <!-- Chat recipinet info -->
@@ -60,9 +60,10 @@
 import apiChats from '@/services/apiChats'
 import apiProfiles from '@/services/apiProfiles'
 import { computed, onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const route = useRoute()
+const router = useRouter()
 const userId = computed(() => {
   return localStorage.getItem('profileId')
 })
@@ -71,6 +72,10 @@ const recipientId = route.params.recipientId
 const messageFeed = ref([])
 const recipient = ref({})
 const message = ref('')
+
+function goBack() {
+  router.back()
+}
 
 async function fetchMessages() {
   try {
