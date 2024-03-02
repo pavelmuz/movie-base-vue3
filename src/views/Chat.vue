@@ -23,7 +23,7 @@
       </h5>
     </div>
     <!-- Chat feed -->
-    <div class="container card chat-feed">
+    <div ref="chatFeedRef" class="container card chat-feed">
       <div v-for="message in messageFeed" :key="message">
         <!-- Recipinets messages -->
         <div
@@ -76,6 +76,7 @@ const recipientId = route.params.recipientId
 const messageFeed = ref([])
 const recipient = ref({})
 const message = ref('')
+const chatFeedRef = ref(null)
 
 function goBack() {
   router.back()
@@ -109,9 +110,14 @@ async function sendMessage() {
   }
 }
 
+function scrollToEnd() {
+  chatFeedRef.value.scrollTop = chatFeedRef.value.scrollHeight
+}
+
 onMounted(async () => {
   await fetchMessages()
   await fetchRecipient()
+  scrollToEnd()
 })
 </script>
 
@@ -141,6 +147,8 @@ onMounted(async () => {
 
 .chat-feed {
   background-color: #edf9ec;
+  overflow-y: auto;
+  height: calc(100vh - 340px);
 }
 
 .message-bubble {
