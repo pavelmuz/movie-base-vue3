@@ -13,10 +13,13 @@
     <div class="row pb-2">
       <h5 class="card-title">
         Чат с пользователем:
-        <a href="#" class="card-link text-decoration-none">
+        <router-link
+          :to="{ name: 'profile', params: { id: recipientId } }"
+          class="card-link text-decoration-none"
+        >
           <img :src="recipient.profile_image" class="avatar-img-sm mx-2" />
           {{ recipient.username }}
-        </a>
+        </router-link>
       </h5>
     </div>
     <!-- Chat feed -->
@@ -39,19 +42,20 @@
       </div>
     </div>
     <!-- Send message form -->
-    <div class="row px-3">
-      <textarea
-        class="form-control message-input my-1"
-        rows="2"
-        placeholder="Введите сообщение"
-        name="chat-message"
-        v-model="message"
-      ></textarea>
-      <div class="col-auto">
+    <div class="row">
+      <form action="">
+        <textarea
+          class="form-control message-input my-1"
+          rows="2"
+          placeholder="Введите сообщение"
+          name="chat-message"
+          v-model="message"
+        ></textarea>
+
         <button type="submit" class="btn edit-btn mb-2" @click.prevent="sendMessage">
           Отправить
         </button>
-      </div>
+      </form>
     </div>
   </div>
 </template>

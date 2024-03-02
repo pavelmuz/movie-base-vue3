@@ -14,7 +14,14 @@
 
   <!-- Active chats -->
   <div v-for="chat in activeChats" :key="chat" class="container card chats-card my-1">
-    <div class="row py-2">
+    <router-link
+      class="card-link row py-2 text-decoration-none"
+      :to="{
+        name: 'chat',
+        params: { recipientId: chat.id }
+      }"
+      role="button"
+    >
       <!-- Prodile avatar -->
       <div class="col-auto my-auto">
         <img :src="chat.profile_image" class="avatar-img-md" />
@@ -25,18 +32,9 @@
       </div>
       <!-- Link to chat -->
       <div class="col-auto my-auto ms-auto me-3">
-        <router-link
-          class="card-link"
-          :to="{
-            name: 'chat',
-            params: { recipientId: chat.id }
-          }"
-          role="button"
-        >
-          <i class="fa-solid fa-chevron-right fa-2xl"></i>
-        </router-link>
+        <i class="fa-solid fa-chevron-right fa-2xl"></i>
       </div>
-    </div>
+    </router-link>
   </div>
 </template>
 

@@ -1,7 +1,14 @@
 <template>
   <div class="container card edit-movie-card">
-    <div class="row py-2">
+    <div class="row pt-2">
       <h4 class="card-title">Добавить фильм</h4>
+    </div>
+    <div class="row pb-2">
+      <div class="col-auto pt-2">
+        <a href="#" @click.prevent="goBack" class="card-link text-decoration-none"
+          ><i class="fa-solid fa-chevron-left fa-xl"></i> Назад</a
+        >
+      </div>
     </div>
     <div class="row pb-2">
       <!-- Movie poster -->
@@ -69,12 +76,19 @@ async function addMovie() {
   }
 }
 
+function goBack() {
+  router.back()
+}
+
 onMounted(async () => {
   await fetchMovieData()
 })
 </script>
 
 <style scoped>
+.card-link {
+  color: #c3edc0;
+}
 .edit-movie-card {
   background-color: #0b666a;
   color: #c3edc0;

@@ -5,9 +5,14 @@
       <h4 class="card-title">Выберите фильм</h4>
     </div>
   </div>
+
   <!-- Movie card -->
   <div v-for="movie in movieList" :key="movie" class="container card movie-card mx-auto my-1">
-    <div class="row py-2">
+    <router-link
+      :to="{ name: 'add-movie', params: { id: movie.kinopoiskId } }"
+      class="card-link row py-2 text-decoration-none"
+      role="button"
+    >
       <!-- Movie poster -->
       <div class="col-auto my-auto">
         <img :src="movie.posterUrlPreview" class="rounded movie-poster-search" />
@@ -19,15 +24,9 @@
       </div>
       <!-- Next button -->
       <div class="col-auto my-auto ms-auto me-3">
-        <router-link
-          :to="{ name: 'add-movie', params: { id: movie.kinopoiskId } }"
-          class="card-link"
-          role="button"
-        >
-          <i class="fa-solid fa-chevron-right fa-2xl"></i>
-        </router-link>
+        <i class="fa-solid fa-chevron-right fa-2xl"></i>
       </div>
-    </div>
+    </router-link>
   </div>
 </template>
 

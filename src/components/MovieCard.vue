@@ -271,9 +271,12 @@
     </div>
     <!-- Show all comments button -->
     <div class="row mb-2">
-      <a href="#" class="card-link text-decoration-none">
+      <router-link
+        :to="{ name: 'movie', params: { movieId: movie.id } }"
+        class="card-link text-decoration-none"
+      >
         <p class="card-subtitle">Показать все комментарии ({{ commentsCount }})</p>
-      </a>
+      </router-link>
     </div>
   </div>
 </template>

@@ -7,37 +7,67 @@
         </a>
       </div>
       <div v-if="notificationType == 'follow'" class="col-auto my-auto px-1">
-        <a href="#" class="card-link text-decoration-none">
-          <p class="card-text">{{ notification.sender.username }} подписался на вас</p>
-        </a>
+        <p class="card-text">
+          <router-link
+            :to="{ name: 'profile', params: { id: notification.sender.id } }"
+            class="card-link text-decoration-none"
+          >
+            {{ notification.sender.username }}
+          </router-link>
+          подписался на вас
+        </p>
       </div>
       <div v-else-if="notificationType == 'like'" class="col-auto my-auto px-1">
-        <a href="#" class="card-link text-decoration-none">
-          <p class="card-text">{{ notification.sender.username }} нравится</p>
-        </a>
+        <p class="card-text">
+          <router-link
+            :to="{ name: 'profile', params: { id: notification.sender.id } }"
+            class="card-link text-decoration-none"
+          >
+            {{ notification.sender.username }}
+          </router-link>
+          нравится
+        </p>
       </div>
       <div v-else-if="notificationType == 'comment'" class="col-auto my-auto px-1">
-        <a href="#" class="card-link text-decoration-none">
-          <p class="card-text">{{ notification.sender.username }} прокомментировал:</p>
-        </a>
+        <p class="card-text">
+          <router-link
+            :to="{ name: 'profile', params: { id: notification.sender.id } }"
+            class="card-link text-decoration-none"
+          >
+            {{ notification.sender.username }}
+          </router-link>
+          прокомментировал:
+        </p>
       </div>
       <div v-else-if="notificationType == 'message'" class="col-auto my-auto px-1">
-        <a href="#" class="card-link text-decoration-none">
-          <p class="card-text">{{ notification.sender.username }} написал вам:</p>
-        </a>
+        <p class="card-text">
+          <router-link
+            :to="{ name: 'profile', params: { id: notification.sender.id } }"
+            class="card-link text-decoration-none"
+          >
+            {{ notification.sender.username }}
+          </router-link>
+          написал вам:
+        </p>
       </div>
       <div
         v-if="notificationType == 'like' || notificationType == 'comment'"
         class="col-6 my-auto me-auto ps-1"
       >
-        <a href="#" class="card-link text-decoration-none">
+        <router-link
+          :to="{ name: 'movie', params: { movieId: notification.movie.id } }"
+          class="card-link text-decoration-none"
+        >
           <p class="card-text">{{ notification.movie.title }}</p>
-        </a>
+        </router-link>
       </div>
       <div v-else-if="notificationType == 'message'" class="col-6 my-auto me-auto ps-1">
-        <a href="#" class="card-link text-decoration-none">
+        <router-link
+          :to="{ name: 'chat', params: { recipientId: notification.sender.id } }"
+          class="card-link text-decoration-none"
+        >
           <p class="card-text">{{ notification.message.body }}</p>
-        </a>
+        </router-link>
       </div>
       <div class="col-auto ms-auto">
         <button
