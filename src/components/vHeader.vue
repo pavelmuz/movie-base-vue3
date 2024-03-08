@@ -1,58 +1,43 @@
 <template>
-  <nav class="navbar fixed-top navbar-expand-lg mb-3">
-    <div class="container-fluid">
-      <router-link :to="{ name: 'feed' }">
-        <img src="@/assets/images/logo.png" class="rounded-circle img-fluid mx-3 nav-logo" />
-      </router-link>
-      <router-link class="navbar-brand" :to="{ name: 'feed' }">Movie Base</router-link>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <i class="fa-solid fa-bars fa-lg"></i>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <header-link :link="{ name: 'feed' }" title="Лента" />
-          <header-link :link="{ name: 'profiles' }" title="Найти" />
-          <header-link :link="{ name: 'search' }" title="Добавить фильм" v-if="authStore.isAuthenticated" />
-          <header-link
-            :link="{ name: 'notifications' }"
-            title="Уведомления"
-            v-if="authStore.isAuthenticated"
-          />
-          <header-link :link="{ name: 'chats' }" title="Сообщения" v-if="authStore.isAuthenticated" />
-          <header-link :link="{ name: 'account' }" title="Профиль" v-if="authStore.isAuthenticated" />
-          <header-link
-            :link="{ name: 'login' }"
-            title="Войти/Регистрация"
-            v-if="!authStore.isAuthenticated"
-          />
-          <li class="nav-item">
-            <a class="nav-link" href="http://localhost:8000/api/docs/" target="_blank">API</a>
-          </li>
-          <li class="nav-item" v-if="authStore.isAuthenticated">
-            <a class="nav-link" @click="logout" href="#"
-              ><i class="fa-solid fa-right-from-bracket fa-lg"></i> Выйти</a
-            >
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
+  <div class="container">
+    <n-card :bordered="false" class="navbar">
+      <n-flex align="center">
+        <n-flex class="brand" @click.prevent="goTo('feed')">
+          <img src="@/assets/images/logo.png" class="rounded-circle img-fluid mx-3 nav-logo" />
+          <h2>MovieBase</h2>
+        </n-flex>
+        <h3 @click="goTo('feed')" class="navlink">Лента</h3>
+        <h3 @click="goTo('profiles')" class="navlink">Найти</h3>
+        <h3 v-if="authStore.isAuthenticated" @click="goTo('search')" class="navlink">
+          Добавить фильм
+        </h3>
+        <h3 v-if="authStore.isAuthenticated" @click="goTo('notifications')" class="navlink">
+          Уведомления
+        </h3>
+        <h3 v-if="authStore.isAuthenticated" @click="goTo('chats')" class="navlink">Сообщения</h3>
+        <h3 v-if="authStore.isAuthenticated" @click="goTo('account')" class="navlink">Профиль</h3>
+        <h3 v-if="!authStore.isAuthenticated" @click="goTo('login')" class="navlink">
+          Войти/Регистрация
+        </h3>
+        <h3 v-if="authStore.isAuthenticated" @click="logout" class="navlink">
+          <i class="fa-solid fa-right-from-bracket fa-lg"></i> Выйти
+        </h3>
+      </n-flex>
+    </n-card>
+  </div>
 </template>
 
 <script setup>
-import HeaderLink from '@/components/HeaderLink.vue'
 import { useAuthStore } from '@/stores/authStore'
+import { NCard, NFlex } from 'naive-ui'
 import { useRouter } from 'vue-router'
+
 const router = useRouter()
 const authStore = useAuthStore()
+
+function goTo(routeName) {
+  router.push({ name: routeName })
+}
 
 async function logout() {
   try {
@@ -65,31 +50,47 @@ async function logout() {
 </script>
 
 <style scoped>
+.container {
+  width: 100%;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  margin-bottom: 1%;
+}
+
 .navbar {
+  width: 100%;
   background-color: #1b3333;
+  color: #c3edc0;
+  border-radius: 0;
+  padding-top: 0;
+  padding-bottom: 0;
+}
+
+.navbar h2 {
+  margin-right: 10px;
+}
+
+.brand {
+  cursor: pointer;
+}
+
+.brand:hover {
+  color: #9cbd99;
+}
+
+.navlink {
+  cursor: pointer;
+}
+
+.navlink:hover {
+  color: #9cbd99;
 }
 
 .nav-logo {
-  width: 50px;
-  height: 50px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   object-fit: cover;
-}
-
-.nav-link,
-.navbar-brand {
-  color: #c3edc0;
-}
-
-.nav-link:hover,
-.navbar-brand:hover {
-  color: #9cbd99;
-}
-.link-active {
-  color: #9cbd99;
-}
-.navbar-toggler {
-  color: #c3edc0;
-  border-color: #c3edc0;
 }
 </style>

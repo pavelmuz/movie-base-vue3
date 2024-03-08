@@ -1,5 +1,5 @@
 <template>
-  <div class="container">
+  <div class="profile-container">
     <n-card class="profile-card">
       <n-flex>
         <!-- Avatar image -->
@@ -115,7 +115,13 @@
           </n-flex>
         </n-flex>
         <!-- Profile options -->
-        <n-button v-if="showOptions" :bordered="false" class="profile-dropdown-btn" size="large">
+        <n-button
+          v-if="showOptions"
+          :bordered="false"
+          text-color="#C3EDC0"
+          size="large"
+          class="profile-dropdown-btn"
+        >
           <i class="fa-solid fa-ellipsis fa-xl dropdown-btn"></i>
         </n-button>
       </n-flex>
@@ -205,7 +211,7 @@ watch(
 </script>
 
 <style scoped>
-.container {
+.profile-container {
   display: flex;
   justify-content: center;
   padding-bottom: 10px;
