@@ -1,68 +1,37 @@
 <template>
-  <div class="container auth-card card mx-auto">
-    <div class="row p-2">
-      <!-- Card title -->
-      <h4 class="card-title">Войти в аккаунт</h4>
-      <!-- Login form -->
-      <div>
-        <div class="mb-3">
-          <label class="form-label">Имя пользователя:</label>
-          <input
-            type="text"
-            v-model="username"
-            class="form-control"
-            name="username"
-            style="color: #0b666a"
-          />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Пароль:</label>
-          <input
-            type="password"
-            v-model="password"
-            class="form-control"
-            name="password"
-            style="color: #0b666a"
-          />
-        </div>
-        <button class="btn auth-btn" @click="login">Войти</button>
-      </div>
-      <p class="card-text pt-2 mb-1">или войдите с помощью:</p>
-      <!-- Social Logins -->
-      <div class="row me-auto">
-        <div class="col-auto">
-          <a class="btn social-btn me-2 my-2" href="#" role="button">
-            <i class="fa-brands fa-google"></i> Google
-          </a>
-        </div>
-        <div class="col-auto">
-          <a class="btn social-btn me-2 my-2" href="#" role="button">
-            <i class="fa-brands fa-yandex"></i> Яндекс
-          </a>
-        </div>
-        <div class="col-auto">
-          <a class="btn social-btn me-2 my-2" href="#" role="button">
-            <i class="fa-brands fa-github"></i> GitHub
-          </a>
-        </div>
-        <div class="col-auto">
-          <a class="btn social-btn me-2 my-2" href="#" role="button">
-            <i class="fa-solid fa-at"></i> Mail.Ru
-          </a>
-        </div>
-      </div>
-      <!-- Forgot passowrd and register links -->
-      <a href="http://localhost:8000/reset_password/" class="card-link mt-2">Забыли пароль?</a>
-      <p class="card-text my-3">
-        Еще нет аккаунта?
-        <router-link :to="{ name: 'register' }" class="card-link">Зарегистрируйтесь</router-link>
-      </p>
-    </div>
+  <div class="container">
+    <n-card :bordered="false" class="login-card">
+      <n-flex vertical>
+        <h1 class="card-title">Войти в аккаунт</h1>
+        <p class="card-text">Имя пользователя:</p>
+        <n-input v-model:value="username" type="text" placeholder="" :autofocus="true" />
+        <p class="card-text">Пароль:</p>
+        <n-input
+          v-model:value="password"
+          type="password"
+          placeholder=""
+          show-password-on="mousedown"
+        />
+        <n-button
+          @click="login"
+          size="large"
+          color="#C3EDC0"
+          text-color="#0b666a"
+          class="login-button"
+          >Войти</n-button
+        >
+        <p class="card-text">
+          Еще нет аккаунта?
+          <strong @click="goToRegister" class="card-link">Зарегистрируйтесь</strong>
+        </p>
+      </n-flex>
+    </n-card>
   </div>
 </template>
 
 <script setup>
 import { useAuthStore } from '@/stores/authStore'
+import { NButton, NCard, NFlex, NInput } from 'naive-ui'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -70,6 +39,10 @@ const router = useRouter()
 const authStore = useAuthStore()
 const username = ref('')
 const password = ref('')
+
+function goToRegister() {
+  router.push({ name: 'register' })
+}
 
 async function login() {
   try {
@@ -85,31 +58,41 @@ async function login() {
 </script>
 
 <style scoped>
-.card-link {
-  color: #c3edc0;
+.container {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
 }
 
-.auth-card {
+.login-card {
+  max-width: 700px;
   background-color: #0b666a;
   color: #c3edc0;
-  max-width: 700px;
+  border-radius: 10px;
 }
 
-.auth-btn {
-  background-color: #c3edc0;
-  width: 130px;
+.card-title,
+.card-text {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
-.auth-btn:hover {
+.card-text {
+  font-size: medium;
+}
+
+.login-button {
+  width: 170px;
+  margin-top: 10px;
+  margin-right: auto;
+  border-radius: 6px;
+}
+
+.login-button:hover {
   background-color: #9cbd99;
 }
 
-.social-btn {
-  background-color: #c3edc0;
-  width: 130px;
-}
-
-.social-btn:hover {
-  background-color: #9cbd99;
+.card-link {
+  cursor: pointer;
 }
 </style>

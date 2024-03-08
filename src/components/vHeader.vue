@@ -3,7 +3,7 @@
     <n-card :bordered="false" class="navbar">
       <n-flex align="center">
         <n-flex class="brand" @click.prevent="goTo('feed')">
-          <img src="@/assets/images/logo.png" class="rounded-circle img-fluid mx-3 nav-logo" />
+          <img src="@/assets/images/logo.png" class="nav-logo" />
           <h2>MovieBase</h2>
         </n-flex>
         <h3 @click="goTo('feed')" class="navlink">Лента</h3>

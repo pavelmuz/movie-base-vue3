@@ -1,74 +1,48 @@
 <template>
-  <div class="container card auth-card mx-auto">
-    <div class="row p-2">
-      <!-- Card title -->
-      <h4 class="card-title">Создать аккаунт</h4>
-      <!-- Register form -->
-      <div>
-        <div class="mb-3">
-          <label class="form-label">Имя пользователя:</label>
-          <input
-            v-model="username"
-            type="text"
-            class="form-control"
-            name="username"
-            style="color: #0b666a"
-          />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Полное имя:</label>
-          <input
-            v-model="name"
-            type="text"
-            class="form-control"
-            name="fullname"
-            style="color: #0b666a"
-          />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Электронная почта:</label>
-          <input
-            v-model="email"
-            type="email"
-            class="form-control"
-            name="email"
-            style="color: #0b666a"
-          />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Пароль:</label>
-          <input
-            v-model="password1"
-            type="password"
-            class="form-control"
-            name="password"
-            style="color: #0b666a"
-          />
-        </div>
-        <div class="mb-3">
-          <label class="form-label">Подтвердите пароль:</label>
-          <input
-            v-model="password2"
-            type="password"
-            class="form-control"
-            name="confirm-password"
-            style="color: #0b666a"
-          />
-        </div>
-        <button @click.prevent="register" class="btn auth-btn mt-2">Создать аккаунт</button>
-      </div>
-
-      <!-- Login link -->
-      <p class="card-text py-3">
-        Уже есть аккаунт?
-        <router-link :to="{ name: 'login' }" class="card-link">Войдите</router-link>
-      </p>
-    </div>
+  <div class="container">
+    <n-card :bordered="false" class="register-card">
+      <n-flex vertical>
+        <h1 class="card-title">Создать аккаунт</h1>
+        <p class="card-text">Имя пользователя:</p>
+        <n-input v-model:value="username" type="text" placeholder="" :autofocus="true" />
+        <p class="card-text">Полное имя:</p>
+        <n-input v-model:value="name" type="text" placeholder="" />
+        <p class="card-text">Электронная почта:</p>
+        <n-input v-model:value="email" type="text" placeholder="" />
+        <p class="card-text">Пароль:</p>
+        <n-input
+          v-model:value="password1"
+          type="password"
+          placeholder=""
+          show-password-on="mousedown"
+        />
+        <p class="card-text">Подтвердите пароль:</p>
+        <n-input
+          v-model:value="password2"
+          type="password"
+          placeholder=""
+          show-password-on="mousedown"
+        />
+        <n-button
+          @click="register"
+          size="large"
+          color="#C3EDC0"
+          text-color="#0b666a"
+          class="register-button"
+          >Создать аккаунт</n-button
+        >
+        <p class="card-text">
+          Уже есть аккаунт?
+          <strong @click="goToLogin" class="card-link">Войдите</strong>
+        </p>
+      </n-flex>
+    </n-card>
   </div>
 </template>
 
 <script setup>
 import { useAuthStore } from '@/stores/authStore'
+import { NButton, NCard, NFlex, NInput } from 'naive-ui'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -79,6 +53,10 @@ const name = ref('')
 const email = ref('')
 const password1 = ref('')
 const password2 = ref('')
+
+function goToLogin() {
+  router.push({ name: 'login' })
+}
 
 async function register() {
   try {
@@ -97,31 +75,41 @@ async function register() {
 </script>
 
 <style scoped>
-.card-link {
-  color: #c3edc0;
+.container {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
 }
 
-.auth-card {
+.register-card {
+  max-width: 700px;
   background-color: #0b666a;
   color: #c3edc0;
-  max-width: 700px;
+  border-radius: 10px;
 }
 
-.auth-btn {
-  background-color: #c3edc0;
-  width: 160px;
+.card-title,
+.card-text {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
-.auth-btn:hover {
+.card-text {
+  font-size: medium;
+}
+
+.register-button {
+  width: 170px;
+  margin-top: 10px;
+  margin-right: auto;
+  border-radius: 6px;
+}
+
+.register-button:hover {
   background-color: #9cbd99;
 }
 
-.social-btn {
-  background-color: #c3edc0;
-  width: 130px;
-}
-
-.social-btn:hover {
-  background-color: #9cbd99;
+.card-link {
+  cursor: pointer;
 }
 </style>
