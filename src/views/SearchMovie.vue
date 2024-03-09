@@ -1,52 +1,74 @@
 <template>
-  <div class="container card movie-card">
-    <div class="row p-2">
-      <!-- Title -->
-      <h4 class="card-title">Найти фильм</h4>
-      <!-- Search movie form -->
-      <div class="mb-3">
-        <label class="form-label">Название:</label>
-        <input
-          type="text"
-          v-model="movieTitle"
-          class="form-control mb-3"
-          name="movie-title"
-          style="color: #0b666a"
-        />
-        <!-- Search button -->
-        <router-link
-          v-if="movieTitle !== ''"
-          :to="{ name: 'search-results', params: { title: movieTitle } }"
-          class="btn auth-btn"
-          ><i class="fa-solid fa-magnifying-glass"></i> Найти</router-link
+  <div class="container">
+    <n-card :bordered="false" class="search-card">
+      <n-flex vertical>
+        <h1 class="card-title">Найти фильм</h1>
+        <p class="card-text">Название:</p>
+        <n-input v-model:value="movieTitle" type="text" placeholder="" :autofocus="true" />
+        <n-button
+          size="large"
+          color="#C3EDC0"
+          text-color="#0b666a"
+          :disabled="buttonEnabled"
+          class="search-button"
+          @click="goToSearchResults"
+          ><i class="fa-solid fa-magnifying-glass"></i> Найти</n-button
         >
-        <button v-else class="btn auth-btn">
-          <i class="fa-solid fa-magnifying-glass"></i> Найти
-        </button>
-      </div>
-    </div>
+      </n-flex>
+    </n-card>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { NButton, NCard, NFlex, NInput } from 'naive-ui'
+import { computed, ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const movieTitle = ref('')
+
+const buttonEnabled = computed(() => {
+  return movieTitle.value === ''
+})
+
+function goToSearchResults() {
+  router.push({ name: 'search-results', params: { title: movieTitle.value } })
+}
 </script>
 
 <style scoped>
-.movie-card {
+.container {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+
+.search-card {
+  max-width: 700px;
   background-color: #0b666a;
   color: #c3edc0;
-  max-width: 700px;
+  border-radius: 10px;
 }
 
-.auth-btn {
-  background-color: #c3edc0;
-  width: 130px;
+.card-title,
+.card-text {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
-.auth-btn:hover {
+.card-text {
+  font-size: medium;
+}
+
+.search-button {
+  width: 170px;
+  margin-top: 10px;
+  margin-right: auto;
+  border-radius: 6px;
+}
+
+.search-button:hover {
   background-color: #9cbd99;
 }
 </style>
