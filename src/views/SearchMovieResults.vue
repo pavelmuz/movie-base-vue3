@@ -1,43 +1,46 @@
 <template>
-  <!-- Title card -->
-  <div class="container card movie-card mx-auto mb-3">
-    <div class="row pt-2">
-      <h4 class="card-title">Выберите фильм</h4>
-    </div>
+  <div class="container">
+    <n-card :bordered="false" class="title-card">
+      <n-flex>
+        <h1 class="card-title">Выберите фильм</h1>
+      </n-flex>
+    </n-card>
   </div>
 
-  <!-- Movie card -->
-  <div v-for="movie in movieList" :key="movie" class="container card movie-card mx-auto my-1">
-    <router-link
-      :to="{ name: 'add-movie', params: { id: movie.kinopoiskId } }"
-      class="card-link row py-2 text-decoration-none"
-      role="button"
-    >
-      <!-- Movie poster -->
-      <div class="col-auto my-auto">
-        <img :src="movie.posterUrlPreview" class="rounded movie-poster-search" />
-      </div>
-      <!-- Movie info -->
-      <div class="col-7 my-auto">
-        <h4 class="card-title">{{ movie.nameRu }}</h4>
-        <p class="card-text">{{ movie.year }}</p>
-      </div>
-      <!-- Next button -->
-      <div class="col-auto my-auto ms-auto me-3">
-        <i class="fa-solid fa-chevron-right fa-2xl"></i>
-      </div>
-    </router-link>
+  <div v-for="movie in movieList" :key="movie" class="movie-container">
+    <n-card :bordered="false" class="movie-card">
+      <n-flex align="center">
+        <img :src="movie.posterUrlPreview" class="movie-poster-search" />
+        <n-flex vertical>
+          <h2 class="card-title">{{ movie.nameRu }}</h2>
+          <h3 class="card-text">{{ movie.year }}</h3>
+        </n-flex>
+        <n-button
+          text
+          text-color="#C3EDC0"
+          class="next-button"
+          @click="goToAddMovie(movie.kinopoiskId)"
+          ><i class="fa-solid fa-chevron-right fa-2xl"></i
+        ></n-button>
+      </n-flex>
+    </n-card>
   </div>
 </template>
 
 <script setup>
 import apiMovibase from '@/services/apiMovies'
+import { NButton, NCard, NFlex } from 'naive-ui'
 import { onMounted, ref } from 'vue'
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 
 const movieList = ref([])
 const route = useRoute()
+const router = useRouter()
 const movieTitle = ref(route.params.title || '')
+
+function goToAddMovie(id) {
+  router.push({ name: 'add-movie', params: { id: id } })
+}
 
 async function fetchMovies() {
   try {
@@ -53,17 +56,43 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.card-link {
+.container {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+
+.movie-container {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 5px;
+}
+
+.title-card {
+  max-width: 700px;
+  background-color: #0b666a;
   color: #c3edc0;
+  border-radius: 10px;
+}
+
+.card-title {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .movie-card {
   background-color: #0b666a;
   color: #c3edc0;
   max-width: 700px;
+  border-radius: 10px;
 }
 
 .movie-poster-search {
   max-width: 120px;
+  border-radius: 5px;
+}
+
+.next-button {
+  margin-left: auto;
 }
 </style>
