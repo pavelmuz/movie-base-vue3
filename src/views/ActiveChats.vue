@@ -3,7 +3,7 @@
   <div class="title-container">
     <n-card :bordered="false" class="title-card">
       <n-flex>
-        <h1 class="card-title">Уведомления</h1>
+        <h1 class="card-title">Чаты</h1>
       </n-flex>
     </n-card>
   </div>
@@ -65,7 +65,7 @@ onMounted(async () => {
 }
 
 .title-card {
-  max-width: 700px;
+  max-width: 600px;
   background-color: #0b666a;
   color: #c3edc0;
   border-radius: 10px;
@@ -78,7 +78,7 @@ onMounted(async () => {
 }
 
 .chat-card {
-  max-width: 700px;
+  max-width: 600px;
   background-color: #0b666a;
   color: #c3edc0;
   border-radius: 10px;

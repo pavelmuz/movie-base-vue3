@@ -1,68 +1,62 @@
 <template>
-  <!-- Chat container -->
-  <div class="container card chats-card">
-    <!-- Back button -->
-    <div class="row pb-2">
-      <div class="col-auto pt-2">
-        <a href="#" @click.prevent="goBack" class="card-link text-decoration-none">
-          <i class="fa-solid fa-chevron-left fa-xl"></i> Назад
-        </a>
-      </div>
-    </div>
-    <!-- Chat recipinet info -->
-    <div class="row pb-2">
-      <h5 class="card-title">
-        Чат с пользователем:
-        <router-link
-          :to="{ name: 'profile', params: { id: recipientId } }"
-          class="card-link text-decoration-none"
-        >
-          <img :src="recipient.profile_image" class="avatar-img-sm mx-2" />
-          {{ recipient.username }}
-        </router-link>
-      </h5>
-    </div>
-    <!-- Chat feed -->
-    <div ref="chatFeedRef" class="container card chat-feed">
-      <div v-for="message in messageFeed" :key="message">
-        <!-- Recipinets messages -->
-        <div
-          v-if="message.sender.id == recipientId"
-          class="card py-2 my-2 message-bubble message-recipient"
-        >
-          <p class="card-text px-2">{{ message.body }}</p>
-        </div>
-        <!-- User messages -->
-        <div
-          v-else-if="message.sender.id == userId"
-          class="card py-2 my-2 message-bubble message-sender ms-auto"
-        >
-          <p class="card-text px-2">{{ message.body }}</p>
-        </div>
-      </div>
-    </div>
-    <!-- Send message form -->
-    <div class="row">
-      <form action="">
-        <textarea
-          class="form-control message-input my-1"
-          rows="2"
+  <div class="chat-container">
+    <n-card :bordered="false" class="chat-card">
+      <n-flex vertical :size="3">
+        <n-flex align="center" @click="goBack" size="small" class="back-button">
+          <i class="fa-solid fa-chevron-left fa-xl"></i>
+          <p>Назад</p>
+        </n-flex>
+        <n-flex align="center">
+          <h3>Чат с пользователем:</h3>
+          <n-flex align="center" @click="goToProfile(recipient.id)" class="profile-link">
+            <img :src="recipient.profile_image" class="avatar-img-sm" />
+            <h3>{{ recipient.username }}</h3>
+          </n-flex>
+        </n-flex>
+        <n-card :bordered="false" class="chat-feed">
+          <n-flex v-for="message in messageFeed" :key="message">
+            <n-card
+              v-if="message.sender.id == recipientId"
+              :bordered="false"
+              size="small"
+              class="message-sender"
+            >
+              <p class="message-text">{{ message.body }}</p>
+            </n-card>
+            <n-card
+              v-else-if="message.sender.id == userId"
+              :bordered="false"
+              size="small"
+              class="message-recipient"
+            >
+              <p class="message-text">{{ message.body }}</p>
+            </n-card>
+          </n-flex>
+        </n-card>
+        <n-input
+          v-model:value="message"
+          type="textarea"
           placeholder="Введите сообщение"
-          name="chat-message"
-          v-model="message"
-        ></textarea>
-
-        <button type="submit" class="btn edit-btn mb-2" @click.prevent="sendMessage">
-          Отправить
-        </button>
-      </form>
-    </div>
+          :rows="2"
+          class="message-input"
+        />
+        <n-button
+          @click="sendMessage"
+          size="large"
+          color="#C3EDC0"
+          text-color="#0b666a"
+          class="message-button"
+          >Отправить</n-button
+        >
+      </n-flex>
+    </n-card>
   </div>
 </template>
 
 <script setup>
 import apiChats from '@/services/apiChats'
 import apiProfiles from '@/services/apiProfiles'
+import { NButton, NCard, NFlex, NInput } from 'naive-ui'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -76,10 +70,13 @@ const recipientId = route.params.recipientId
 const messageFeed = ref([])
 const recipient = ref({})
 const message = ref('')
-const chatFeedRef = ref(null)
 
 function goBack() {
   router.back()
+}
+
+function goToProfile(id) {
+  router.push({ name: 'profile', params: { id: id } })
 }
 
 async function fetchMessages() {
@@ -110,45 +107,48 @@ async function sendMessage() {
   }
 }
 
-function scrollToEnd() {
-  chatFeedRef.value.scrollTop = chatFeedRef.value.scrollHeight
-}
-
 onMounted(async () => {
   await fetchMessages()
   await fetchRecipient()
-  scrollToEnd()
 })
 </script>
 
 <style scoped>
-.card-link {
-  color: #c3edc0;
+.chat-container {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
 }
 
-.edit-btn {
-  background-color: #c3edc0;
-}
-
-.edit-btn:hover {
-  background-color: #9cbd99;
-}
-.avatar-img-sm {
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-.chats-card {
+.chat-card {
+  max-width: 600px;
   background-color: #0b666a;
   color: #c3edc0;
-  max-width: 600px;
+  border-radius: 10px;
 }
 
 .chat-feed {
   background-color: #edf9ec;
   overflow-y: auto;
-  height: calc(100vh - 340px);
+  height: calc(100vh - 440px);
+}
+
+.message-button {
+  width: 170px;
+  margin-top: 10px;
+  margin-right: auto;
+  border-radius: 6px;
+}
+
+.message-button:hover {
+  background-color: #9cbd99;
+}
+
+.avatar-img-sm {
+  width: 25px;
+  height: 25px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
 .message-bubble {
@@ -156,23 +156,37 @@ onMounted(async () => {
 }
 
 .message-sender {
-  background-color: #cff0cc;
+  background-color: #afd5ac;
+  max-width: 220px;
+  margin-right: auto;
+  border-radius: 8px;
+  margin-bottom: 2px;
 }
 
 .message-recipient {
-  background-color: #afd5ac;
+  background-color: #cff0cc;
+  max-width: 220px;
+  margin-left: auto;
+  border-radius: 8px;
+  margin-bottom: 2px;
+}
+
+.message-text {
+  margin-top: 0;
+  margin-bottom: 0;
+  font-weight: 500;
+  color: #0b666a;
 }
 
 .message-input {
   background-color: #edf9ec;
 }
 
-.message-input:focus {
-  background-color: #edf9ec;
-  color: #0b666a;
+.back-button {
+  cursor: pointer;
 }
 
-::placeholder {
-  color: #0b666a;
+.profile-link {
+  cursor: pointer;
 }
 </style>
