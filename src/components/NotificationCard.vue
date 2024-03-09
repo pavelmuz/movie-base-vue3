@@ -1,88 +1,51 @@
 <template>
-  <div class="container card movie-card mb-1">
-    <div class="row py-1">
-      <div class="col-auto my-auto pe-0">
-        <a href="#" class="card-link text-decoration-none">
+  <div class="notification-container">
+    <n-card :bordered="false" class="notification-card">
+      <n-flex align="center" :size="7">
+        <n-flex
+          @click="goToProfile(notification.sender.id)"
+          align="center"
+          :size="8"
+          class="card-link"
+        >
           <img :src="notification.sender.profile_image" class="avatar-img-sm" />
-        </a>
-      </div>
-      <div v-if="notificationType == 'follow'" class="col-auto my-auto px-1">
-        <p class="card-text">
-          <router-link
-            :to="{ name: 'profile', params: { id: notification.sender.id } }"
-            class="card-link text-decoration-none"
-          >
-            {{ notification.sender.username }}
-          </router-link>
-          подписался на вас
-        </p>
-      </div>
-      <div v-else-if="notificationType == 'like'" class="col-auto my-auto px-1">
-        <p class="card-text">
-          <router-link
-            :to="{ name: 'profile', params: { id: notification.sender.id } }"
-            class="card-link text-decoration-none"
-          >
-            {{ notification.sender.username }}
-          </router-link>
-          нравится
-        </p>
-      </div>
-      <div v-else-if="notificationType == 'comment'" class="col-auto my-auto px-1">
-        <p class="card-text">
-          <router-link
-            :to="{ name: 'profile', params: { id: notification.sender.id } }"
-            class="card-link text-decoration-none"
-          >
-            {{ notification.sender.username }}
-          </router-link>
-          прокомментировал:
-        </p>
-      </div>
-      <div v-else-if="notificationType == 'message'" class="col-auto my-auto px-1">
-        <p class="card-text">
-          <router-link
-            :to="{ name: 'profile', params: { id: notification.sender.id } }"
-            class="card-link text-decoration-none"
-          >
-            {{ notification.sender.username }}
-          </router-link>
-          написал вам:
-        </p>
-      </div>
-      <div
-        v-if="notificationType == 'like' || notificationType == 'comment'"
-        class="col-6 my-auto me-auto ps-1"
-      >
-        <router-link
-          :to="{ name: 'movie', params: { movieId: notification.movie.id } }"
-          class="card-link text-decoration-none"
+          <p>{{ notification.sender.username }}</p>
+        </n-flex>
+        <p v-if="notificationType == 'follow'">подписался на вас</p>
+        <p v-else-if="notificationType == 'like'">нравится</p>
+        <p v-else-if="notificationType == 'comment'">прокомментировал:</p>
+        <p v-else-if="notificationType == 'message'">написал вам:</p>
+
+        <p
+          v-if="notificationType == 'like' || notificationType == 'comment'"
+          @click="goToMovie(notification.movie.id)"
+          class="card-link"
         >
-          <p class="card-text">{{ notification.movie.title }}</p>
-        </router-link>
-      </div>
-      <div v-else-if="notificationType == 'message'" class="col-6 my-auto me-auto ps-1">
-        <router-link
-          :to="{ name: 'chat', params: { recipientId: notification.sender.id } }"
-          class="card-link text-decoration-none"
+          {{ notification.movie.title }}
+        </p>
+        <p
+          v-else-if="notificationType == 'message'"
+          @click="goToChat(notification.sender.id)"
+          class="card-link"
         >
-          <p class="card-text">{{ notification.message.body }}</p>
-        </router-link>
-      </div>
-      <div class="col-auto ms-auto">
-        <button
-          class="btn notification-btn ps-auto"
-          @click.prevent="$emit('removeNotification', notification.id)"
-        >
-          <i class="fa-solid fa-xmark fa-xl"></i>
-        </button>
-      </div>
-    </div>
+          {{ notification.message.body }}
+        </p>
+        <n-button
+          @click="$emit('removeNotification', notification.id)"
+          text
+          text-color="#C3EDC0"
+          class="delete-button"
+          ><i class="fa-solid fa-xmark fa-xl"></i
+        ></n-button>
+      </n-flex>
+    </n-card>
   </div>
 </template>
 
 <script setup>
+import { NButton, NCard, NFlex } from 'naive-ui'
 import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
   notification: {
@@ -95,7 +58,21 @@ const props = defineProps({
   }
 })
 
+const router = useRouter()
+
 const notification = ref({})
+
+function goToProfile(id) {
+  router.push({ name: 'profile', params: { id: id } })
+}
+
+function goToMovie(id) {
+  router.push({ name: 'movie', params: { movieId: id } })
+}
+
+function goToChat(id) {
+  router.push({ name: 'chat', params: { recipientId: id } })
+}
 
 watch(
   () => props.notification,
@@ -109,19 +86,17 @@ watch(
 </script>
 
 <style scoped>
-.card-link,
-.notification-btn {
-  color: #c3edc0;
+.notification-container {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 5px;
 }
 
-.notification-btn:hover {
-  color: #9cbd99;
-}
-
-.movie-card {
+.notification-card {
+  max-width: 700px;
   background-color: #0b666a;
   color: #c3edc0;
-  max-width: 700px;
+  border-radius: 10px;
 }
 
 .avatar-img-sm {
@@ -129,5 +104,17 @@ watch(
   height: 25px;
   border-radius: 50%;
   object-fit: cover;
+}
+
+.delete-button {
+  margin-left: auto;
+}
+
+.card-link {
+  cursor: pointer;
+}
+
+p {
+  font-size: medium;
 }
 </style>
