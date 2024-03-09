@@ -1,48 +1,48 @@
 <template>
   <!-- Chats card -->
-  <div class="container card chats-card mb-2" id="cards-list">
-    <div class="row p-2 py-3 my-auto">
-      <h4 class="card-title my-auto">Чаты</h4>
-    </div>
+  <div class="title-container">
+    <n-card :bordered="false" class="title-card">
+      <n-flex>
+        <h1 class="card-title">Уведомления</h1>
+      </n-flex>
+    </n-card>
   </div>
 
-  <div v-if="activeChats.length === 0" class="container card chats-card mb-1">
-    <div class="row py-1">
-      <p class="card-text">У вас нет активных чатов</p>
-    </div>
+  <div v-if="activeChats.length === 0" class="title-container">
+    <n-card :bordered="false" class="title-card">
+      <n-flex>
+        <h3>У вас нет активных чатов</h3>
+      </n-flex>
+    </n-card>
   </div>
 
   <!-- Active chats -->
-  <div v-for="chat in activeChats" :key="chat" class="container card chats-card my-1">
-    <router-link
-      class="card-link row py-2 text-decoration-none"
-      :to="{
-        name: 'chat',
-        params: { recipientId: chat.id }
-      }"
-      role="button"
-    >
-      <!-- Prodile avatar -->
-      <div class="col-auto my-auto">
+  <div v-for="chat in activeChats" :key="chat" class="chat-container">
+    <n-card @click="goToChat(chat.id)" :bordered="false" class="chat-card">
+      <n-flex align="center">
         <img :src="chat.profile_image" class="avatar-img-md" />
-      </div>
-      <!-- Profile username -->
-      <div class="col-auto my-auto">
-        <h5 class="card-text">{{ chat.username }}</h5>
-      </div>
-      <!-- Link to chat -->
-      <div class="col-auto my-auto ms-auto me-3">
-        <i class="fa-solid fa-chevron-right fa-2xl"></i>
-      </div>
-    </router-link>
+        <p>{{ chat.username }}</p>
+        <n-button text text-color="#C3EDC0" class="chat-button"
+          ><i class="fa-solid fa-chevron-right fa-2xl"></i
+        ></n-button>
+      </n-flex>
+    </n-card>
   </div>
 </template>
 
 <script setup>
 import apiChats from '@/services/apiChats'
+import { NButton, NCard, NFlex } from 'naive-ui'
 import { onMounted, ref } from 'vue'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const activeChats = ref([])
+
+function goToChat(id) {
+  router.push({ name: 'chat', params: { recipientId: id } })
+}
 
 async function fetchActiveChats() {
   try {
@@ -58,8 +58,36 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.card-link {
+.title-container {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+
+.title-card {
+  max-width: 700px;
+  background-color: #0b666a;
   color: #c3edc0;
+  border-radius: 10px;
+}
+
+.chat-container {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 5px;
+}
+
+.chat-card {
+  max-width: 700px;
+  background-color: #0b666a;
+  color: #c3edc0;
+  border-radius: 10px;
+  cursor: pointer;
+}
+
+.card-title {
+  margin-top: 0;
+  margin-bottom: 0;
 }
 
 .avatar-img-md {
@@ -69,9 +97,12 @@ onMounted(async () => {
   object-fit: cover;
 }
 
-.chats-card {
-  background-color: #0b666a;
-  color: #c3edc0;
-  max-width: 600px;
+.chat-button {
+  margin-left: auto;
+}
+
+p {
+  font-size: large;
+  font-weight: 500;
 }
 </style>

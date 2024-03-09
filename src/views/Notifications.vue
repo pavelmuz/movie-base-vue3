@@ -8,7 +8,7 @@
     </n-card>
   </div>
 
-  <div v-if="notifications.length === 0" class="container">
+  <div v-if="notifications.length === 0" class="title-container">
     <n-card :bordered="false" class="title-card">
       <n-flex>
         <h3>Для вас нет уведомлений</h3>
