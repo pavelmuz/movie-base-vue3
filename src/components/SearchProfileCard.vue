@@ -1,41 +1,38 @@
 <template>
-  <div class="container card search-user-card mx-auto my-1">
-    <div class="row">
-      <!-- User Avatar -->
-      <div class="col-1 my-auto">
-        <router-link
-          :to="{ name: 'profile', params: { id: profile.id } }"
-          class="card-link text-decoration-none"
-        >
+  <div class="container">
+    <n-card :bordered="false" class="profile-card">
+      <n-flex align="center">
+        <n-flex align="center" @click="goToProfile(profile.id)" class="profile-link">
           <img :src="profile.profile_image" class="avatar-img-md" />
-        </router-link>
-      </div>
-      <!-- User info -->
-      <div class="col-8 my-auto">
-        <router-link
-          :to="{ name: 'profile', params: { id: profile.id } }"
-          class="card-link text-decoration-none"
+          <n-flex vertical :size="1">
+            <h2 class="text-username">{{ profile.username }}</h2>
+            <p class="text-name">{{ profile.name }}</p>
+          </n-flex>
+        </n-flex>
+        <n-button
+          v-if="authStore.isAuthenticated && isFollowing"
+          ghost
+          color="#c3edc0"
+          class="unfollow-button"
+          >Подписан</n-button
         >
-          <div class="card-body">
-            <h5 class="card-title">{{ profile.username }}</h5>
-            <p class="card-subtitle">{{ profile.name }}</p>
-          </div>
-        </router-link>
-      </div>
-      <!-- Follow-unfollow buttons -->
-      <div v-if="authStore.isAuthenticated" class="col-3 my-auto">
-        <!-- Unfollow action -->
-        <button class="btn following-btn" name="unfollow" v-if="isFollowing">Подписан</button>
-        <!-- Follow action -->
-        <button class="btn follow-btn" name="follow" v-if="!isFollowing">Подписаться</button>
-      </div>
-    </div>
+        <n-button
+          v-if="authStore.isAuthenticated && !isFollowing"
+          ghost
+          color="#c3edc0"
+          class="follow-button"
+          >Подписаться</n-button
+        >
+      </n-flex>
+    </n-card>
   </div>
 </template>
 
 <script setup>
 import { useAuthStore } from '@/stores/authStore'
+import { NButton, NCard, NFlex } from 'naive-ui'
 import { ref, watch } from 'vue'
+import { useRouter } from 'vue-router'
 
 const props = defineProps({
   profile: {
@@ -45,8 +42,13 @@ const props = defineProps({
 })
 
 const authStore = useAuthStore()
+const router = useRouter()
 
-const isFollowing = ref(true)
+const isFollowing = ref(false)
+
+function goToProfile(id) {
+  router.push({ name: 'profile', params: { id: id } })
+}
 
 watch(
   () => props.profile,
@@ -60,9 +62,32 @@ watch(
 </script>
 
 <style scoped>
-.card-link {
-  color: #c3edc0;
+.container {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
 }
+
+.profile-card {
+  max-width: 600px;
+  background-color: #0b666a;
+  color: #c3edc0;
+  border-radius: 10px;
+}
+
+.profile-link {
+  cursor: pointer;
+}
+
+.text-username {
+  margin: 0;
+}
+
+.text-name {
+  font-size: medium;
+  margin: 0;
+}
+
 .avatar-img-md {
   width: 50px;
   height: 50px;
@@ -70,31 +95,22 @@ watch(
   object-fit: cover;
 }
 
-.search-user-card {
-  background-color: #0b666a;
-  color: #c3edc0;
-  max-width: 600px;
-}
-
-.follow-btn {
-  background-color: transparent;
-  border-color: #c3edc0;
-  color: #c3edc0;
+.follow-button {
+  margin-left: auto;
+  border-radius: 6px;
   width: 130px;
 }
 
-.follow-btn:hover {
+.follow-button:hover {
   background-color: #c3edc0;
   color: #0b666a;
 }
 
-.following-btn {
+.unfollow-button {
   background-color: #c3edc0;
   width: 130px;
-}
-
-.following-btn:hover {
-  background-color: transparent;
-  border-color: #c3edc0;
+  margin-left: auto;
+  color: #0b666a;
+  border-radius: 6px;
 }
 </style>

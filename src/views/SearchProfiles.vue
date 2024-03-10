@@ -1,22 +1,19 @@
 <template>
-  <!-- Title card -->
-  <div class="container search-user mx-auto mb-3">
-    <!-- Search user form -->
-    <div class="row">
-      <div class="col-9">
-        <input
+  <div class="container">
+    <n-card :bordered="false" class="search-card">
+      <n-flex justify="space-between" align="center">
+        <n-input
+          v-model:value="searchQuery"
           type="text"
-          class="form-control search-user-input"
-          style="color: #0b666a"
           placeholder="Найти пользователя"
+          size="large"
+          class="search-input"
         />
-      </div>
-      <div class="col-3">
-        <button type="submit" class="btn search-user-btn">
-          <i class="fa-solid fa-magnifying-glass"></i> Найти
-        </button>
-      </div>
-    </div>
+        <n-button ghost color="#0b666a" class="search-button"
+          ><i class="fa-solid fa-magnifying-glass"></i> Найти</n-button
+        >
+      </n-flex>
+    </n-card>
   </div>
 
   <!-- Found users list -->
@@ -26,9 +23,11 @@
 <script setup>
 import SearchProfileCard from '@/components/SearchProfileCard.vue'
 import apiProfiles from '@/services/apiProfiles'
+import { NButton, NCard, NFlex, NInput } from 'naive-ui'
 import { onMounted, ref } from 'vue'
 
 const profiles = ref([])
+const searchQuery = ref('')
 
 async function fetchProfiles() {
   try {
@@ -44,18 +43,33 @@ onMounted(async () => {
 </script>
 
 <style scoped>
+.container {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
+}
+
+.search-card {
+  max-width: 600px;
+  background-color: transparent;
+  color: #c3edc0;
+  border-radius: 10px;
+}
+
+.search-input {
+  flex: 1;
+}
+
 .search-user {
   max-width: 600px;
 }
 
-.search-user-btn {
-  background-color: transparent;
-  border-color: #0b666a;
-  color: #0b666a;
+.search-button {
   width: 120px;
+  border-radius: 6px;
 }
 
-.search-user-btn:hover {
+.search-button:hover {
   background-color: #0b666a;
   color: #c3edc0;
 }
