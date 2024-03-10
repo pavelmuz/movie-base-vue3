@@ -1,115 +1,108 @@
 <template>
   <div class="profile-container">
-    <n-card class="profile-card">
+    <n-card :bordered="false" class="profile-card">
       <n-flex>
         <!-- Avatar image -->
-        <div class="profile-avatar">
-          <img :src="profile.profile_image" class="avatar-img-lg" />
-        </div>
+        <img :src="profile.profile_image" class="avatar-img-lg" />
         <!-- User info and followers -->
         <n-flex vertical>
           <!-- Info -->
-          <h3>{{ profile.username }}</h3>
-          <p>{{ profile.name }} {{ profile.birthday }}</p>
+          <h1 class="profile-username">{{ profile.username }}</h1>
+          <h4 class="profile-name">{{ profile.name }} {{ profile.birthday }}</h4>
           <n-flex>
             <!-- Movie Count -->
-            <div class="movie-count">
-              <n-flex vertical :size="1" align="center">
-                <div>
-                  <h6>{{ movieCount || 0 }}</h6>
-                </div>
-                <div>
-                  <h6>фильмы</h6>
-                </div>
-              </n-flex>
-            </div>
+            <n-flex vertical :size="1" align="center">
+              <p class="card-counter">{{ movieCount || 0 }}</p>
+              <p class="card-text">фильмы</p>
+            </n-flex>
             <!-- Followers -->
-            <n-button text text-color="#C3EDC0" @click.prevent="showFollowers = true">
-              <n-flex vertical :size="1" align="center">
-                <div>
-                  <h6>{{ followersCount }}</h6>
-                </div>
-                <div>
-                  <h6>подписчики</h6>
-                </div>
-              </n-flex>
-            </n-button>
+            <n-flex
+              vertical
+              :size="1"
+              align="center"
+              @click.prevent="showFollowers = true"
+              class="modal-open-button"
+            >
+              <p class="card-counter">{{ followersCount }}</p>
+              <p class="card-text">подписчики</p>
+            </n-flex>
+            <!-- Followers Modal -->
             <n-modal v-model:show="showFollowers">
               <n-card
-                class="followers-modal"
                 :bordered="false"
                 size="huge"
                 role="dialog"
                 aria-modal="true"
+                class="followers-modal"
               >
-                <n-flex vertical :size="1">
-                  <h4 class="modal-header">Подписчики:</h4>
-                  <div
+                <n-flex vertical :size="10">
+                  <h2 class="modal-header">Подписчики:</h2>
+                  <n-flex
                     v-for="follower in profile.followers"
                     :key="follower"
+                    align="center"
+                    :size="17"
                     @click="goToProfile(follower.follower.id)"
                     class="follower"
                   >
-                    <n-flex :size="30">
-                      <img :src="follower.follower.profile_image" class="avatar-img-md" />
-                      <n-flex vertical :size="1">
-                        <h5>{{ follower.follower.username }}</h5>
-                        <p>{{ follower.follower.name }}</p>
-                      </n-flex>
+                    <img :src="follower.follower.profile_image" class="avatar-img-md" />
+                    <n-flex vertical :size="1">
+                      <h3>{{ follower.follower.username }}</h3>
+                      <p>{{ follower.follower.name }}</p>
                     </n-flex>
-                  </div>
+                  </n-flex>
                 </n-flex>
               </n-card>
             </n-modal>
             <!-- Followings -->
-            <n-button text text-color="#C3EDC0" @click.prevent="showFollowings = true">
-              <n-flex vertical :size="1" align="center">
-                <div>
-                  <h6>{{ followingsCount }}</h6>
-                </div>
-                <div>
-                  <h6>подписки</h6>
-                </div>
-              </n-flex>
-            </n-button>
+            <n-flex
+              vertical
+              :size="1"
+              align="center"
+              @click.prevent="showFollowings = true"
+              class="modal-open-button"
+            >
+              <p class="card-counter">{{ followingsCount }}</p>
+              <p class="card-text">подписки</p>
+            </n-flex>
+            <!-- Followings Modal -->
             <n-modal v-model:show="showFollowings">
               <n-card
-                class="followings-modal"
                 :bordered="false"
                 size="huge"
                 role="dialog"
                 aria-modal="true"
+                class="followings-modal"
               >
-                <n-flex vertical :size="1">
-                  <h4>Подписки:</h4>
-                  <div
+                <n-flex vertical :size="10">
+                  <h2 class="modal-header">Подписки:</h2>
+                  <n-flex
                     v-for="following in profile.followings"
                     :key="following"
+                    align="center"
+                    :size="17"
                     @click="goToProfile(following.following.id)"
                     class="follow"
                   >
-                    <n-flex :size="30">
-                      <img :src="following.following.profile_image" class="avatar-img-md" />
-                      <n-flex vertical :size="1">
-                        <h5>{{ following.following.username }}</h5>
-                        <p>{{ following.following.name }}</p>
-                      </n-flex>
+                    <img :src="following.following.profile_image" class="avatar-img-md" />
+                    <n-flex vertical :size="1">
+                      <h3>{{ following.following.username }}</h3>
+                      <p>{{ following.following.name }}</p>
                     </n-flex>
-                  </div>
+                  </n-flex>
                 </n-flex>
               </n-card>
             </n-modal>
           </n-flex>
-
           <!-- Follow & Chat buttons -->
           <n-flex v-if="showProfileButtons && authStore.isAuthenticated" justify="space-between">
-            <!-- <n-button size="large" color="#C3EDC0" text-color="#0b666a">Подписан</n-button> -->
-            <n-button size="large" color="#C3EDC0" ghost text-color="#C3EDC0">Подписаться</n-button>
+            <n-button ghost color="#c3edc0" class="unfollow-button">Подписан</n-button>
+            <!-- <n-button ghost color="#c3edc0" class="follow-button">Подписаться</n-button> -->
             <n-button
-              size="large"
               color="#C3EDC0"
               text-color="#0b666a"
               @click.prevent="goToChat(profile.id)"
+              class="chat-button"
               ><i class="fa-solid fa-pen-to-square"></i> Сообщение
             </n-button>
           </n-flex>
@@ -118,6 +111,7 @@
         <n-button
           v-if="showOptions"
           :bordered="false"
+          text
           text-color="#C3EDC0"
           size="large"
           class="profile-dropdown-btn"
@@ -224,12 +218,57 @@ watch(
   border-radius: 10px;
 }
 
-.profile-avatar {
-  margin-right: 3%;
+.profile-username {
+  margin: 0;
+}
+
+.profile-name {
+  margin-top: 0;
+}
+
+.card-counter {
+  margin: 0;
+  font-size: medium;
+}
+
+.card-text {
+  margin: 0;
+  font-size: medium;
+}
+
+.modal-open-button {
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.follow-button {
+  margin-left: auto;
+  border-radius: 6px;
+  width: 130px;
+}
+
+.follow-button:hover {
+  background-color: #c3edc0;
+  color: #0b666a;
+}
+
+.unfollow-button {
+  background-color: #c3edc0;
+  width: 130px;
+  margin-left: auto;
+  color: #0b666a;
+  border-radius: 6px;
+}
+
+.chat-button {
+  width: 130px;
+  border-radius: 6px;
 }
 
 .profile-dropdown-btn {
   margin-left: auto;
+  margin-bottom: auto;
+  margin-top: 15px;
 }
 
 .fa-pen-to-square {
@@ -244,9 +283,42 @@ watch(
   border-radius: 10px;
 }
 
+.modal-header {
+  border-bottom: 1px solid #c3edc0;
+  padding-bottom: 10px;
+  margin-top: 0;
+}
+
 .follower,
 .follow {
   cursor: pointer;
+}
+
+.follower h3,
+.follower p,
+.follow h3,
+.follow p {
+  margin: 0;
+}
+
+.follower p,
+.follow p {
+  font-size: medium;
+}
+
+.avatar-img-md {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.avatar-img-lg {
+  width: 90px;
+  height: 90px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-right: 10px;
 }
 
 .edit-link {
@@ -263,24 +335,5 @@ watch(
 
 .delete-link:hover {
   color: #c8180b;
-}
-
-.avatar-img-md {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.avatar-img-lg {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.modal-header {
-  border-bottom: 2px solid #c3edc0;
-  padding-bottom: 10px;
 }
 </style>
