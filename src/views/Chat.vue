@@ -130,7 +130,7 @@ onMounted(async () => {
 .chat-feed {
   background-color: #edf9ec;
   overflow-y: auto;
-  height: calc(100vh - 440px);
+  height: calc(100vh - 400px);
 }
 
 .message-button {
@@ -184,6 +184,10 @@ onMounted(async () => {
 
 .back-button {
   cursor: pointer;
+}
+
+.back-button p {
+  margin: 0;
 }
 
 .profile-link {

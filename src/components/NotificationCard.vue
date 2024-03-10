@@ -116,5 +116,6 @@ watch(
 
 p {
   font-size: medium;
+  margin: 0;
 }
 </style>

@@ -104,5 +104,6 @@ onMounted(async () => {
 p {
   font-size: large;
   font-weight: 500;
+  margin: 0;
 }
 </style>

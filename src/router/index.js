@@ -37,17 +37,17 @@ const routes = [
   },
   {
     name: 'search',
-    path: '/search',
+    path: '/search/',
     component: SearchMovie
   },
   {
     name: 'search-results',
-    path: '/search-results/:title',
+    path: '/search-results/:title/',
     component: SearchMovieResults
   },
   {
     name: 'add-movie',
-    path: '/add-movie/:id',
+    path: '/add-movie/:id/',
     component: AddMovie
   },
   {
@@ -72,7 +72,7 @@ const routes = [
   },
   {
     name: 'chat',
-    path: '/chats/:recipientId?',
+    path: '/chats/:recipientId?/',
     component: Chat
   },
   {
