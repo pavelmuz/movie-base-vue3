@@ -1,56 +1,61 @@
 <template>
-  <div class="container card edit-movie-card">
-    <div class="row pt-2">
-      <h4 class="card-title">Добавить фильм</h4>
-    </div>
-    <div class="row pb-2">
-      <div class="col-auto pt-2">
-        <a href="#" @click.prevent="goBack" class="card-link text-decoration-none"
-          ><i class="fa-solid fa-chevron-left fa-xl"></i> Назад</a
-        >
-      </div>
-    </div>
-    <div class="row pb-2">
-      <!-- Movie poster -->
-      <div class="col-auto">
-        <img :src="movie.posterUrlPreview" class="rounded movie-card-poster" />
-      </div>
-      <!-- Movie description -->
-      <div class="col-7">
-        <h4 class="card-title">{{ movie.nameRu }}</h4>
-        <p class="card-text">{{ movie.year }}</p>
-        <p v-if="movie.shortDescription" class="card-text">{{ movie.shortDescription }}</p>
-
-        <!-- Form for personal review and rating -->
-        <label class="form-label">Ваш обзор:</label>
-        <textarea
-          class="form-control"
-          rows="3"
-          v-model="userReview"
-          style="color: #0b666a"
-        ></textarea>
-        <label class="form-label">Ваша оценка:</label>
-        <input type="text" class="form-control" v-model="userRating" style="color: #0b666a" />
-        <button @click.prevent="addMovie" class="btn edit-btn mt-2">
-          <i class="fa-solid fa-floppy-disk"></i> Сохранить
-        </button>
-      </div>
-    </div>
+  <div class="container">
+    <n-card :bordered="false" class="movie-card">
+      <n-flex vertical size="small">
+        <h1>Добавить фильм</h1>
+        <n-flex align="center" size="small" @click="goBack" class="back-button">
+          <i class="fa-solid fa-chevron-left fa-xl"></i>
+          <p>Назад</p>
+        </n-flex>
+        <n-flex class="movie-info">
+          <img :src="movie.posterUrlPreview" class="rounded movie-card-poster" />
+          <n-flex vertical>
+            <h2>{{ movie.nameRu }}</h2>
+            <h3>{{ movie.year }}</h3>
+            <p>{{ movie.shortDescription }}</p>
+            <p class="card-text">Ваш обзор:</p>
+            <n-input
+              v-model:value="userReview"
+              type="textarea"
+              placeholder=""
+              :rows="3"
+              class="message-input"
+            />
+            <p class="card-text">Ваша оценка:</p>
+            <n-input-number v-model:value="userRating" :precision="1" :step="0.1" />
+            <n-button
+              :disabled="buttonDisabled"
+              size="large"
+              color="#C3EDC0"
+              text-color="#0b666a"
+              @click="addMovie"
+              class="save-button"
+              ><i class="fa-solid fa-floppy-disk"></i>Сохранить</n-button
+            >
+          </n-flex>
+        </n-flex>
+      </n-flex>
+    </n-card>
   </div>
 </template>
 
 <script setup>
 import apiMovies from '@/services/apiMovies'
-import { onMounted, ref } from 'vue'
+import { NButton, NCard, NFlex, NInput, NInputNumber } from 'naive-ui'
+import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
 const movie = ref({})
-const userRating = ref('')
+const userRating = ref(0.0)
 const userReview = ref('')
 
 const route = useRoute()
 const router = useRouter()
 const kinopoiskId = route.params.id
+
+const buttonDisabled = computed(() => {
+  return userRating.value === 0.0 || userReview.value === ''
+})
 
 async function fetchMovieData() {
   try {
@@ -64,7 +69,7 @@ async function addMovie() {
   try {
     await apiMovies.postMovie({
       title: movie.value.nameRu,
-      user_rating: parseFloat(userRating.value),
+      user_rating: userRating.value,
       user_review: userReview.value,
       description: movie.value.description,
       poster_url: movie.value.posterUrl,
@@ -86,24 +91,54 @@ onMounted(async () => {
 </script>
 
 <style scoped>
-.card-link {
-  color: #c3edc0;
+.container {
+  display: flex;
+  justify-content: center;
+  padding-bottom: 10px;
 }
-.edit-movie-card {
+
+.movie-card {
   background-color: #0b666a;
   color: #c3edc0;
   max-width: 700px;
+  border-radius: 10px;
+}
+
+.movie-card h1 {
+  margin: 0;
+}
+
+.back-button {
+  cursor: pointer;
+}
+
+.movie-info h2,
+.movie-info h3,
+.movie-info p {
+  margin: 0;
 }
 
 .movie-card-poster {
   max-width: 220px;
+  border-radius: 5px;
 }
 
-.edit-btn {
-  background-color: #c3edc0;
+.save-button {
+  width: 170px;
+  margin-top: 10px;
+  margin-right: auto;
+  border-radius: 6px;
 }
 
-.edit-btn:hover {
+.save-button:hover {
   background-color: #9cbd99;
+}
+
+.fa-floppy-disk {
+  padding-right: 5px;
+}
+
+.card-text {
+  font-size: medium;
 }
 </style>

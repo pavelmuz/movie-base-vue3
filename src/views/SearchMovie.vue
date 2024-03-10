@@ -9,7 +9,7 @@
           size="large"
           color="#C3EDC0"
           text-color="#0b666a"
-          :disabled="buttonEnabled"
+          :disabled="buttonDisabled"
           class="search-button"
           @click="goToSearchResults"
           ><i class="fa-solid fa-magnifying-glass"></i> Найти</n-button
@@ -28,7 +28,7 @@ const router = useRouter()
 
 const movieTitle = ref('')
 
-const buttonEnabled = computed(() => {
+const buttonDisabled = computed(() => {
   return movieTitle.value === ''
 })
 
@@ -70,5 +70,9 @@ function goToSearchResults() {
 
 .search-button:hover {
   background-color: #9cbd99;
+}
+
+.fa-magnifying-glass {
+  padding-right: 5px;
 }
 </style>
