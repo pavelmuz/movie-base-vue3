@@ -108,16 +108,85 @@
           </n-flex>
         </n-flex>
         <!-- Profile options -->
-        <n-button
-          v-if="showOptions"
-          :bordered="false"
-          text
-          text-color="#C3EDC0"
+        <n-dropdown
+          :show="showOptionsDropdown"
+          placement="left-start"
           size="large"
-          class="profile-dropdown-btn"
+          :options="profileOptions"
+          style="background-color: #237578; border-radius: 6px"
         >
-          <i class="fa-solid fa-ellipsis fa-xl dropdown-btn"></i>
-        </n-button>
+          <n-button
+            v-if="showOptions"
+            :bordered="false"
+            text
+            text-color="#C3EDC0"
+            size="large"
+            @click="showOptionsDropdown = !showOptionsDropdown"
+            class="profile-dropdown-btn"
+          >
+            <i class="fa-solid fa-ellipsis fa-xl dropdown-btn"></i>
+          </n-button>
+        </n-dropdown>
+        <!-- Edit profile modal -->
+        <n-modal v-model:show="showEditModal">
+          <n-card :bordered="false" role="dialog" aria-modal="true" class="edit-modal">
+            <n-flex vertical :size="1">
+              <h2>Редактировать профиль</h2>
+              <p>Имя пользователя:</p>
+              <n-input type="text" placeholder="" :autofocus="true" maxlength="30" show-count />
+              <p>Полное имя:</p>
+              <n-input type="text" placeholder="" maxlength="30" show-count />
+              <p>Дата рождения:</p>
+              <n-date-picker type="date" placeholder="" />
+              <p>Электронная почта:</p>
+              <n-input type="text" placeholder="" />
+              <div>
+                <p>Фото профиля:</p>
+                <n-upload>
+                  <n-button color="#C3EDC0" text-color="#0b666a" class="select-button"
+                    ><i class="fa-regular fa-image"></i>Выбрать файл</n-button
+                  >
+                </n-upload>
+              </div>
+              <n-flex align="center" :size="20">
+                <n-button
+                  color="#C3EDC0"
+                  text-color="#0b666a"
+                  @click="showEditModal = false"
+                  class="cancel-button"
+                  >Омена</n-button
+                >
+                <n-button color="#C3EDC0" text-color="#0b666a" class="save-button"
+                  ><i class="fa-solid fa-floppy-disk"></i> Сохранить</n-button
+                >
+              </n-flex>
+            </n-flex>
+          </n-card>
+        </n-modal>
+        <!-- Delete profile modal -->
+        <n-modal v-model:show="showDeleteModal">
+          <n-card :bordered="false" role="dialog" aria-modal="true" class="delete-modal">
+            <n-flex vertical :size="1">
+              <h2>Вы действительно хотите удалить аккаунт?</h2>
+              <n-flex align="center" :size="20">
+                <n-button
+                  color="#C3EDC0"
+                  text-color="#0b666a"
+                  @click="showDeleteModal = false"
+                  class="cancel-button"
+                  >Омена</n-button
+                >
+                <n-button
+                  color="#c8180b"
+                  text-color="#C3EDC0"
+                  @click="deleteAccount"
+                  class="delete-button"
+                  ><i class="fa-solid fa-trash-can"></i> Удалить</n-button
+                >
+              </n-flex>
+            </n-flex>
+          </n-card>
+        </n-modal>
       </n-flex>
     </n-card>
   </div>
@@ -126,8 +195,8 @@
 <script setup>
 import apiProfiles from '@/services/apiProfiles'
 import { useAuthStore } from '@/stores/authStore'
-import { NButton, NCard, NFlex, NModal } from 'naive-ui'
-import { ref, watch } from 'vue'
+import { NButton, NCard, NDatePicker, NDropdown, NFlex, NInput, NModal, NUpload } from 'naive-ui'
+import { h, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 const props = defineProps({
@@ -159,6 +228,62 @@ const followersCount = ref()
 const followingsCount = ref()
 const showFollowers = ref(false)
 const showFollowings = ref(false)
+const showOptionsDropdown = ref(false)
+const showEditModal = ref(false)
+const showDeleteModal = ref(false)
+
+function handleEdit() {
+  showOptionsDropdown.value = false
+  showEditModal.value = true
+}
+
+function handleDelete() {
+  showOptionsDropdown.value = false
+  showDeleteModal.value = true
+}
+
+function renderEditOption() {
+  return h(
+    'div',
+    {
+      style: {
+        margin: '5px 15px',
+        color: '#c3edc0',
+        cursor: 'pointer'
+      },
+      onClick: handleEdit
+    },
+    [h('i', { class: 'fa-solid fa-pen-to-square', style: { 'margin-right': '5px' } }), 'Изменить']
+  )
+}
+
+function renderDeleteOption() {
+  return h(
+    'div',
+    {
+      style: {
+        margin: '5px 15px',
+        color: '#c3edc0',
+        cursor: 'pointer'
+      },
+      onClick: handleDelete
+    },
+    [h('i', { class: 'fa-solid fa-trash-can', style: { 'margin-right': '5px' } }), 'Удалить']
+  )
+}
+
+const profileOptions = [
+  {
+    key: 'edit',
+    type: 'render',
+    render: renderEditOption
+  },
+  {
+    key: 'delete',
+    type: 'render',
+    render: renderDeleteOption
+  }
+]
 
 function goToChat(profileId) {
   router.push({ name: 'chat', params: { recipientId: profileId } })
@@ -177,6 +302,7 @@ function goToProfile(id) {
 async function deleteAccount() {
   try {
     await apiProfiles.deleteAccount()
+    authStore.isAuthenticated = false
     router.push({ name: 'login' })
   } catch (error) {
     console.log(error)
@@ -260,9 +386,17 @@ watch(
   border-radius: 6px;
 }
 
-.chat-button {
-  width: 130px;
+.chat-button,
+.cancel-button,
+.delete-button,
+.select-button,
+.save-button {
+  width: 150px;
   border-radius: 6px;
+}
+
+.select-button {
+  margin-bottom: 10px;
 }
 
 .profile-dropdown-btn {
@@ -271,7 +405,10 @@ watch(
   margin-top: 15px;
 }
 
-.fa-pen-to-square {
+.fa-pen-to-square,
+.fa-image,
+.fa-floppy-disk,
+.fa-trash-can {
   margin-right: 8px;
 }
 
@@ -321,19 +458,22 @@ watch(
   margin-right: 10px;
 }
 
-.edit-link {
-  color: #ffff00;
+.delete-modal,
+.edit-modal {
+  width: 550px;
+  background-color: #0b666a;
+  color: #c3edc0;
+  border-radius: 10px;
 }
 
-.edit-link:hover {
-  color: #cccc00;
+.delete-modal h2,
+.edit-modal h2 {
+  margin-top: 0;
+  margin-bottom: 10px;
 }
 
-.delete-link {
-  color: #fa1e0e;
-}
-
-.delete-link:hover {
-  color: #c8180b;
+.edit-modal p {
+  font-size: medium;
+  margin: 5px;
 }
 </style>
