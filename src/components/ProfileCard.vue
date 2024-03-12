@@ -133,13 +133,29 @@
             <n-flex vertical :size="1">
               <h2>Редактировать профиль</h2>
               <p>Имя пользователя:</p>
-              <n-input type="text" placeholder="" :autofocus="true" maxlength="30" show-count />
+              <n-input
+                v-model:value="profile.username"
+                type="text"
+                placeholder=""
+                maxlength="30"
+                show-count
+              />
               <p>Полное имя:</p>
-              <n-input type="text" placeholder="" maxlength="30" show-count />
+              <n-input
+                v-model:value="profile.name"
+                type="text"
+                placeholder=""
+                maxlength="30"
+                show-count
+              />
               <p>Дата рождения:</p>
-              <n-date-picker type="date" placeholder="" />
+              <n-date-picker
+                v-model:formatted-value="profile.birthday"
+                type="date"
+                placeholder=""
+              />
               <p>Электронная почта:</p>
-              <n-input type="text" placeholder="" />
+              <n-input v-model:value="profile.email" type="text" placeholder="" />
               <div>
                 <p>Фото профиля:</p>
                 <n-upload>
