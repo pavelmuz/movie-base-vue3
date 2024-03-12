@@ -24,7 +24,7 @@
 
 <script setup>
 import { NCard, NFlex, NModal } from 'naive-ui'
-import { defineEmits, defineProps, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 const props = defineProps({

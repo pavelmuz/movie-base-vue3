@@ -60,57 +60,12 @@
           </n-button>
         </n-dropdown>
         <!-- Edit profile modal -->
-        <n-modal v-model:show="showEditModal">
-          <n-card :bordered="false" role="dialog" aria-modal="true" class="edit-modal">
-            <n-flex vertical :size="1">
-              <h2>Редактировать профиль</h2>
-              <p>Имя пользователя:</p>
-              <n-input
-                v-model:value="profile.username"
-                type="text"
-                placeholder=""
-                maxlength="30"
-                show-count
-              />
-              <p>Полное имя:</p>
-              <n-input
-                v-model:value="profile.name"
-                type="text"
-                placeholder=""
-                maxlength="30"
-                show-count
-              />
-              <p>Дата рождения:</p>
-              <n-date-picker
-                v-model:formatted-value="profile.birthday"
-                type="date"
-                placeholder=""
-              />
-              <p>Электронная почта:</p>
-              <n-input v-model:value="profile.email" type="text" placeholder="" />
-              <div>
-                <p>Фото профиля:</p>
-                <n-upload>
-                  <n-button color="#C3EDC0" text-color="#0b666a" class="select-button"
-                    ><i class="fa-regular fa-image"></i>Выбрать файл</n-button
-                  >
-                </n-upload>
-              </div>
-              <n-flex align="center" :size="20">
-                <n-button
-                  color="#C3EDC0"
-                  text-color="#0b666a"
-                  @click="showEditModal = false"
-                  class="cancel-button"
-                  >Омена</n-button
-                >
-                <n-button color="#C3EDC0" text-color="#0b666a" class="save-button"
-                  ><i class="fa-solid fa-floppy-disk"></i> Сохранить</n-button
-                >
-              </n-flex>
-            </n-flex>
-          </n-card>
-        </n-modal>
+        <edit-profile-modal
+          :show="showEditModal"
+          :profile="profile"
+          @update:show="showEditModal = $event"
+          @close-modal="showEditModal = false"
+        />
         <!-- Delete profile modal -->
         <delete-profile-modal
           :show="showDeleteModal"
@@ -124,10 +79,11 @@
 
 <script setup>
 import DeleteProfileModal from '@/components/DeleteProfileModal.vue'
+import EditProfileModal from '@/components/EditProfileModal.vue'
 import FollowersModal from '@/components/FollowersModal.vue'
 import FollowingsModal from '@/components/FollowingsModal.vue'
 import ProfileCounter from '@/components/ProfileCounter.vue'
-import { NButton, NCard, NDatePicker, NDropdown, NFlex, NInput, NModal, NUpload } from 'naive-ui'
+import { NButton, NCard, NDropdown, NFlex } from 'naive-ui'
 import { h, ref, watch } from 'vue'
 
 const props = defineProps({
@@ -252,27 +208,10 @@ watch(
   margin-left: 10px;
 }
 
-.cancel-button,
-.select-button,
-.save-button {
-  width: 150px;
-  border-radius: 6px;
-}
-
-.select-button {
-  margin-bottom: 10px;
-}
-
 .profile-dropdown-btn {
   margin-left: auto;
   margin-bottom: auto;
   margin-top: 15px;
-}
-
-.fa-pen-to-square,
-.fa-image,
-.fa-floppy-disk {
-  margin-right: 8px;
 }
 
 .avatar-img-lg {
@@ -281,22 +220,5 @@ watch(
   border-radius: 50%;
   object-fit: cover;
   margin-right: 10px;
-}
-
-.edit-modal {
-  width: 550px;
-  background-color: #0b666a;
-  color: #c3edc0;
-  border-radius: 10px;
-}
-
-.edit-modal h2 {
-  margin-top: 0;
-  margin-bottom: 10px;
-}
-
-.edit-modal p {
-  font-size: medium;
-  margin: 5px;
 }
 </style>

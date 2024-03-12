@@ -28,7 +28,7 @@
 import apiProfiles from '@/services/apiProfiles'
 import { useAuthStore } from '@/stores/authStore'
 import { NButton, NCard, NFlex, NModal } from 'naive-ui'
-import { defineEmits, defineProps, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 const props = defineProps({
