@@ -1,10 +1,5 @@
 <template>
-  <profile-card
-    :profile="profile"
-    :movie-count="movieCount"
-    :show-options="true"
-    :show-profile-buttons="false"
-  />
+  <account-card :profile="profile" :movie-count="movieCount" />
   <movie-card
     v-for="movie in feedData"
     :key="movie"
@@ -20,8 +15,8 @@
 </template>
 
 <script setup>
+import AccountCard from '@/components/AccountCard.vue'
 import MovieCard from '@/components/MovieCard.vue'
-import ProfileCard from '@/components/ProfileCard.vue'
 import apiMovies from '@/services/apiMovies'
 import apiProfiles from '@/services/apiProfiles'
 import { onMounted, ref } from 'vue'

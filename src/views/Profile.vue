@@ -1,10 +1,5 @@
 <template>
-  <profile-card
-    :profile="profile"
-    :movie-count="movieCount"
-    :show-options="false"
-    :show-profile-buttons="true"
-  />
+  <profile-card :profile="profile" :movie-count="movieCount" />
   <movie-card
     v-for="movie in feedData"
     :movie="movie"

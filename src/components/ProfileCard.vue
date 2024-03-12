@@ -11,91 +11,36 @@
           <h4 class="profile-name">{{ profile.name }} {{ profile.birthday }}</h4>
           <n-flex>
             <!-- Movie Count -->
-            <n-flex vertical :size="1" align="center">
-              <p class="card-counter">{{ movieCount || 0 }}</p>
-              <p class="card-text">фильмы</p>
-            </n-flex>
+            <profile-counter :counter="movieCount || 0" text="фильмы" />
             <!-- Followers -->
-            <n-flex
-              vertical
-              :size="1"
-              align="center"
+            <profile-counter
+              :counter="followersCount"
+              text="подписчики"
               @click.prevent="showFollowers = true"
               class="modal-open-button"
-            >
-              <p class="card-counter">{{ followersCount }}</p>
-              <p class="card-text">подписчики</p>
-            </n-flex>
+            />
             <!-- Followers Modal -->
-            <n-modal v-model:show="showFollowers">
-              <n-card
-                :bordered="false"
-                size="huge"
-                role="dialog"
-                aria-modal="true"
-                class="followers-modal"
-              >
-                <n-flex vertical :size="10">
-                  <h2 class="modal-header">Подписчики:</h2>
-                  <n-flex
-                    v-for="follower in profile.followers"
-                    :key="follower"
-                    align="center"
-                    :size="17"
-                    @click="goToProfile(follower.follower.id)"
-                    class="follower"
-                  >
-                    <img :src="follower.follower.profile_image" class="avatar-img-md" />
-                    <n-flex vertical :size="1">
-                      <h3>{{ follower.follower.username }}</h3>
-                      <p>{{ follower.follower.name }}</p>
-                    </n-flex>
-                  </n-flex>
-                </n-flex>
-              </n-card>
-            </n-modal>
+            <followers-modal
+              :show="showFollowers"
+              @update:show="showFollowers = $event"
+              :followers="profile.followers"
+            />
             <!-- Followings -->
-            <n-flex
-              vertical
-              :size="1"
-              align="center"
+            <profile-counter
+              :counter="followingsCount"
+              text="подписки"
               @click.prevent="showFollowings = true"
               class="modal-open-button"
-            >
-              <p class="card-counter">{{ followingsCount }}</p>
-              <p class="card-text">подписки</p>
-            </n-flex>
+            />
             <!-- Followings Modal -->
-            <n-modal v-model:show="showFollowings">
-              <n-card
-                :bordered="false"
-                size="huge"
-                role="dialog"
-                aria-modal="true"
-                class="followings-modal"
-              >
-                <n-flex vertical :size="10">
-                  <h2 class="modal-header">Подписки:</h2>
-                  <n-flex
-                    v-for="following in profile.followings"
-                    :key="following"
-                    align="center"
-                    :size="17"
-                    @click="goToProfile(following.following.id)"
-                    class="follow"
-                  >
-                    <img :src="following.following.profile_image" class="avatar-img-md" />
-                    <n-flex vertical :size="1">
-                      <h3>{{ following.following.username }}</h3>
-                      <p>{{ following.following.name }}</p>
-                    </n-flex>
-                  </n-flex>
-                </n-flex>
-              </n-card>
-            </n-modal>
+            <followings-modal
+              :show="showFollowings"
+              @update:show="showFollowings = $event"
+              :followings="profile.followings"
+            />
           </n-flex>
           <!-- Follow & Chat buttons -->
-          <n-flex v-if="showProfileButtons && authStore.isAuthenticated" justify="space-between">
+          <n-flex v-if="authStore.isAuthenticated" justify="space-between">
             <n-button ghost color="#c3edc0" class="unfollow-button">Подписан</n-button>
             <!-- <n-button ghost color="#c3edc0" class="follow-button">Подписаться</n-button> -->
             <n-button
@@ -107,135 +52,32 @@
             </n-button>
           </n-flex>
         </n-flex>
-        <!-- Profile options -->
-        <n-dropdown
-          :show="showOptionsDropdown"
-          placement="left-start"
-          size="large"
-          :options="profileOptions"
-          style="background-color: #237578; border-radius: 6px"
-        >
-          <n-button
-            v-if="showOptions"
-            :bordered="false"
-            text
-            text-color="#C3EDC0"
-            size="large"
-            @click="showOptionsDropdown = !showOptionsDropdown"
-            class="profile-dropdown-btn"
-          >
-            <i class="fa-solid fa-ellipsis fa-xl dropdown-btn"></i>
-          </n-button>
-        </n-dropdown>
-        <!-- Edit profile modal -->
-        <n-modal v-model:show="showEditModal">
-          <n-card :bordered="false" role="dialog" aria-modal="true" class="edit-modal">
-            <n-flex vertical :size="1">
-              <h2>Редактировать профиль</h2>
-              <p>Имя пользователя:</p>
-              <n-input
-                v-model:value="profile.username"
-                type="text"
-                placeholder=""
-                maxlength="30"
-                show-count
-              />
-              <p>Полное имя:</p>
-              <n-input
-                v-model:value="profile.name"
-                type="text"
-                placeholder=""
-                maxlength="30"
-                show-count
-              />
-              <p>Дата рождения:</p>
-              <n-date-picker
-                v-model:formatted-value="profile.birthday"
-                type="date"
-                placeholder=""
-              />
-              <p>Электронная почта:</p>
-              <n-input v-model:value="profile.email" type="text" placeholder="" />
-              <div>
-                <p>Фото профиля:</p>
-                <n-upload>
-                  <n-button color="#C3EDC0" text-color="#0b666a" class="select-button"
-                    ><i class="fa-regular fa-image"></i>Выбрать файл</n-button
-                  >
-                </n-upload>
-              </div>
-              <n-flex align="center" :size="20">
-                <n-button
-                  color="#C3EDC0"
-                  text-color="#0b666a"
-                  @click="showEditModal = false"
-                  class="cancel-button"
-                  >Омена</n-button
-                >
-                <n-button color="#C3EDC0" text-color="#0b666a" class="save-button"
-                  ><i class="fa-solid fa-floppy-disk"></i> Сохранить</n-button
-                >
-              </n-flex>
-            </n-flex>
-          </n-card>
-        </n-modal>
-        <!-- Delete profile modal -->
-        <n-modal v-model:show="showDeleteModal">
-          <n-card :bordered="false" role="dialog" aria-modal="true" class="delete-modal">
-            <n-flex vertical :size="1">
-              <h2>Вы действительно хотите удалить аккаунт?</h2>
-              <n-flex align="center" :size="20">
-                <n-button
-                  color="#C3EDC0"
-                  text-color="#0b666a"
-                  @click="showDeleteModal = false"
-                  class="cancel-button"
-                  >Омена</n-button
-                >
-                <n-button
-                  color="#c8180b"
-                  text-color="#C3EDC0"
-                  @click="deleteAccount"
-                  class="delete-button"
-                  ><i class="fa-solid fa-trash-can"></i> Удалить</n-button
-                >
-              </n-flex>
-            </n-flex>
-          </n-card>
-        </n-modal>
       </n-flex>
     </n-card>
   </div>
 </template>
 
 <script setup>
-import apiProfiles from '@/services/apiProfiles'
+import FollowersModal from '@/components/FollowersModal.vue'
+import FollowingsModal from '@/components/FollowingsModal.vue'
+import ProfileCounter from '@/components/ProfileCounter.vue'
 import { useAuthStore } from '@/stores/authStore'
-import { NButton, NCard, NDatePicker, NDropdown, NFlex, NInput, NModal, NUpload } from 'naive-ui'
-import { h, ref, watch } from 'vue'
+import { NButton, NCard, NFlex } from 'naive-ui'
+import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
 
 const props = defineProps({
   profile: {
     type: Object,
-    required: true
+    required: false
   },
   movieCount: {
     type: Number,
-    required: true
-  },
-  showOptions: {
-    type: Boolean,
-    required: true
-  },
-  showProfileButtons: {
-    type: Boolean,
     required: true
   }
 })
 
 const authStore = useAuthStore()
-const profileId = localStorage.getItem('profileId')
 const router = useRouter()
 
 const profile = ref({})
@@ -244,85 +86,9 @@ const followersCount = ref()
 const followingsCount = ref()
 const showFollowers = ref(false)
 const showFollowings = ref(false)
-const showOptionsDropdown = ref(false)
-const showEditModal = ref(false)
-const showDeleteModal = ref(false)
-
-function handleEdit() {
-  showOptionsDropdown.value = false
-  showEditModal.value = true
-}
-
-function handleDelete() {
-  showOptionsDropdown.value = false
-  showDeleteModal.value = true
-}
-
-function renderEditOption() {
-  return h(
-    'div',
-    {
-      style: {
-        margin: '5px 15px',
-        color: '#c3edc0',
-        cursor: 'pointer'
-      },
-      onClick: handleEdit
-    },
-    [h('i', { class: 'fa-solid fa-pen-to-square', style: { 'margin-right': '5px' } }), 'Изменить']
-  )
-}
-
-function renderDeleteOption() {
-  return h(
-    'div',
-    {
-      style: {
-        margin: '5px 15px',
-        color: '#c3edc0',
-        cursor: 'pointer'
-      },
-      onClick: handleDelete
-    },
-    [h('i', { class: 'fa-solid fa-trash-can', style: { 'margin-right': '5px' } }), 'Удалить']
-  )
-}
-
-const profileOptions = [
-  {
-    key: 'edit',
-    type: 'render',
-    render: renderEditOption
-  },
-  {
-    key: 'delete',
-    type: 'render',
-    render: renderDeleteOption
-  }
-]
 
 function goToChat(profileId) {
   router.push({ name: 'chat', params: { recipientId: profileId } })
-}
-
-function goToProfile(id) {
-  if (id === profileId) {
-    router.push({ name: 'account' })
-  } else {
-    router.push({ name: 'profile', params: { id: id } })
-  }
-  showFollowers.value = false
-  showFollowings.value = false
-}
-
-async function deleteAccount() {
-  try {
-    await apiProfiles.deleteAccount()
-    authStore.isAuthenticated = false
-    router.push({ name: 'login' })
-  } catch (error) {
-    console.log(error)
-  }
 }
 
 watch(
@@ -368,16 +134,6 @@ watch(
   margin-top: 0;
 }
 
-.card-counter {
-  margin: 0;
-  font-size: medium;
-}
-
-.card-text {
-  margin: 0;
-  font-size: medium;
-}
-
 .modal-open-button {
   cursor: pointer;
   margin-left: 10px;
@@ -402,11 +158,7 @@ watch(
   border-radius: 6px;
 }
 
-.chat-button,
-.cancel-button,
-.delete-button,
-.select-button,
-.save-button {
+.chat-button {
   width: 150px;
   border-radius: 6px;
 }
@@ -415,55 +167,8 @@ watch(
   margin-bottom: 10px;
 }
 
-.profile-dropdown-btn {
-  margin-left: auto;
-  margin-bottom: auto;
-  margin-top: 15px;
-}
-
-.fa-pen-to-square,
-.fa-image,
-.fa-floppy-disk,
-.fa-trash-can {
+.fa-pen-to-square {
   margin-right: 8px;
-}
-
-.followers-modal,
-.followings-modal {
-  width: 500px;
-  background-color: #0b666a;
-  color: #c3edc0;
-  border-radius: 10px;
-}
-
-.modal-header {
-  border-bottom: 1px solid #c3edc0;
-  padding-bottom: 10px;
-  margin-top: 0;
-}
-
-.follower,
-.follow {
-  cursor: pointer;
-}
-
-.follower h3,
-.follower p,
-.follow h3,
-.follow p {
-  margin: 0;
-}
-
-.follower p,
-.follow p {
-  font-size: medium;
-}
-
-.avatar-img-md {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
 }
 
 .avatar-img-lg {
@@ -472,24 +177,5 @@ watch(
   border-radius: 50%;
   object-fit: cover;
   margin-right: 10px;
-}
-
-.delete-modal,
-.edit-modal {
-  width: 550px;
-  background-color: #0b666a;
-  color: #c3edc0;
-  border-radius: 10px;
-}
-
-.delete-modal h2,
-.edit-modal h2 {
-  margin-top: 0;
-  margin-bottom: 10px;
-}
-
-.edit-modal p {
-  font-size: medium;
-  margin: 5px;
 }
 </style>
