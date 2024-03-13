@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_SERVER_API_URL
+const accessToken = localStorage.getItem('accessToken')
 
 async function getProfiles() {
   try {
@@ -15,7 +16,6 @@ async function getProfiles() {
 
 async function getAccount() {
   try {
-    const accessToken = localStorage.getItem('accessToken')
     const response = await axios.get(`${API_URL}/account/`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -36,9 +36,21 @@ async function getProfile(pk) {
   }
 }
 
+async function patchAccount(profileData) {
+  try {
+    await axios.patch(`${API_URL}/account/`, profileData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
+  } catch (error) {
+    throw new Error(error.response.data.error)
+  }
+}
+
 async function deleteAccount() {
   try {
-    const accessToken = localStorage.getItem('accessToken')
     await axios.delete(`${API_URL}/account/`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -56,5 +68,6 @@ export default {
   getProfiles,
   getProfile,
   getAccount,
+  patchAccount,
   deleteAccount
 }

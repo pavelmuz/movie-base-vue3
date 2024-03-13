@@ -43,11 +43,11 @@ const showModal = ref(props.show)
 const authStore = useAuthStore()
 const router = useRouter()
 
-const updateShowDeleteProfile = (newValue) => {
+function updateShowDeleteProfile(newValue) {
   emit('update:show', newValue)
 }
 
-const emitCloseModal = () => {
+function emitCloseModal() {
   emit('closeModal')
 }
 

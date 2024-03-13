@@ -34,12 +34,12 @@ const emit = defineEmits(['openEdit', 'openDelete'])
 
 const showDropdown = ref(props.show)
 
-const emitOpenEdit = () => {
+function emitOpenEdit() {
   showDropdown.value = false
   emit('openEdit')
 }
 
-const emitOpenDelete = () => {
+function emitOpenDelete() {
   showDropdown.value = false
   emit('openDelete')
 }

@@ -43,7 +43,7 @@ const emit = defineEmits(['update:show'])
 const router = useRouter()
 const profileId = localStorage.getItem('profileId')
 
-const updateShowFollowings = (newValue) => {
+function updateShowFollowings(newValue) {
   emit('update:show', newValue)
 }
 

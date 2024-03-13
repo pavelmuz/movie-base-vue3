@@ -1,5 +1,5 @@
 <template>
-  <account-card :profile="profile" :movie-count="movieCount" />
+  <account-card :profile="profile" :movie-count="movieCount" @update-profile="updateProfile" />
   <movie-card
     v-for="movie in feedData"
     :key="movie"
@@ -29,6 +29,20 @@ async function fetchProfileData() {
   try {
     profile.value = await apiProfiles.getAccount()
   } catch {
+    console.log(error)
+  }
+}
+
+async function updateProfile(profile) {
+  const profileData = new FormData()
+  profileData.append('username', profile.username)
+  profileData.append('name', profile.name)
+  profileData.append('email', profile.email)
+  profileData.append('birthday', profile.birthday)
+  try {
+    await apiProfiles.patchAccount(profileData)
+    await fetchProfileData()
+  } catch (error) {
     console.log(error)
   }
 }

@@ -1,6 +1,7 @@
 import axios from 'axios'
 
 const API_URL = import.meta.env.VITE_SERVER_API_URL
+const accessToken = localStorage.getItem('accessToken')
 
 async function getFeed() {
   try {
@@ -31,7 +32,6 @@ async function getKinopoiskMovie(kinopoiskId) {
 
 async function getAccountFeed() {
   try {
-    const accessToken = localStorage.getItem('accessToken')
     const response = await axios.get(`${API_URL}/account-feed/`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -54,7 +54,6 @@ async function getProfileFeed(pk) {
 
 async function postMovie(movieData) {
   try {
-    const accessToken = localStorage.getItem('accessToken')
     await axios.post(`${API_URL}/add-movie/`, movieData, {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -67,7 +66,6 @@ async function postMovie(movieData) {
 
 async function deleteMovie(id) {
   try {
-    const accessToken = localStorage.getItem('accessToken')
     await axios.delete(`${API_URL}/movie/${id}/`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -80,7 +78,6 @@ async function deleteMovie(id) {
 
 async function postComment(comment, movieId) {
   try {
-    const accessToken = localStorage.getItem('accessToken')
     await axios.post(`${API_URL}/comment/${movieId}/`, comment, {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -102,7 +99,6 @@ async function getMovie(movieId) {
 
 async function postLike(movieId) {
   try {
-    const accessToken = localStorage.getItem('accessToken')
     await axios.post(`${API_URL}/like/${movieId}/`, null, {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -115,7 +111,6 @@ async function postLike(movieId) {
 
 async function deleteLike(movieId) {
   try {
-    const accessToken = localStorage.getItem('accessToken')
     await axios.delete(`${API_URL}/like/${movieId}/`, {
       headers: {
         Authorization: `Bearer ${accessToken}`
@@ -128,7 +123,6 @@ async function deleteLike(movieId) {
 
 async function patchMovie(content, movieId) {
   try {
-    const accessToken = localStorage.getItem('accessToken')
     await axios.patch(`${API_URL}/movie/${movieId}/`, content, {
       headers: {
         Authorization: `Bearer ${accessToken}`

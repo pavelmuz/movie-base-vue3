@@ -39,7 +39,11 @@
             class="cancel-button"
             >Омена</n-button
           >
-          <n-button color="#C3EDC0" text-color="#0b666a" class="save-button"
+          <n-button
+            color="#C3EDC0"
+            text-color="#0b666a"
+            @click="emitUpdateProfile(profile)"
+            class="save-button"
             ><i class="fa-solid fa-floppy-disk"></i> Сохранить</n-button
           >
         </n-flex>
@@ -65,14 +69,19 @@ const props = defineProps({
 
 const profile = ref({})
 const showModal = ref(props.show)
-const emit = defineEmits(['update:show', 'closeModal'])
+const emit = defineEmits(['update:show', 'closeModal', 'updateProfile'])
 
-const updateShowEditProfile = (newValue) => {
+function updateShowEditProfile(newValue) {
   emit('update:show', newValue)
 }
 
-const emitCloseModal = () => {
+function emitCloseModal() {
   emit('closeModal')
+}
+
+function emitUpdateProfile(profile) {
+  showModal.value = false
+  emit('updateProfile', profile)
 }
 
 watch(
