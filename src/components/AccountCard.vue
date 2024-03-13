@@ -41,24 +41,11 @@
           </n-flex>
         </n-flex>
         <!-- Profile options -->
-        <n-dropdown
+        <options-dropdown
           :show="showOptionsDropdown"
-          placement="left-start"
-          size="large"
-          :options="profileOptions"
-          style="background-color: #237578; border-radius: 6px"
-        >
-          <n-button
-            :bordered="false"
-            text
-            text-color="#C3EDC0"
-            size="large"
-            @click="showOptionsDropdown = !showOptionsDropdown"
-            class="profile-dropdown-btn"
-          >
-            <i class="fa-solid fa-ellipsis fa-xl dropdown-btn"></i>
-          </n-button>
-        </n-dropdown>
+          @open-edit="showEditModal = true"
+          @open-delete="showDeleteModal = true"
+        />
         <!-- Edit profile modal -->
         <edit-profile-modal
           :show="showEditModal"
@@ -82,9 +69,10 @@ import DeleteProfileModal from '@/components/DeleteProfileModal.vue'
 import EditProfileModal from '@/components/EditProfileModal.vue'
 import FollowersModal from '@/components/FollowersModal.vue'
 import FollowingsModal from '@/components/FollowingsModal.vue'
+import OptionsDropdown from '@/components/OptionsDropdown.vue'
 import ProfileCounter from '@/components/ProfileCounter.vue'
-import { NButton, NCard, NDropdown, NFlex } from 'naive-ui'
-import { h, ref, watch } from 'vue'
+import { NCard, NFlex } from 'naive-ui'
+import { ref, watch } from 'vue'
 
 const props = defineProps({
   profile: {
@@ -106,59 +94,6 @@ const showFollowings = ref(false)
 const showOptionsDropdown = ref(false)
 const showEditModal = ref(false)
 const showDeleteModal = ref(false)
-
-function handleEdit() {
-  showOptionsDropdown.value = false
-  showEditModal.value = true
-}
-
-function handleDelete() {
-  showOptionsDropdown.value = false
-  showDeleteModal.value = true
-}
-
-function renderEditOption() {
-  return h(
-    'div',
-    {
-      style: {
-        margin: '5px 15px',
-        color: '#c3edc0',
-        cursor: 'pointer'
-      },
-      onClick: handleEdit
-    },
-    [h('i', { class: 'fa-solid fa-pen-to-square', style: { 'margin-right': '5px' } }), 'Изменить']
-  )
-}
-
-function renderDeleteOption() {
-  return h(
-    'div',
-    {
-      style: {
-        margin: '5px 15px',
-        color: '#c3edc0',
-        cursor: 'pointer'
-      },
-      onClick: handleDelete
-    },
-    [h('i', { class: 'fa-solid fa-trash-can', style: { 'margin-right': '5px' } }), 'Удалить']
-  )
-}
-
-const profileOptions = [
-  {
-    key: 'edit',
-    type: 'render',
-    render: renderEditOption
-  },
-  {
-    key: 'delete',
-    type: 'render',
-    render: renderDeleteOption
-  }
-]
 
 watch(
   () => props.profile,
@@ -206,12 +141,6 @@ watch(
 .modal-open-button {
   cursor: pointer;
   margin-left: 10px;
-}
-
-.profile-dropdown-btn {
-  margin-left: auto;
-  margin-bottom: auto;
-  margin-top: 15px;
 }
 
 .avatar-img-lg {
