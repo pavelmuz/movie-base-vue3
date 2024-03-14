@@ -30,7 +30,7 @@ const message = useMessage()
 async function fetchProfileData() {
   try {
     profile.value = await apiProfiles.getAccount()
-  } catch {
+  } catch (error) {
     message.error(error.message, {
       closable: true,
       duration: 5e3
