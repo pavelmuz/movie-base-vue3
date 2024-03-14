@@ -52,7 +52,7 @@
           :profile="profile"
           @update:show="showEditModal = $event"
           @close-modal="showEditModal = false"
-          @update-profile="$emit('updateProfile', { profile, avatar }), (showEditModal = false)"
+          @update-profile="$emit('updateProfile', profile), (showEditModal = false)"
         />
         <!-- Delete profile modal -->
         <delete-profile-modal

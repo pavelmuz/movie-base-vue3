@@ -38,9 +38,8 @@ async function fetchProfileData() {
   }
 }
 
-async function updateProfile({ profile, avatar }) {
+async function updateProfile(profile) {
   const profileData = new FormData()
-  console.log(avatar)
   profileData.append('username', profile.username)
   profileData.append('name', profile.name)
   profileData.append('email', profile.email)
