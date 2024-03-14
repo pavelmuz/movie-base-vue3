@@ -31,7 +31,7 @@
 
 <script setup>
 import { useAuthStore } from '@/stores/authStore'
-import { NButton, NCard, NFlex, NInput } from 'naive-ui'
+import { NButton, NCard, NFlex, NInput, useMessage } from 'naive-ui'
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 
@@ -39,6 +39,7 @@ const router = useRouter()
 const authStore = useAuthStore()
 const username = ref('')
 const password = ref('')
+const message = useMessage()
 
 function goToRegister() {
   router.push({ name: 'register' })
@@ -50,9 +51,13 @@ async function login() {
       username: username.value,
       password: password.value
     })
+    message.success('Вы успешно вошли в аккаунт', {
+      closable: true,
+      duration: 5e3
+    })
     router.push({ name: 'account' })
   } catch (error) {
-    console.log('Error', error)
+    message.error(error.message)
   }
 }
 </script>

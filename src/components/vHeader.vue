@@ -29,11 +29,12 @@
 
 <script setup>
 import { useAuthStore } from '@/stores/authStore'
-import { NCard, NFlex } from 'naive-ui'
+import { NCard, NFlex, useMessage } from 'naive-ui'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
 const authStore = useAuthStore()
+const message = useMessage()
 
 function goTo(routeName) {
   router.push({ name: routeName })
@@ -43,6 +44,10 @@ async function logout() {
   try {
     await authStore.logout()
     router.push({ name: 'login' })
+    message.success('Вы вышли из аккаунта', {
+      closable: true,
+      duration: 5e3
+    })
   } catch (error) {
     console.log('Logout error')
   }

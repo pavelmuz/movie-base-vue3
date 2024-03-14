@@ -19,31 +19,45 @@ import AccountCard from '@/components/AccountCard.vue'
 import MovieCard from '@/components/MovieCard.vue'
 import apiMovies from '@/services/apiMovies'
 import apiProfiles from '@/services/apiProfiles'
+import { useMessage } from 'naive-ui'
 import { onMounted, ref } from 'vue'
 
 const profile = ref({})
 const feedData = ref([])
 const movieCount = ref(0)
+const message = useMessage()
 
 async function fetchProfileData() {
   try {
     profile.value = await apiProfiles.getAccount()
   } catch {
-    console.log(error)
+    message.error(error.message, {
+      closable: true,
+      duration: 5e3
+    })
   }
 }
 
-async function updateProfile(profile) {
+async function updateProfile({ profile, avatar }) {
   const profileData = new FormData()
+  console.log(avatar)
   profileData.append('username', profile.username)
   profileData.append('name', profile.name)
   profileData.append('email', profile.email)
   profileData.append('birthday', profile.birthday)
+
   try {
     await apiProfiles.patchAccount(profileData)
     await fetchProfileData()
+    message.success('Аккаунт успешно изменен', {
+      closable: true,
+      duration: 5e3
+    })
   } catch (error) {
-    console.log(error)
+    message.error(error.message, {
+      closable: true,
+      duration: 5e3
+    })
   }
 }
 
@@ -52,7 +66,10 @@ async function fetchMovieFeed() {
     feedData.value = await apiMovies.getAccountFeed()
     movieCount.value = feedData.value.length
   } catch (error) {
-    console.log(error)
+    message.error(error.message, {
+      closable: true,
+      duration: 5e3
+    })
   }
 }
 
@@ -61,7 +78,10 @@ async function addLike(movieId) {
     await apiMovies.postLike(movieId)
     await fetchMovieFeed()
   } catch (error) {
-    console.log(error)
+    message.error(error.message, {
+      closable: true,
+      duration: 5e3
+    })
   }
 }
 
@@ -70,7 +90,10 @@ async function removeLike(movieId) {
     await apiMovies.deleteLike(movieId)
     await fetchMovieFeed()
   } catch (error) {
-    console.log(error)
+    message.error(error.message, {
+      closable: true,
+      duration: 5e3
+    })
   }
 }
 
@@ -83,7 +106,10 @@ async function addComment(movieId, commentMsg) {
     commentMsg = ''
     await fetchMovieFeed()
   } catch (error) {
-    console.log(error)
+    message.error(error.message, {
+      closable: true,
+      duration: 5e3
+    })
   }
 }
 
@@ -96,7 +122,10 @@ async function editMovie(movieId, userReview, userRating) {
     await apiMovies.patchMovie(content, movieId)
     await fetchMovieFeed()
   } catch (error) {
-    console.log(error)
+    message.error(error.message, {
+      closable: true,
+      duration: 5e3
+    })
   }
 }
 
@@ -105,7 +134,10 @@ async function removeMovie(movieId) {
     await apiMovies.deleteMovie(movieId)
     await fetchMovieFeed()
   } catch (error) {
-    console.log(error)
+    message.error(error.message, {
+      closable: true,
+      duration: 5e3
+    })
   }
 }
 

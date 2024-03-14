@@ -25,7 +25,7 @@
         <n-input v-model:value="profile.email" type="text" placeholder="" />
         <div>
           <p>Фото профиля:</p>
-          <n-upload>
+          <n-upload @change="handleFileChange">
             <n-button color="#C3EDC0" text-color="#0b666a" class="select-button"
               ><i class="fa-regular fa-image"></i>Выбрать файл</n-button
             >
@@ -70,6 +70,11 @@ const props = defineProps({
 const profile = ref({})
 const showModal = ref(props.show)
 const emit = defineEmits(['update:show', 'closeModal', 'updateProfile'])
+const avatar = ref(null)
+
+function handleFileChange(file) {
+  avatar.value = file
+}
 
 function updateShowEditProfile(newValue) {
   emit('update:show', newValue)
@@ -81,7 +86,8 @@ function emitCloseModal() {
 
 function emitUpdateProfile(profile) {
   showModal.value = false
-  emit('updateProfile', profile)
+  console.log(avatar.value)
+  emit('updateProfile', { profile, avatar: avatar.value })
 }
 
 watch(
