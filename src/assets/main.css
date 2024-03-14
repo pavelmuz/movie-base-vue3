@@ -6,3 +6,13 @@
 body {
   background-color: #c3edc0;
 }
+
+body .n-message {
+  background-color: #c3edc0;
+  border: solid 1px #0b666a;
+  border-radius: 6px;
+}
+
+body .n-message__content {
+  color: #0b666a;
+}
