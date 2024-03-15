@@ -8,7 +8,7 @@
           <p>Назад</p>
         </n-flex>
         <n-flex class="movie-info" :wrap="false" align="start">
-          <movie-poster :image="movie.posterUrl" :width="220" />
+          <movie-poster :image="movie.posterUrl" size="large" />
           <n-flex vertical>
             <h2>{{ movie.nameRu }}</h2>
             <h3>{{ movie.year }}</h3>

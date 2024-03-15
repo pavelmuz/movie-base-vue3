@@ -20,7 +20,7 @@
   <div v-for="chat in activeChats" :key="chat" class="chat-container">
     <n-card @click="goToChat(chat.id)" :bordered="false" class="chat-card">
       <n-flex align="center">
-        <img :src="chat.profile_image" class="avatar-img-md" />
+        <profile-avatar size="medium" :image="chat.profile_image" />
         <p>{{ chat.username }}</p>
         <n-button text text-color="#C3EDC0" class="chat-button"
           ><i class="fa-solid fa-chevron-right fa-2xl"></i
@@ -31,6 +31,7 @@
 </template>
 
 <script setup>
+import ProfileAvatar from '@/components/ProfileAvatar.vue'
 import apiChats from '@/services/apiChats'
 import { NButton, NCard, NFlex } from 'naive-ui'
 import { onMounted, ref } from 'vue'
@@ -88,13 +89,6 @@ onMounted(async () => {
 .card-title {
   margin-top: 0;
   margin-bottom: 0;
-}
-
-.avatar-img-md {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
 }
 
 .chat-button {

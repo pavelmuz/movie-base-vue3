@@ -13,14 +13,20 @@ import { NImage } from 'naive-ui'
 
 const props = defineProps({
   image: {
-    type: String,
-    required: true
+    type: String
   },
-  width: {
-    type: Number,
+  size: {
+    type: String,
     required: true
   }
 })
+
+const WidthOptions = {
+  medium: 120,
+  large: 220
+}
+
+const width = WidthOptions[props.size]
 </script>
 
 <style scoped>

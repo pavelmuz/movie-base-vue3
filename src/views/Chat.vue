@@ -9,7 +9,7 @@
         <n-flex align="center">
           <h3>Чат с пользователем:</h3>
           <n-flex align="center" @click="goToProfile(recipient.id)" class="profile-link">
-            <img :src="recipient.profile_image" class="avatar-img-sm" />
+            <profile-avatar size="small" :image="recipient.profile_image" />
             <h3>{{ recipient.username }}</h3>
           </n-flex>
         </n-flex>
@@ -54,6 +54,7 @@
 </template>
 
 <script setup>
+import ProfileAvatar from '@/components/ProfileAvatar.vue'
 import apiChats from '@/services/apiChats'
 import apiProfiles from '@/services/apiProfiles'
 import { NButton, NCard, NFlex, NInput } from 'naive-ui'
@@ -142,13 +143,6 @@ onMounted(async () => {
 
 .message-button:hover {
   background-color: #9cbd99;
-}
-
-.avatar-img-sm {
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  object-fit: cover;
 }
 
 .message-bubble {

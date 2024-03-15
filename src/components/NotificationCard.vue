@@ -8,7 +8,7 @@
           :size="8"
           class="card-link"
         >
-          <img :src="notification.sender.profile_image" class="avatar-img-sm" />
+          <profile-avatar size="small" :image="notification.sender.profile_image" />
           <p>{{ notification.sender.username }}</p>
         </n-flex>
         <p v-if="notificationType == 'follow'">подписался на вас</p>
@@ -43,6 +43,7 @@
 </template>
 
 <script setup>
+import ProfileAvatar from '@/components/ProfileAvatar.vue'
 import { NButton, NCard, NFlex } from 'naive-ui'
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -97,13 +98,6 @@ watch(
   background-color: #0b666a;
   color: #c3edc0;
   border-radius: 10px;
-}
-
-.avatar-img-sm {
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  object-fit: cover;
 }
 
 .delete-button {

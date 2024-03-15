@@ -3,7 +3,7 @@
     <n-card :bordered="false" class="profile-card">
       <n-flex align="center">
         <n-flex align="center" @click="goToProfile(profile.id)" class="profile-link">
-          <img :src="profile.profile_image" class="avatar-img-md" />
+          <profile-avatar size="medium" :image="profile.profile_image" />
           <n-flex vertical :size="1">
             <h2 class="text-username">{{ profile.username }}</h2>
             <p class="text-name">{{ profile.name }}</p>
@@ -29,6 +29,7 @@
 </template>
 
 <script setup>
+import ProfileAvatar from '@/components/ProfileAvatar.vue'
 import { useAuthStore } from '@/stores/authStore'
 import { NButton, NCard, NFlex } from 'naive-ui'
 import { ref, watch } from 'vue'
@@ -85,13 +86,6 @@ watch(
 .text-name {
   font-size: medium;
   margin: 0;
-}
-
-.avatar-img-md {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
 }
 
 .follow-button {

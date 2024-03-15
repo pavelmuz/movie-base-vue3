@@ -11,7 +11,7 @@
           @click="goToProfile(following.following.id)"
           class="follow"
         >
-          <img :src="following.following.profile_image" class="avatar-img-md" />
+          <profile-avatar size="medium" :image="following.following.profile_image" />
           <n-flex vertical :size="1">
             <h3>{{ following.following.username }}</h3>
             <p>{{ following.following.name }}</p>
@@ -23,6 +23,7 @@
 </template>
 
 <script setup>
+import ProfileAvatar from '@/components/ProfileAvatar.vue'
 import { NCard, NFlex, NModal } from 'naive-ui'
 import { ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
@@ -88,12 +89,5 @@ watch(
 
 .follow p {
   font-size: medium;
-}
-
-.avatar-img-md {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
 }
 </style>

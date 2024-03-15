@@ -3,7 +3,7 @@
     <n-card :bordered="false" class="profile-card">
       <n-flex>
         <!-- Avatar image -->
-        <img :src="profile.profile_image" class="avatar-img-lg" />
+        <profile-avatar size="large" :image="profile.profile_image" />
         <!-- User info and followers -->
         <n-flex vertical>
           <!-- Info -->
@@ -60,6 +60,7 @@
 <script setup>
 import FollowersModal from '@/components/FollowersModal.vue'
 import FollowingsModal from '@/components/FollowingsModal.vue'
+import ProfileAvatar from '@/components/ProfileAvatar.vue'
 import ProfileCounter from '@/components/ProfileCounter.vue'
 import { useAuthStore } from '@/stores/authStore'
 import { NButton, NCard, NFlex } from 'naive-ui'
@@ -169,13 +170,5 @@ watch(
 
 .fa-pen-to-square {
   margin-right: 8px;
-}
-
-.avatar-img-lg {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 10px;
 }
 </style>

@@ -3,7 +3,7 @@
     <n-card :bordered="false" class="profile-card">
       <n-flex>
         <!-- Avatar image -->
-        <img :src="profile.profile_image" class="avatar-img-lg" />
+        <profile-avatar size="large" :image="profile.profile_image" />
         <!-- User info and followers -->
         <n-flex vertical>
           <!-- Info -->
@@ -71,6 +71,7 @@ import EditProfileModal from '@/components/EditProfileModal.vue'
 import FollowersModal from '@/components/FollowersModal.vue'
 import FollowingsModal from '@/components/FollowingsModal.vue'
 import OptionsDropdown from '@/components/OptionsDropdown.vue'
+import ProfileAvatar from '@/components/ProfileAvatar.vue'
 import ProfileCounter from '@/components/ProfileCounter.vue'
 import { NCard, NFlex } from 'naive-ui'
 import { ref, watch } from 'vue'
@@ -142,13 +143,5 @@ watch(
 .modal-open-button {
   cursor: pointer;
   margin-left: 10px;
-}
-
-.avatar-img-lg {
-  width: 90px;
-  height: 90px;
-  border-radius: 50%;
-  object-fit: cover;
-  margin-right: 10px;
 }
 </style>
