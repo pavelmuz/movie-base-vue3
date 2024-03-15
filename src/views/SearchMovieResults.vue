@@ -9,8 +9,8 @@
 
   <div v-for="movie in movieList" :key="movie" class="movie-container">
     <n-card :bordered="false" class="movie-card">
-      <n-flex align="center">
-        <img :src="movie.posterUrlPreview" class="movie-poster-search" />
+      <n-flex align="center" :wrap="false">
+        <movie-poster :image="movie.posterUrl" :width="120" />
         <n-flex vertical>
           <h2 class="card-title">{{ movie.nameRu }}</h2>
           <h3 class="card-text">{{ movie.year }}</h3>
@@ -28,6 +28,7 @@
 </template>
 
 <script setup>
+import MoviePoster from '@/components/MoviePoster.vue'
 import apiMovibase from '@/services/apiMovies'
 import { NButton, NCard, NFlex } from 'naive-ui'
 import { onMounted, ref } from 'vue'

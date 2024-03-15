@@ -7,8 +7,8 @@
           <i class="fa-solid fa-chevron-left fa-xl"></i>
           <p>Назад</p>
         </n-flex>
-        <n-flex class="movie-info">
-          <img :src="movie.posterUrlPreview" class="rounded movie-card-poster" />
+        <n-flex class="movie-info" :wrap="false" align="start">
+          <movie-poster :image="movie.posterUrl" :width="220" />
           <n-flex vertical>
             <h2>{{ movie.nameRu }}</h2>
             <h3>{{ movie.year }}</h3>
@@ -22,7 +22,13 @@
               class="message-input"
             />
             <p class="card-text">Ваша оценка:</p>
-            <n-input-number v-model:value="userRating" :precision="1" :step="0.1" />
+            <n-rate
+              :count="10"
+              :allow-half="true"
+              :on-update:value="handleRating"
+              size="large"
+              color="#FDFFAE"
+            />
             <n-button
               :disabled="buttonDisabled"
               size="large"
@@ -40,8 +46,9 @@
 </template>
 
 <script setup>
+import MoviePoster from '@/components/MoviePoster.vue'
 import apiMovies from '@/services/apiMovies'
-import { NButton, NCard, NFlex, NInput, NInputNumber } from 'naive-ui'
+import { NButton, NCard, NFlex, NInput, NRate } from 'naive-ui'
 import { computed, onMounted, ref } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 
@@ -56,6 +63,10 @@ const kinopoiskId = route.params.id
 const buttonDisabled = computed(() => {
   return userRating.value === 0.0 || userReview.value === ''
 })
+
+function handleRating(value) {
+  userRating.value = value
+}
 
 async function fetchMovieData() {
   try {
@@ -110,6 +121,7 @@ onMounted(async () => {
 
 .back-button {
   cursor: pointer;
+  margin-right: auto;
 }
 
 .movie-info h2,
