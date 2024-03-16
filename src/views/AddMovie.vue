@@ -12,7 +12,7 @@
           <n-flex vertical>
             <h2>{{ movie.nameRu }}</h2>
             <h3>{{ movie.year }}</h3>
-            <p>{{ movie.shortDescription }}</p>
+            <p>{{ movie.description }}</p>
             <p class="card-text">Ваш обзор:</p>
             <n-input
               v-model:value="userReview"

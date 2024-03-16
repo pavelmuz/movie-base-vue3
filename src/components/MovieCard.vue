@@ -1,21 +1,27 @@
 <template>
   <div class="movie-container">
-    <n-card class="movie-card2">
-      <n-flex vertical>
+    <n-card :bordered="false" class="movie-card">
+      <n-flex vertical :size="1">
         <!-- Movie owner -->
-        <n-flex v-if="showOwner" @click.prevent="goToProfile(movie.owner.id)">
-          <img :src="movie.owner.profile_image" class="avatar-img-sm" />
-          <h6 class="card-text">{{ movie.owner.username }}</h6>
+        <n-flex
+          v-if="showOwner"
+          align="center"
+          class="profile-link"
+          @click.prevent="goToProfile(movie.owner.id)"
+        >
+          <profile-avatar :image="movie.owner.profile_image" size="small" class="movie-owner" />
+          <p class="movie-owner">{{ movie.owner.username }}</p>
         </n-flex>
-        <n-flex>
+        <n-flex :wrap="false">
           <n-flex vertical>
             <!-- Poster -->
-            <img :src="movie.poster_url" class="rounded movie-card-poster" />
-            <n-flex>
+            <movie-poster :image="movie.poster_url" size="large" />
+            <n-flex v-if="authStore.isAuthenticated" class="movie-buttons">
               <!-- Like button -->
               <n-button
                 v-if="likedMovie"
                 text
+                size="large"
                 text-color="#C3EDC0"
                 @click.prevent="$emit('removeLike', movie.id)"
               >
@@ -24,80 +30,98 @@
               <n-button
                 v-if="!likedMovie"
                 text
+                size="large"
                 text-color="#C3EDC0"
                 @click.prevent="$emit('addLike', movie.id)"
               >
                 <i class="fa-regular fa-heart fa-xl card-button"></i>
               </n-button>
               <!-- New comment button -->
-              <n-button text text-color="#C3EDC0">
+              <n-button text size="large" text-color="#C3EDC0" @click="showCommentModal = true">
                 <i class="fa-regular fa-message fa-xl card-button"></i>
               </n-button>
+              <!-- New comment modal -->
+              <n-modal v-model:show="showCommentModal">
+                <n-card
+                  :bordered="false"
+                  size="huge"
+                  role="dialog"
+                  aria-modal="true"
+                  class="comment-modal"
+                >
+                  <n-flex vertical style="margin: 0">
+                    <h2 class="modal-header">Комментарий:</h2>
+                    <p class="input-label">Добавить комментарий:</p>
+                    <n-input
+                      v-model:value="commentMsg"
+                      type="textarea"
+                      placeholder=""
+                      :rows="4"
+                      class="comment-input"
+                    />
+                    <n-button
+                      color="#C3EDC0"
+                      text-color="#0b666a"
+                      @click="emitAddComment({ commentMsg, movie })"
+                      class="add-button"
+                      >Добавить</n-button
+                    >
+                  </n-flex>
+                </n-card>
+              </n-modal>
             </n-flex>
             <!-- Likes count -->
-            <n-button text text-color="#C3EDC0" @click.prevent="showLikes = true">
-              <strong>Нравится: </strong>{{ likesCount }}
+            <n-button
+              text
+              text-color="#C3EDC0"
+              @click.prevent="showLikesModal = true"
+              class="likes-modal-open"
+            >
+              <strong>Нравится:</strong>{{ likesCount }}
             </n-button>
             <!-- Likers modal -->
-            <n-modal v-model:show="showLikes">
-              <n-card
-                class="likes-modal"
-                :bordered="false"
-                size="huge"
-                role="dialog"
-                aria-modal="true"
-              >
-                <n-flex vertical :size="1">
-                  <h4>Нравится: {{ likesCount }}</h4>
-                  <div
-                    v-for="like in likes"
-                    :key="like"
-                    class="like"
-                    @click.prevent="goToProfile(like.owner.id)"
-                  >
-                    <n-flex :size="30" class="liker">
-                      <img :src="like.owner.profile_image" class="avatar-img-md" />
-                      <n-flex vertical :size="1">
-                        <h5>{{ like.owner.username }}</h5>
-                        <p>{{ like.owner.name }}</p>
-                      </n-flex>
-                    </n-flex>
-                  </div>
-                </n-flex>
-              </n-card>
-            </n-modal>
+            <likes-modal
+              :likes="likes"
+              :show="showLikesModal"
+              @update:show="showLikesModal = $event"
+            />
           </n-flex>
-          <n-flex vertical>
-            <n-flex>
+          <n-flex vertical class="movie-info">
+            <n-flex :wrap="false">
               <!-- Movie title -->
-              <h5>{{ movie.title }}</h5>
-              <!-- Movie options -->
-              <n-button v-if="showOptions" :bordered="false" text-color="#C3EDC0" size="large" text>
-                <i class="fa-solid fa-ellipsis fa-xl dropdown-btn"></i>
-              </n-button>
+              <h2>{{ movie.title }}</h2>
             </n-flex>
             <!-- Movie rating -->
-            <p><strong>Рейтинг: </strong>{{ movie.user_rating }}</p>
+            <n-flex align="center">
+              <p><strong>Рейтинг: </strong></p>
+              <n-rate :count="10" :allow-half="true" :value="movie.user_rating" readonly />
+            </n-flex>
             <!-- Movie review -->
             <p><strong>Обзор: </strong>{{ movie.user_review }}</p>
           </n-flex>
+          <!-- Movie options -->
+          <options-dropdown v-if="showOptions" />
         </n-flex>
         <!-- Last 2 comments -->
-        <p v-for="comment in cardComments" :key="comment">
+        <p v-for="comment in cardComments" :key="comment" class="card-comment">
           <strong>{{ comment.owner.username }}</strong> {{ comment.body }}
         </p>
         <!-- Link to show all comments -->
-        <p class="card-subtitle">Показать все комментарии ({{ commentsCount }})</p>
+        <p class="all-comments">Показать все комментарии ({{ commentsCount }})</p>
       </n-flex>
     </n-card>
   </div>
 </template>
 
 <script setup>
+import MoviePoster from '@/components/MoviePoster.vue'
+import ProfileAvatar from '@/components/ProfileAvatar.vue'
 import { useAuthStore } from '@/stores/authStore'
-import { NButton, NCard, NFlex, NModal } from 'naive-ui'
+import { NButton, NCard, NFlex, NInput, NModal, NRate } from 'naive-ui'
 import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
+import LikesModal from './LikesModal.vue'
+import OptionsDropdown from './OptionsDropdown.vue'
 
 const props = defineProps({
   movie: {
@@ -116,7 +140,8 @@ const props = defineProps({
 
 const router = useRouter()
 const authStore = useAuthStore()
-let profileId = localStorage.getItem('profileId')
+const emit = defineEmits(['addComment'])
+const profileId = localStorage.getItem('profileId')
 
 const movie = ref({})
 const cardComments = ref([])
@@ -125,19 +150,18 @@ const commentsCount = ref(0)
 const likes = ref([])
 const userRating = ref(0)
 const userReview = ref('')
+const showCommentModal = ref(false)
+const showLikesModal = ref(false)
 const commentMsg = ref('')
-const showLikes = ref(false)
 
 const likedMovie = computed(() => {
   return props.movie.likes.some((like) => like.owner.id === profileId)
 })
 
-const movieOwner = computed(() => {
-  if (props.movie.owner.id === profileId) {
-    return true
-  }
-  return false
-})
+function emitAddComment({ commentMsg, movie }) {
+  emit('addComment', { commentMsg, movie })
+  showCommentModal.value = false
+}
 
 function goToProfile(id) {
   if (id === profileId) {
@@ -171,130 +195,78 @@ watch(
   padding-bottom: 10px;
 }
 
-.movie-card2 {
+.movie-card {
   max-width: 700px;
   background-color: #0b666a;
   color: #c3edc0;
   border-radius: 10px;
 }
 
-.likes-modal {
+.profile-link {
+  cursor: pointer;
+}
+
+.movie-owner {
+  margin-top: 0;
+  margin-bottom: 10px;
+}
+
+.movie-buttons {
+  margin-top: 10px;
+}
+
+.likes-modal-open {
+  margin-right: auto;
+  margin-top: 10px;
+  font-size: medium;
+}
+
+.likes-modal-open strong {
+  margin-right: 5px;
+}
+
+.movie-info h2,
+.movie-info p,
+.card-comment,
+.all-comments {
+  margin: 0;
+}
+
+.movie-info p,
+.card-comment,
+.all-comments {
+  font-size: medium;
+}
+
+.all-comments {
+  cursor: pointer;
+}
+
+.comment-modal {
   width: 500px;
   background-color: #0b666a;
   color: #c3edc0;
   border-radius: 10px;
 }
 
-.liker {
-  cursor: pointer;
-}
-
-.card-link,
-.modal-close {
-  color: #c3edc0;
-}
-
-.modal-close:hover {
-  color: #9cbd99;
-}
-
-.link-active {
-  color: #9cbd99;
-}
-
-.movie-card,
-.profile-card,
-.modal-content {
-  background-color: #0b666a;
-  color: #c3edc0;
-  max-width: 700px;
-}
-
-.movie-card-poster {
-  max-width: 220px;
-}
-
-.card-button {
-  color: #c3edc0;
-}
-
-.edit-btn {
-  background-color: #c3edc0;
-}
-
-.edit-btn:hover {
-  background-color: #9cbd99;
-}
-
-.delete-btn {
-  background-color: #fa1e0e;
-}
-
-.delete-btn:hover {
-  background-color: #c8180b;
-}
-
-.save-btn {
-  background-color: #ffff00;
-}
-
-.save-btn:hover {
-  background-color: #cccc00;
-}
-
-.dropdown-btn {
-  color: #c3edc0;
-  border-color: transparent;
-}
-
-.dropdown-menu {
-  border-color: #c3edc0;
-  background-color: #0b666a;
-}
-
-.dropdown-item {
-  color: #c3edc0;
-}
-
-.dropdown-item:hover {
-  background-color: #0b666a;
-}
-
-.edit-link {
-  color: #ffff00;
-}
-
-.edit-link:hover {
-  color: #cccc00;
-}
-
-.delete-link {
-  color: #fa1e0e;
-}
-
-.delete-link:hover {
-  color: #c8180b;
-}
-
-.avatar-img-md {
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.avatar-img-sm {
-  width: 25px;
-  height: 25px;
-  border-radius: 50%;
-  object-fit: cover;
-}
-
-.modal-link {
-  cursor: pointer;
-}
-
 .modal-header {
-  border-bottom: 2px solid #c3edc0;
+  border-bottom: 1px solid #c3edc0;
+  padding-bottom: 10px;
+  margin: 0;
+}
+
+.input-label {
+  margin-bottom: 0;
+  margin: 0;
+}
+
+.comment-input {
+  border-radius: 6px;
+}
+
+.add-button {
+  width: 150px;
+  border-radius: 6px;
+  margin-top: 10px;
 }
 </style>
