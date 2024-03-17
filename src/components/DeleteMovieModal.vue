@@ -34,22 +34,22 @@ const props = defineProps({
     required: true
   },
   movie: {
-    type: Object
+    type: Object,
+    required: true
   }
 })
 
 const emit = defineEmits(['update:show', 'closeModal', 'removeMovie'])
 const showModal = ref(props.show)
-const movie = ref({})
+const movie = ref(props.movie)
 
 function updateShowDeleteMovie(newValue) {
   emit('update:show', newValue)
 }
 
-function emitRemoveMovie(movieId) {
-  console.log(movieId)
+function emitRemoveMovie(movie) {
   console.log('Emitted from modal')
-  emit('removeMovie', movieId)
+  emit('removeMovie', movie)
 }
 
 function emitCloseModal() {
@@ -60,15 +60,6 @@ watch(
   () => props.show,
   (newVal) => {
     showModal.value = newVal
-  }
-)
-
-watch(
-  () => props.movie,
-  (newValue, oldValue) => {
-    if (newValue) {
-      movie.value = newValue
-    }
   }
 )
 </script>

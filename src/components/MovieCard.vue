@@ -111,7 +111,7 @@
             :movie="movie"
             @update:show="showDeleteModal = $event"
             @close-modal="showDeleteModal = false"
-            @remove-movie="$emit('removeMovie', movieId)"
+            @remove-movie="$emit('removeMovie', movie)"
           />
         </n-flex>
         <!-- Last 2 comments -->
@@ -155,7 +155,7 @@ const props = defineProps({
 
 const router = useRouter()
 const authStore = useAuthStore()
-const emit = defineEmits(['addComment', 'addLike', 'removeLike'])
+const emit = defineEmits(['addComment', 'addLike', 'removeLike', 'removeMovie'])
 const profileId = localStorage.getItem('profileId')
 
 const movie = ref({})

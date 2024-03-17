@@ -124,9 +124,9 @@ async function editMovie(movieId, userReview, userRating) {
   }
 }
 
-async function removeMovie(movieId) {
+async function removeMovie(movie) {
   try {
-    await apiMovies.deleteMovie(movieId)
+    await apiMovies.deleteMovie(movie.id)
     await fetchMovieFeed()
   } catch (error) {
     message.error(error.message, {
