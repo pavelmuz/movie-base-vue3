@@ -61,13 +61,12 @@ async function removeLike(movieId) {
   }
 }
 
-async function addComment(movieId, commentMsg) {
+async function addComment({ commentMsg, movie }) {
   try {
-    let comment = {
+    const commentData = {
       comment: commentMsg
     }
-    await apiMovies.postComment(comment, movieId)
-    commentMsg = ''
+    await apiMovies.postComment(commentData, movie.id)
     await fetchMovieFeed()
   } catch (error) {
     console.log(error)

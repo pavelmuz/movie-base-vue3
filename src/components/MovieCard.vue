@@ -23,7 +23,7 @@
                 text
                 size="large"
                 text-color="#C3EDC0"
-                @click.prevent="$emit('removeLike', movie.id)"
+                @click="$emit('removeLike', movie.id)"
               >
                 <i class="fa-solid fa-heart fa-xl"></i>
               </n-button>
@@ -32,7 +32,7 @@
                 text
                 size="large"
                 text-color="#C3EDC0"
-                @click.prevent="$emit('addLike', movie.id)"
+                @click="$emit('addLike', movie.id)"
               >
                 <i class="fa-regular fa-heart fa-xl card-button"></i>
               </n-button>
@@ -89,7 +89,7 @@
           <n-flex vertical class="movie-info">
             <n-flex :wrap="false">
               <!-- Movie title -->
-              <h2>{{ movie.title }}</h2>
+              <h2 @click="goToMovieDetails(movie.id)">{{ movie.title }}</h2>
             </n-flex>
             <!-- Movie rating -->
             <n-flex align="center">
@@ -107,21 +107,23 @@
           <strong>{{ comment.owner.username }}</strong> {{ comment.body }}
         </p>
         <!-- Link to show all comments -->
-        <p class="all-comments">Показать все комментарии ({{ commentsCount }})</p>
+        <p @click="goToMovieDetails(movie.id)" class="all-comments">
+          Показать все комментарии ({{ commentsCount }})
+        </p>
       </n-flex>
     </n-card>
   </div>
 </template>
 
 <script setup>
+import LikesModal from '@/components/LikesModal.vue'
 import MoviePoster from '@/components/MoviePoster.vue'
+import OptionsDropdown from '@/components/OptionsDropdown.vue'
 import ProfileAvatar from '@/components/ProfileAvatar.vue'
 import { useAuthStore } from '@/stores/authStore'
 import { NButton, NCard, NFlex, NInput, NModal, NRate } from 'naive-ui'
 import { computed, ref, watch } from 'vue'
 import { useRouter } from 'vue-router'
-import LikesModal from './LikesModal.vue'
-import OptionsDropdown from './OptionsDropdown.vue'
 
 const props = defineProps({
   movie: {
@@ -169,6 +171,10 @@ function goToProfile(id) {
   } else {
     router.push({ name: 'profile', params: { id: id } })
   }
+}
+
+function goToMovieDetails(id) {
+  router.push({ name: 'movie', params: { movieId: id } })
 }
 
 watch(
@@ -230,6 +236,10 @@ watch(
 .card-comment,
 .all-comments {
   margin: 0;
+}
+
+.movie-info h2 {
+  cursor: pointer;
 }
 
 .movie-info p,
