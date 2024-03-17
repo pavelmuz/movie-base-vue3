@@ -16,6 +16,15 @@
         </h3>
         <h3 v-if="authStore.isAuthenticated" @click="goTo('chats')" class="navlink">Сообщения</h3>
         <h3 v-if="authStore.isAuthenticated" @click="goTo('account')" class="navlink">Профиль</h3>
+        <n-button
+          tag="a"
+          href="http://localhost:8000/api/docs/"
+          target="_blank"
+          text
+          text-color="#C3EDC0"
+          class="navlink"
+          ><h3>API</h3></n-button
+        >
         <h3 v-if="!authStore.isAuthenticated" @click="goTo('login')" class="navlink">
           Войти/Регистрация
         </h3>
@@ -29,7 +38,7 @@
 
 <script setup>
 import { useAuthStore } from '@/stores/authStore'
-import { NCard, NFlex, useMessage } from 'naive-ui'
+import { NButton, NCard, NFlex, useMessage } from 'naive-ui'
 import { useRouter } from 'vue-router'
 
 const router = useRouter()
