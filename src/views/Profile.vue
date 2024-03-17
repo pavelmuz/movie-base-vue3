@@ -21,11 +21,11 @@ import MovieCard from '@/components/MovieCard.vue'
 import ProfileCard from '@/components/ProfileCard.vue'
 import apiMovies from '@/services/apiMovies'
 import apiProfiles from '@/services/apiProfiles'
-import { onMounted, ref } from 'vue'
+import { onMounted, ref, watch } from 'vue'
 import { useRoute } from 'vue-router'
 
 const route = useRoute()
-const profileId = route.params.id
+const profileId = ref(route.params.id)
 
 const profile = ref({})
 const feedData = ref([])
@@ -33,7 +33,7 @@ const movieCount = ref(0)
 
 async function fetchProfileData() {
   try {
-    profile.value = await apiProfiles.getProfile(profileId)
+    profile.value = await apiProfiles.getProfile(profileId.value)
   } catch {
     console.log(error)
   }
@@ -59,7 +59,7 @@ async function removeFollow(profileId) {
 
 async function fetchMovieFeed() {
   try {
-    feedData.value = await apiMovies.getProfileFeed(profileId)
+    feedData.value = await apiMovies.getProfileFeed(profileId.value)
     movieCount.value = feedData.value.length
   } catch (error) {
     console.log(error)
@@ -95,6 +95,17 @@ async function addComment({ commentMsg, movie }) {
     console.log(error)
   }
 }
+
+watch(
+  () => route.params.id,
+  async (newValue, oldValue) => {
+    if (newValue) {
+      profileId.value = newValue
+      await fetchProfileData()
+      await fetchMovieFeed()
+    }
+  }
+)
 
 onMounted(async () => {
   await fetchProfileData()

@@ -100,7 +100,19 @@
             <p><strong>Обзор: </strong>{{ movie.user_review }}</p>
           </n-flex>
           <!-- Movie options -->
-          <options-dropdown v-if="showOptions" />
+          <options-dropdown
+            v-if="showOptions"
+            :show="showOptionsDropdown"
+            @open-delete="showDeleteModal = true"
+          />
+          <!-- Delete Movie Modal -->
+          <delete-movie-modal
+            :show="showDeleteModal"
+            :movie="movie"
+            @update:show="showDeleteModal = $event"
+            @close-modal="showDeleteModal = false"
+            @remove-movie="$emit('removeMovie', movieId)"
+          />
         </n-flex>
         <!-- Last 2 comments -->
         <p v-for="comment in cardComments" :key="comment" class="card-comment">
@@ -116,6 +128,7 @@
 </template>
 
 <script setup>
+import DeleteMovieModal from '@/components/DeleteMovieModal.vue'
 import LikesModal from '@/components/LikesModal.vue'
 import MoviePoster from '@/components/MoviePoster.vue'
 import OptionsDropdown from '@/components/OptionsDropdown.vue'
@@ -154,6 +167,8 @@ const userRating = ref(0)
 const userReview = ref('')
 const showCommentModal = ref(false)
 const showLikesModal = ref(false)
+const showOptionsDropdown = ref(false)
+const showDeleteModal = ref(false)
 const commentMsg = ref('')
 
 const likedMovie = computed(() => {

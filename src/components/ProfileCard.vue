@@ -123,6 +123,8 @@ watch(
   (newValue, oldValue) => {
     if (newValue) {
       profile.value = newValue
+      showFollowers.value = false
+      showFollowings.value = false
       followersCount.value = newValue.followers.length
       followingsCount.value = newValue.followings.length
       isFollowing.value = newValue.followers.some((follower) => follower.follower.id === profileId)

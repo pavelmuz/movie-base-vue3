@@ -22,13 +22,7 @@
               class="message-input"
             />
             <p class="card-text">Ваша оценка:</p>
-            <n-rate
-              :count="10"
-              :allow-half="true"
-              :on-update:value="handleRating"
-              size="large"
-              color="#FDFFAE"
-            />
+            <n-rate :count="10" :allow-half="true" :on-update:value="handleRating" size="large" />
             <n-button
               :disabled="buttonDisabled"
               size="large"

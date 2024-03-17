@@ -54,6 +54,7 @@ function goToProfile(id) {
   } else {
     router.push({ name: 'profile', params: { id: id } })
   }
+  showModal.value = false
 }
 
 watch(
