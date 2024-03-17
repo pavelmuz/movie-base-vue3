@@ -17,7 +17,12 @@
   </div>
 
   <!-- Found users list -->
-  <search-profile-card v-for="profile in profiles" :profile="profile" />
+  <search-profile-card
+    v-for="profile in profiles"
+    :profile="profile"
+    @add-follow="addFollow"
+    @remove-follow="removeFollow"
+  />
 </template>
 
 <script setup>
@@ -32,6 +37,24 @@ const searchQuery = ref('')
 async function fetchProfiles() {
   try {
     profiles.value = await apiProfiles.getProfiles()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function addFollow(profileId) {
+  try {
+    await apiProfiles.postFollow(profileId)
+    await fetchProfiles()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function removeFollow(profileId) {
+  try {
+    await apiProfiles.deleteFollow(profileId)
+    await fetchProfiles()
   } catch (error) {
     console.log(error)
   }

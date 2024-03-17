@@ -13,6 +13,7 @@
           v-if="authStore.isAuthenticated && isFollowing"
           ghost
           color="#c3edc0"
+          @click="emitRemoveFollow(profile.id)"
           class="unfollow-button"
           >Подписан</n-button
         >
@@ -20,6 +21,7 @@
           v-if="authStore.isAuthenticated && !isFollowing"
           ghost
           color="#c3edc0"
+          @click="emitAddFollow(profile.id)"
           class="follow-button"
           >Подписаться</n-button
         >
@@ -32,7 +34,7 @@
 import ProfileAvatar from '@/components/ProfileAvatar.vue'
 import { useAuthStore } from '@/stores/authStore'
 import { NButton, NCard, NFlex } from 'naive-ui'
-import { ref, watch } from 'vue'
+import { computed } from 'vue'
 import { useRouter } from 'vue-router'
 
 const props = defineProps({
@@ -42,24 +44,27 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['addFollow', 'removeFollow'])
+
 const authStore = useAuthStore()
 const router = useRouter()
+const profileId = localStorage.getItem('profileId')
 
-const isFollowing = ref(false)
+const isFollowing = computed(() => {
+  return props.profile.followers.some((follower) => follower.follower.id === profileId)
+})
+
+function emitAddFollow(profileId) {
+  emit('addFollow', profileId)
+}
+
+function emitRemoveFollow(profileId) {
+  emit('removeFollow', profileId)
+}
 
 function goToProfile(id) {
   router.push({ name: 'profile', params: { id: id } })
 }
-
-watch(
-  () => props.profile,
-  (newValue, oldValue) => {
-    if (newValue) {
-      const profileId = localStorage.getItem('profileId')
-      isFollowing.value = newValue.followers.some((follower) => follower.follower.id === profileId)
-    }
-  }
-)
 </script>
 
 <style scoped>

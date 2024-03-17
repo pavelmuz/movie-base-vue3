@@ -1,5 +1,10 @@
 <template>
-  <profile-card :profile="profile" :movie-count="movieCount" />
+  <profile-card
+    :profile="profile"
+    :movie-count="movieCount"
+    @add-follow="addFollow"
+    @remove-follow="removeFollow"
+  />
   <movie-card
     v-for="movie in feedData"
     :movie="movie"
@@ -30,6 +35,24 @@ async function fetchProfileData() {
   try {
     profile.value = await apiProfiles.getProfile(profileId)
   } catch {
+    console.log(error)
+  }
+}
+
+async function addFollow(profileId) {
+  try {
+    await apiProfiles.postFollow(profileId)
+    await fetchProfileData()
+  } catch (error) {
+    console.log(error)
+  }
+}
+
+async function removeFollow(profileId) {
+  try {
+    await apiProfiles.deleteFollow(profileId)
+    await fetchProfileData()
+  } catch (error) {
     console.log(error)
   }
 }

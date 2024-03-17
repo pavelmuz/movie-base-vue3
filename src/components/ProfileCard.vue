@@ -41,8 +41,22 @@
           </n-flex>
           <!-- Follow & Chat buttons -->
           <n-flex v-if="authStore.isAuthenticated" justify="space-between">
-            <n-button ghost color="#c3edc0" class="unfollow-button">Подписан</n-button>
-            <!-- <n-button ghost color="#c3edc0" class="follow-button">Подписаться</n-button> -->
+            <n-button
+              v-if="isFollowing"
+              ghost
+              color="#c3edc0"
+              @click="emitRemoveFollow(profile.id)"
+              class="unfollow-button"
+              >Подписан</n-button
+            >
+            <n-button
+              v-if="!isFollowing"
+              ghost
+              color="#c3edc0"
+              @click="emitAddFollow(profile.id)"
+              class="follow-button"
+              >Подписаться</n-button
+            >
             <n-button
               color="#C3EDC0"
               text-color="#0b666a"
@@ -78,6 +92,8 @@ const props = defineProps({
   }
 })
 
+const emit = defineEmits(['addFollow', 'removeFollow'])
+
 const authStore = useAuthStore()
 const router = useRouter()
 
@@ -87,6 +103,16 @@ const followersCount = ref()
 const followingsCount = ref()
 const showFollowers = ref(false)
 const showFollowings = ref(false)
+const isFollowing = ref(false)
+const profileId = localStorage.getItem('profileId')
+
+function emitAddFollow(profileId) {
+  emit('addFollow', profileId)
+}
+
+function emitRemoveFollow(profileId) {
+  emit('removeFollow', profileId)
+}
 
 function goToChat(profileId) {
   router.push({ name: 'chat', params: { recipientId: profileId } })
@@ -99,6 +125,7 @@ watch(
       profile.value = newValue
       followersCount.value = newValue.followers.length
       followingsCount.value = newValue.followings.length
+      isFollowing.value = newValue.followers.some((follower) => follower.follower.id === profileId)
     }
   }
 )

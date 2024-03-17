@@ -64,10 +64,36 @@ async function deleteAccount() {
   }
 }
 
+async function postFollow(profileId) {
+  try {
+    await axios.post(`${API_URL}/follow/${profileId}/`, null, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
+  } catch (error) {
+    throw new Error(error.response.data.error)
+  }
+}
+
+async function deleteFollow(profileId) {
+  try {
+    await axios.delete(`${API_URL}/follow/${profileId}/`, {
+      headers: {
+        Authorization: `Bearer ${accessToken}`
+      }
+    })
+  } catch (error) {
+    throw new Error(error.response.data.error)
+  }
+}
+
 export default {
   getProfiles,
   getProfile,
   getAccount,
   patchAccount,
-  deleteAccount
+  deleteAccount,
+  postFollow,
+  deleteFollow
 }

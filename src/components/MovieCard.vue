@@ -23,7 +23,7 @@
                 text
                 size="large"
                 text-color="#C3EDC0"
-                @click="$emit('removeLike', movie.id)"
+                @click="emitRemoveLike(movie.id)"
               >
                 <i class="fa-solid fa-heart fa-xl"></i>
               </n-button>
@@ -32,7 +32,7 @@
                 text
                 size="large"
                 text-color="#C3EDC0"
-                @click="$emit('addLike', movie.id)"
+                @click="emitAddLike(movie.id)"
               >
                 <i class="fa-regular fa-heart fa-xl card-button"></i>
               </n-button>
@@ -142,7 +142,7 @@ const props = defineProps({
 
 const router = useRouter()
 const authStore = useAuthStore()
-const emit = defineEmits(['addComment'])
+const emit = defineEmits(['addComment', 'addLike', 'removeLike'])
 const profileId = localStorage.getItem('profileId')
 
 const movie = ref({})
@@ -163,6 +163,14 @@ const likedMovie = computed(() => {
 function emitAddComment({ commentMsg, movie }) {
   emit('addComment', { commentMsg, movie })
   showCommentModal.value = false
+}
+
+function emitAddLike(movieId) {
+  emit('addLike', movieId)
+}
+
+function emitRemoveLike(movieId) {
+  emit('removeLike', movieId)
 }
 
 function goToProfile(id) {
