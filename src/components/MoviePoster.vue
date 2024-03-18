@@ -22,6 +22,7 @@ const props = defineProps({
 })
 
 const WidthOptions = {
+  small: 80,
   medium: 120,
   large: 220
 }

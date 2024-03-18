@@ -1,23 +1,26 @@
 <template>
   <n-modal :show="showModal" @update:show="updateShowDeleteMovie">
     <n-card :bordered="false" role="dialog" aria-modal="true" class="delete-modal">
-      <n-flex vertical :size="1">
-        <h2>Вы действительно хотите удалить {{ movie.title }}?</h2>
-        <n-flex align="center" :size="20">
-          <n-button
-            color="#C3EDC0"
-            text-color="#0b666a"
-            @click="emitCloseModal"
-            class="cancel-button"
-            >Омена</n-button
-          >
-          <n-button
-            color="#c8180b"
-            text-color="#C3EDC0"
-            @click="emitRemoveMovie(movie)"
-            class="delete-button"
-            ><i class="fa-solid fa-trash-can"></i> Удалить</n-button
-          >
+      <n-flex :wrap="false">
+        <movie-poster :image="movie.poster_url" size="small" />
+        <n-flex vertical :size="1">
+          <h2>Вы действительно хотите удалить {{ movie.title }}?</h2>
+          <n-flex align="center" :size="20" class="modal-buttons">
+            <n-button
+              color="#C3EDC0"
+              text-color="#0b666a"
+              @click="emitCloseModal"
+              class="cancel-button"
+              >Омена</n-button
+            >
+            <n-button
+              color="#c8180b"
+              text-color="#C3EDC0"
+              @click="emitRemoveMovie(movie)"
+              class="delete-button"
+              ><i class="fa-solid fa-trash-can"></i> Удалить</n-button
+            >
+          </n-flex>
         </n-flex>
       </n-flex>
     </n-card>
@@ -25,6 +28,7 @@
 </template>
 
 <script setup>
+import MoviePoster from '@/components/MoviePoster.vue'
 import { NButton, NCard, NFlex, NModal } from 'naive-ui'
 import { ref, watch } from 'vue'
 
@@ -85,5 +89,9 @@ watch(
 
 .fa-trash-can {
   margin-right: 8px;
+}
+
+.modal-buttons {
+  margin-top: auto;
 }
 </style>
