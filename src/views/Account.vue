@@ -108,13 +108,13 @@ async function addComment({ commentMsg, movie }) {
   }
 }
 
-async function editMovie(movieId, userReview, userRating) {
+async function editMovie(movie) {
   try {
     let content = {
-      user_rating: userRating,
-      user_review: userReview
+      user_rating: movie.user_rating,
+      user_review: movie.user_review
     }
-    await apiMovies.patchMovie(content, movieId)
+    await apiMovies.patchMovie(content, movie.id)
     await fetchMovieFeed()
   } catch (error) {
     message.error(error.message, {

@@ -104,6 +104,14 @@
             v-if="showOptions"
             :show="showOptionsDropdown"
             @open-delete="showDeleteModal = true"
+            @open-edit="showEditModal = true"
+          />
+          <edit-movie-modal
+            :show="showEditModal"
+            :movie="movie"
+            @update:show="showEditModal = $event"
+            @close-modal="showEditModal = false"
+            @edit-movie="$emit('editMovie', movie)"
           />
           <!-- Delete Movie Modal -->
           <delete-movie-modal
@@ -129,6 +137,7 @@
 
 <script setup>
 import DeleteMovieModal from '@/components/DeleteMovieModal.vue'
+import EditMovieModal from '@/components/EditMovieModal.vue'
 import LikesModal from '@/components/LikesModal.vue'
 import MoviePoster from '@/components/MoviePoster.vue'
 import OptionsDropdown from '@/components/OptionsDropdown.vue'
@@ -155,7 +164,7 @@ const props = defineProps({
 
 const router = useRouter()
 const authStore = useAuthStore()
-const emit = defineEmits(['addComment', 'addLike', 'removeLike', 'removeMovie'])
+const emit = defineEmits(['addComment', 'addLike', 'removeLike', 'removeMovie', 'editMovie'])
 const profileId = localStorage.getItem('profileId')
 
 const movie = ref({})
@@ -169,6 +178,7 @@ const showCommentModal = ref(false)
 const showLikesModal = ref(false)
 const showOptionsDropdown = ref(false)
 const showDeleteModal = ref(false)
+const showEditModal = ref(false)
 const commentMsg = ref('')
 
 const likedMovie = computed(() => {

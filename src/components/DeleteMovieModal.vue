@@ -52,7 +52,6 @@ function updateShowDeleteMovie(newValue) {
 }
 
 function emitRemoveMovie(movie) {
-  console.log('Emitted from modal')
   emit('removeMovie', movie)
 }
 
