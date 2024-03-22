@@ -3,9 +3,9 @@ import axios from 'axios'
 const API_URL = import.meta.env.VITE_SERVER_API_URL
 const accessToken = localStorage.getItem('accessToken')
 
-async function getProfiles() {
+async function getProfiles(query) {
   try {
-    const response = await axios.get(`${API_URL}/profiles/`)
+    const response = await axios.get(`${API_URL}/profiles/${query}`)
     const profileId = localStorage.getItem('profileId')
     const filteredProfiles = response.data.filter((profile) => profile.id !== profileId)
     return filteredProfiles

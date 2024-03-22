@@ -9,7 +9,7 @@
           size="large"
           class="search-input"
         />
-        <n-button ghost color="#0b666a" class="search-button"
+        <n-button ghost color="#0b666a" class="search-button" @click="fetchProfiles"
           ><i class="fa-solid fa-magnifying-glass"></i> Найти</n-button
         >
       </n-flex>
@@ -29,14 +29,14 @@
 import SearchProfileCard from '@/components/SearchProfileCard.vue'
 import apiProfiles from '@/services/apiProfiles'
 import { NButton, NCard, NFlex, NInput } from 'naive-ui'
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 
 const profiles = ref([])
 const searchQuery = ref('')
 
 async function fetchProfiles() {
   try {
-    profiles.value = await apiProfiles.getProfiles()
+    profiles.value = await apiProfiles.getProfiles(searchQuery.value)
   } catch (error) {
     console.log(error)
   }
@@ -59,10 +59,6 @@ async function removeFollow(profileId) {
     console.log(error)
   }
 }
-
-onMounted(async () => {
-  await fetchProfiles()
-})
 </script>
 
 <style scoped>
