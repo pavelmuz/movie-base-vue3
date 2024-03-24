@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+  vue:
+    image: pavelmuz/moviebase-vue
+    ports:
+      - '8080:80'
+    depends_on:
+      - django
+
+  django:
+    image: pavelmuz/moviebase
+    ports:
+      - '8000:8000'
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:latest
+    ports:
+      - '6379:6379'
