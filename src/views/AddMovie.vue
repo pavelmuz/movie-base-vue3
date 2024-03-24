@@ -18,7 +18,7 @@
               v-model:value="userReview"
               type="textarea"
               placeholder=""
-              :rows="3"
+              :autosize="{ minRows: 3, maxRows: 5 }"
               class="message-input"
             />
             <p class="card-text">Ваша оценка:</p>
@@ -146,5 +146,9 @@ onMounted(async () => {
 
 .card-text {
   font-size: medium;
+}
+
+.message-input {
+  border-radius: 6px;
 }
 </style>

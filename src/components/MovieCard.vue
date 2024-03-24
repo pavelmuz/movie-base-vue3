@@ -55,8 +55,8 @@
                     <n-input
                       v-model:value="commentMsg"
                       type="textarea"
+                      :autosize="{ minRows: 2, maxRows: 4 }"
                       placeholder=""
-                      :rows="4"
                       class="comment-input"
                     />
                     <n-button

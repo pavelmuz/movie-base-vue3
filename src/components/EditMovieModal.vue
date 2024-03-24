@@ -12,7 +12,7 @@
             v-model:value="movie.user_review"
             type="textarea"
             placeholder=""
-            :rows="5"
+            :autosize="{ minRows: 3, maxRows: 5 }"
             class="message-input"
           />
           <p>Ваша оценка:</p>
@@ -115,5 +115,9 @@ watch(
 .edit-modal p {
   font-size: medium;
   margin: 0;
+}
+
+.message-input {
+  border-radius: 6px;
 }
 </style>

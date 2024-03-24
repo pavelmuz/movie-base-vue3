@@ -73,7 +73,7 @@
           v-model:value="commentMsg"
           type="textarea"
           placeholder=""
-          :rows="2"
+          :autosize="{ minRows: 2, maxRows: 4 }"
           class="comment-input"
         />
         <n-button
@@ -251,6 +251,10 @@ onBeforeMount(async () => {
 }
 
 .login-button {
+  border-radius: 6px;
+}
+
+.comment-input {
   border-radius: 6px;
 }
 </style>

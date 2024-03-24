@@ -17,7 +17,11 @@
           <p>Полное имя:</p>
           <n-input v-model:value="profile.name" type="text" />
           <p>Дата рождения:</p>
-          <n-date-picker v-model:formatted-value="profile.birthday" type="date" />
+          <n-date-picker
+            v-model:formatted-value="profile.birthday"
+            type="date"
+            class="date-input"
+          />
           <p>Электронная почта:</p>
           <n-input v-model:value="profile.email" type="text" />
           <n-flex align="center" :size="20">

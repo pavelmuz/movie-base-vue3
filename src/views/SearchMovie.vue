@@ -4,7 +4,13 @@
       <n-flex vertical>
         <h1 class="card-title">Найти фильм</h1>
         <p class="card-text">Название:</p>
-        <n-input v-model:value="movieTitle" type="text" placeholder="" :autofocus="true" />
+        <n-input
+          v-model:value="movieTitle"
+          type="text"
+          placeholder=""
+          :autofocus="true"
+          class="search-input"
+        />
         <n-button
           size="large"
           color="#C3EDC0"
@@ -74,5 +80,9 @@ function goToSearchResults() {
 
 .fa-magnifying-glass {
   padding-right: 5px;
+}
+
+.search-input {
+  border-radius: 6px;
 }
 </style>

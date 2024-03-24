@@ -77,6 +77,7 @@ async function removeFollow(profileId) {
 
 .search-input {
   flex: 1;
+  border-radius: 6px;
 }
 
 .search-user {
@@ -91,9 +92,5 @@ async function removeFollow(profileId) {
 .search-button:hover {
   background-color: #0b666a;
   color: #c3edc0;
-}
-
-.search-user-input::placeholder {
-  color: #0b666a;
 }
 </style>
