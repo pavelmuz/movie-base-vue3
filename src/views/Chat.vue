@@ -73,7 +73,11 @@ const recipient = ref({})
 const message = ref('')
 
 function goBack() {
-  router.back()
+  if (route.query.from === 'chats') {
+    router.push({ name: 'chats' })
+  } else {
+    router.back()
+  }
 }
 
 function goToProfile(id) {

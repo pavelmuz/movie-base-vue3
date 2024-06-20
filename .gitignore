@@ -32,3 +32,4 @@ coverage
 README.md
 .prettierrc.json
 .eslintrc.cjs
+.dockerignore

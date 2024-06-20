@@ -42,7 +42,7 @@ const router = useRouter()
 const activeChats = ref([])
 
 function goToChat(id) {
-  router.push({ name: 'chat', params: { recipientId: id } })
+  router.push({ name: 'chat', params: { recipientId: id }, query: { from: 'chats' } })
 }
 
 async function fetchActiveChats() {

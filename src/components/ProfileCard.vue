@@ -115,7 +115,7 @@ function emitRemoveFollow(profileId) {
 }
 
 function goToChat(profileId) {
-  router.push({ name: 'chat', params: { recipientId: profileId } })
+  router.push({ name: 'chat', params: { recipientId: profileId }, query: { from: 'profile' } })
 }
 
 watch(
